@@ -1,12 +1,12 @@
 # Kango, a personal kanban
 
 <p align="center">
-<strong>This project is only an idea...</strong>
+<strong>This project is in development...</strong>
 </p>
 
 Kango is a desktop application where you can use a Kanban board in a very simple way. Oriented for personal use, you can manage your hobbies or projects as well as your daily life.  
 
-It also allows you to group files to have them in easy access and to be able to count the time spent on what you want.
+It stands out for the possibility of configuring the database associated to your needs, although by default it will use Firebase.
 
 ## :clapper: Preview
 
@@ -29,22 +29,31 @@ It also allows you to group files to have them in easy access and to be able to 
 
 #### :black_joker: Entities
 
-Currently, there are 2 entities.
+Currently, there are 4 entities.
 
 | Entities |
 | :-: |
-| [User](#user) |
+| [State](#state) |
 | [Dashboard](#dashboard) |
 | [Table](#table) |
 | [Card](#card) |
+| [Automation](#automation) |
+| [Tag](#tag) |
 
-##### User
+##### State
 
-See this section to know more about the [Entity User](#busts_in_silhouette-type-of-users).
+The Status contains the setting of the application. All oriented to accesability.
+
+The configuration will be:
+- Color blind filter
+- Font size
+- Language
 
 ##### Dashboard
 
-The board contains all tables, a name, a description, a timer, a legend with the types of cards and a space to save or quickly access the files.
+The board contains all tables, a name, a legend with the types of cards and a space to save or quickly access the files.
+
+It also contains the automations, labels, and global and local card templates.
 
 ##### Table
 
@@ -52,42 +61,77 @@ The table contains a set of cards next to the table name.
 
 ##### Card
 
-The card contains name, description, type, and other specific functionalities.
+The card contains name, description, type (template or card), and other specific information.
+
+The specific information:
+- Attached links
+- Deadtime
+- Checklist
+- Tags
+
+##### Automation
+
+The Automation contains a list of instruction to do when it is activated.
+
+##### Tag
+
+The card contains text and color to be put on a card.
+
 
 #### :busts_in_silhouette: Type of Users
 
-In the application there are 2 different type of user:
+As the application is for personal use, and will not be public in the restrictive use of the word.
 
-| Type of User | Attributes |
-| :-: | :-- |
-| Unregistered User | It can not use the application |
-| Registered User | It can use the application |
+The code will be accessible to everyone, to be downloaded and configured to personal needs.
+
+Therefore, it does not consist of any kind of user to use. It will be the state of the application the “user”.
 
 #### :wrench: Functional Requirements
 
-Here are the diferent actions that can do the different type of users:
+Here are the diferent actions that can be done in the application:
 
-| User Histories | Unregistered User | Registered User |
-| :-- | :-: | :-: |
-| UH-01 Sign Up | :heavy_check_mark:  | |
-| UH-02 Log In | | :heavy_check_mark: |
-| UH-03 Log Out | | :heavy_check_mark: |
-| UH-04 Delete Account | | :heavy_check_mark: |
-| UH-05 Create Dashboard | | :heavy_check_mark: |
-| UH-06 Access Dashboard | | :heavy_check_mark: |
-| UH-07 Update Dashboard (To expand) | | :heavy_check_mark: |
-| UH-08 Delete Dashboard | | :heavy_check_mark: |
-| UH-09 See List of Dashboards | | :heavy_check_mark: |
-| UH-10 Create Table | | :heavy_check_mark: |
-| UH-11 See Table | | :heavy_check_mark: |
-| UH-12 Update Table (To expand) | | :heavy_check_mark: |
-| UH-13 Delete Table | | :heavy_check_mark: |
-| UH-14 Create Card | | :heavy_check_mark:  |
-| UH-15 See Card | | :heavy_check_mark: |
-| UH-16 Update Card (To expand) | | :heavy_check_mark: |
-| UH-17 Delete Card | | :heavy_check_mark: |
-| UH-18 Access Configuration Page | | :heavy_check_mark: |
-| UH-19 Access Help Pop Ups | | :heavy_check_mark: |
+| User Histories | 
+| :-- |
+| UH-101 Show list of available Dashboard |
+| UH-102 Access to Help Page |
+| UH-103 Show adaptative help |
+| UH-104 Access to Configuration Page |
+| UH-105 Show configuration options |
+| UH-106 Configure Accesibility |
+| UH-107 Create Card Template (Globally) |
+| UH-108 Create Automation (Globally) |
+| UH-109 Create tags (Globally) |
+| UH-110 Create Dashboard |
+| UH-111 Access Dashboard |
+| UH-112 Delete Dashboard |
+| UH-113 Delete Dashboards |
+| UH-114 Exit of the application |
+| UH-201 Show list of available Table | 
+| UH-202 Access to associated files of the table |
+| UH-203 Change Dashboard's name |
+| UH-204 Create Card Template (Locally) |
+| UH-205 Create Automation (Locally) |
+| UH-206 Create tags (Locally) |
+| UH-207 Create Table |
+| UH-208 See Table |
+| UH-209 Change Table's name |
+| UH-210 Move table position in the dashboard |
+| UH-211 Delete Table |
+| UH-212 Copy list of cards |
+| UH-213 Move list of cards |
+| UH-214 Move card to another table |
+| UH-215 Move card position in the table |
+| UH-216 Sort cards from a table |
+| UH-217 Create Card |
+| UH-301 See Card |
+| UH-302 Update Card |
+| UH-303 Delete Card |
+| UH-304 Interact with cards (to determine) |
+| UH-305 Attach file |
+| UH-306 Set deadline |
+| UH-307 Set Checklist |
+| UH-308 Add tags |
+| UH-309 Add Description |
 
 #### :electric_plug: Non Functional Requirements
 
@@ -96,10 +140,9 @@ Here are the diferent actions that can do the different type of users:
 | Oriented to Desktop |
 | Responsive Design |
 | Front-end must be implemented with React |
-| Back-end must be implemented with Django |
+| Back-end must be implemented with Spring |
 | It needs to connect with SQL Database |
 | GUI must be minimalist and user-friendly |
-| Protection & Security for Registered User Data |
 | Usability & Accesibility |
 | Languages must be English and Spanish  |
 
