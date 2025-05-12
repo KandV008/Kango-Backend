@@ -130,8 +130,9 @@ Here are the diferent actions that can be done in the application:
 | UH-305 Attach file |
 | UH-306 Set deadline |
 | UH-307 Set Checklist |
-| UH-308 Add tags |
-| UH-309 Add Description |
+| UH-308 Set tags |
+| UH-309 Set Description |
+| UH-310 Set Color |
 
 #### :electric_plug: Non Functional Requirements
 
