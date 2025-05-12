@@ -126,13 +126,12 @@ Here are the diferent actions that can be done in the application:
 | UH-301 See Card |
 | UH-302 Update Card |
 | UH-303 Delete Card |
-| UH-304 Interact with cards (to determine) |
-| UH-305 Attach file |
-| UH-306 Set deadline |
-| UH-307 Set Checklist |
-| UH-308 Set tags |
-| UH-309 Set Description |
-| UH-310 Set Color |
+| UH-304 Attach file to a Card |
+| UH-305 Set deadline to a Card|
+| UH-306 Set checklist to a Card |
+| UH-307 Set Tags to a Card |
+| UH-308 Set description to a Card |
+| UH-309 Set color to a Card |
 
 #### :electric_plug: Non Functional Requirements
 
