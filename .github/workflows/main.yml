@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/setup-java
+      - uses: ./.github/actions/setup-docker
 
       - name: Run tests
         run: mvn test
@@ -35,4 +36,4 @@ jobs:
       - uses: ./.github/actions/setup-java
 
       - name: Run build
-        run: mvn install
+        run: mvn compile
