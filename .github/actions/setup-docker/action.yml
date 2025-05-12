@@ -8,3 +8,4 @@ runs:
 
       - name: Start Docker service
         run: sudo service docker start
+        shell: bash
