@@ -2,6 +2,7 @@ package dev.kandv.kango.units.models;
 
 import dev.kandv.kango.models.Card;
 import dev.kandv.kango.models.enums.Color;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.Test;
 
 import java.util.Date;
@@ -118,5 +119,28 @@ public class CardTest {
         List<Card.Check> checks = card.getChecks();
         assertThat(checks).hasSize(1);
         assertThat(checks.getFirst()).isEqualTo(check);
+    }
+
+    @Test
+    public void testSetPosition(){
+        String name = "example";
+        int expectedPosition = 1;
+        Card newCard = new Card(name);
+
+        newCard.setPosition(expectedPosition);
+        int result = newCard.getPosition();
+
+        AssertionsForClassTypes.assertThat(result).isEqualTo(expectedPosition);
+    }
+
+    @Test
+    public void testGetPosition(){
+        String name = "example";
+        int expectedPosition = 1;
+        Card newCard = new Card(name, expectedPosition);
+
+        int result = newCard.getPosition();
+
+        AssertionsForClassTypes.assertThat(result).isEqualTo(expectedPosition);
     }
 }

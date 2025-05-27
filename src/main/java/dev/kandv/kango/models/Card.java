@@ -21,6 +21,7 @@ public class Card {
     private List<AttachedFile> attachedAttachedFiles = new ArrayList<>();
     private Date deadLine;
     private List<Check> checks = new ArrayList<>();
+    private int position;
     // TODO Add Tag List
 
     @Getter
@@ -42,6 +43,15 @@ public class Card {
             this.label = label;
             this.checked = checked;
         }
+    }
+
+    public Card(String title){
+        this.title = title;
+    }
+
+    public Card(String title, int position){
+        this.title = title;
+        this.position = position;
     }
 
     public void attachFile(AttachedFile attachedFile){
