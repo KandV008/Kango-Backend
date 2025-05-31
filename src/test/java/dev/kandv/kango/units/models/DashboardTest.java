@@ -17,8 +17,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class DashboardTest {
     private Dashboard dashboard;
     private List<Table> tableList;
-    private Table table1;
-    private Table table2;
 
     @BeforeEach
     public void beforeEach() {
@@ -26,13 +24,13 @@ public class DashboardTest {
         this.dashboard = new Dashboard(name);
         this.tableList = new LinkedList<>();
 
-        this.table1 = new Table("Example Table 1");
-        this.table1.setPosition(0);
-        this.tableList.add(this.table1);
+        Table table1 = new Table("Example Table 1");
+        table1.setPosition(0);
+        this.tableList.add(table1);
 
-        this.table2 = new Table("Example Table 2");
-        this.table2.setPosition(1);
-        this.tableList.add(this.table2);
+        Table table2 = new Table("Example Table 2");
+        table2.setPosition(1);
+        this.tableList.add(table2);
     }
 
     @Test
