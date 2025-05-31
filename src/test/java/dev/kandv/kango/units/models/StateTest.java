@@ -5,7 +5,6 @@ import dev.kandv.kango.models.Dashboard;
 import dev.kandv.kango.models.State;
 import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.Color;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +13,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StateTest {
+class StateTest {
     private State state;
     private List<Dashboard> dashboardList;
     private Dashboard dashboard1;
     private Dashboard dashboard2;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         this.state = new State();
         this.dashboardList = new ArrayList<>();
         this.dashboard1 = new Dashboard("Example Dashboard 1");
@@ -33,7 +32,7 @@ public class StateTest {
     }
 
     @Test
-    public void testGetAndSetFontSize(){
+    void testGetAndSetFontSize(){
         State.FontSize expected = State.FontSize.LARGE;
         this.state.setFontSize(expected);
         State.FontSize result = this.state.getFontSize();
@@ -42,7 +41,7 @@ public class StateTest {
     }
 
     @Test
-    public void testGetAndSetLanguage(){
+    void testGetAndSetLanguage(){
         State.Language expected = State.Language.SPANISH;
         this.state.setLanguage(expected);
         State.Language result = this.state.getLanguage();
@@ -51,7 +50,7 @@ public class StateTest {
     }
 
     @Test
-    public void testGetAndSetColorBlind(){
+    void testGetAndSetColorBlind(){
         State.ColorBlind expected = State.ColorBlind.ANY;
         this.state.setColorBlind(expected);
         State.ColorBlind result = this.state.getColorBlind();
@@ -60,7 +59,7 @@ public class StateTest {
     }
 
     @Test
-    public void testGetDashboardList(){
+    void testGetDashboardList(){
         List<Dashboard> result = this.state.getDashboardList();
 
         assertThat(result).hasSameSizeAs(this.dashboardList);
@@ -68,7 +67,7 @@ public class StateTest {
     }
 
     @Test
-    public void testSetDashboardList(){
+    void testSetDashboardList(){
         List<Dashboard> dashboardArrayList = new ArrayList<>();
         this.state.setDashboardList(dashboardArrayList);
 
@@ -78,7 +77,7 @@ public class StateTest {
     }
 
     @Test
-    public void testAddDashboard(){
+    void testAddDashboard(){
         Dashboard dashboard = new Dashboard("Example Dashboard 1");
         List<Dashboard> dashboardArrayList = new ArrayList<>();
         this.state.setDashboardList(dashboardArrayList);
@@ -90,7 +89,7 @@ public class StateTest {
     }
 
     @Test
-    public void testRemoveDashboard(){
+    void testRemoveDashboard(){
         this.state.removeDashboard(this.dashboard1);
         List<Dashboard> stateDashboardList = this.state.getDashboardList();
         assertThat(stateDashboardList).hasSize(1);
@@ -98,7 +97,7 @@ public class StateTest {
     }
 
     @Test
-    public void testAddTagToTagList() {
+    void testAddTagToTagList() {
         Tag newTag = new Tag("example", Color.PURPLE);
 
         this.state.addTagToTagList(newTag);
@@ -107,7 +106,7 @@ public class StateTest {
     }
 
     @Test
-    public void testRemoveTagFromTagList() {
+    void testRemoveTagFromTagList() {
         Tag newTag = new Tag("example", Color.PURPLE);
 
         this.state.addTagToTagList(newTag);
@@ -120,7 +119,7 @@ public class StateTest {
     }
 
     @Test
-    public void testAddAutomationToAutomationList() {
+    void testAddAutomationToAutomationList() {
         Automation newAutomation = new Automation();
 
         this.state.addAutomationToAutomationList(newAutomation);
@@ -129,7 +128,7 @@ public class StateTest {
     }
 
     @Test
-    public void testRemoveAutomationToAutomationList() {
+    void testRemoveAutomationToAutomationList() {
         Automation newAutomation = new Automation();
 
         this.state.addAutomationToAutomationList(newAutomation);

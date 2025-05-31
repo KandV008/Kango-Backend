@@ -18,7 +18,7 @@ public class DashboardTest {
     private List<Table> tableList;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         String name = "Example Dashboard";
         this.dashboard = new Dashboard(name);
         this.tableList = new LinkedList<>();
@@ -33,7 +33,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testSetName(){
+    void testSetName(){
         String expectedName = "Set Up Name";
         this.dashboard.setName(expectedName);
 
@@ -42,7 +42,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testGetTables(){
+    void testGetTables(){
         Dashboard exampleDashboard = new Dashboard("Example Dashboard", this.tableList);
         List<Table> result = exampleDashboard.getTableList();
 
@@ -51,7 +51,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testSetTables(){
+    void testSetTables(){
         this.dashboard.setTableList(this.tableList);
         List<Table> result = dashboard.getTableList();
 
@@ -60,7 +60,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testAttachFile() {
+    void testAttachFile() {
         AttachedFile expectedAttachedFile = new AttachedFile("example.png", "example");
 
         this.dashboard.attachFile(expectedAttachedFile);
@@ -72,7 +72,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testDetachFile() {
+    void testDetachFile() {
         AttachedFile expectedAttachedFile = new AttachedFile("example.png", "example");
 
         this.dashboard.attachFile(expectedAttachedFile);
@@ -85,7 +85,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testAddTable() {
+    void testAddTable() {
         Table expectedTable = new Table("Example Table 3");
         this.dashboard.addTable(expectedTable);
 
@@ -97,7 +97,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testRemoveTable() {
+    void testRemoveTable() {
         Table expectedTable = new Table("Example Table 3");
         this.dashboard.addTable(expectedTable);
 
@@ -111,7 +111,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testGetAndSetTemplateCardList(){
+    void testGetAndSetTemplateCardList(){
         List<Card> cardList = new ArrayList<>();
         Card card1 = new Card("Example Card 1");
         Card card2 = new Card("Example Card 2");
@@ -127,7 +127,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testAddTemplateCard(){
+    void testAddTemplateCard(){
         Card expectedCard = new Card("Example Card 1");
         this.dashboard.addTemplateCard(expectedCard);
 
@@ -137,7 +137,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testRemoveTemplateCard(){
+    void testRemoveTemplateCard(){
         Card expectedCard = new Card("Example Card 1");
         this.dashboard.addTemplateCard(expectedCard);
 
@@ -150,7 +150,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testAddTagToTagList() {
+    void testAddTagToTagList() {
         Tag newTag = new Tag("example", Color.PURPLE);
 
         this.dashboard.addTagToTagList(newTag);
@@ -159,7 +159,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testRemoveTagFromTagList() {
+    void testRemoveTagFromTagList() {
         Tag newTag = new Tag("example", Color.PURPLE);
 
         this.dashboard.addTagToTagList(newTag);
@@ -172,7 +172,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testAddAutomationToAutomationList() {
+    void testAddAutomationToAutomationList() {
         Automation newAutomation = new Automation();
 
         this.dashboard.addAutomationToAutomationList(newAutomation);
@@ -181,7 +181,7 @@ public class DashboardTest {
     }
 
     @Test
-    public void testRemoveAutomationToAutomationList() {
+    void testRemoveAutomationToAutomationList() {
         Automation newAutomation = new Automation();
 
         this.dashboard.addAutomationToAutomationList(newAutomation);

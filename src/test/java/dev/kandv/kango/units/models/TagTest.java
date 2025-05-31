@@ -7,16 +7,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class TagTest {
+class TagTest {
     private Tag tag;
 
     @BeforeEach
-    public void beforeEach(){
+    void beforeEach(){
         this.tag = new Tag("Example", Color.PURPLE);
     }
 
     @Test
-    public void testSetAndGetLabel(){
+    void testSetAndGetLabel(){
         String expected = "Example Label";
         this.tag.setLabel(expected);
         String actual = this.tag.getLabel();
@@ -24,7 +24,7 @@ public class TagTest {
     }
 
     @Test
-    public void testSetAndGetColor(){
+    void testSetAndGetColor(){
         Color expected = Color.GREEN;
         this.tag.setColor(expected);
         Color actual = this.tag.getColor();

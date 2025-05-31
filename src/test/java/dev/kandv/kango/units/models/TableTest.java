@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TableTest {
+class TableTest {
 
     private Table table;
     private List<Card> cardList;
@@ -18,7 +18,7 @@ public class TableTest {
     private Card card2;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         String name = "Example";
         this.table = new Table(name);
         this.cardList = new ArrayList<>();
@@ -33,7 +33,7 @@ public class TableTest {
     }
 
     @Test
-    public void testSetName(){
+    void testSetName(){
         String expectedName = "example";
 
         this.table.setName(expectedName);
@@ -43,7 +43,7 @@ public class TableTest {
     }
 
     @Test
-    public void testGetName(){
+    void testGetName(){
         String expectedName = "example";
         Table exampleTable = new Table(expectedName);
 
@@ -52,7 +52,7 @@ public class TableTest {
     }
 
     @Test
-    public void testSetPosition(){
+    void testSetPosition(){
         int expectedPosition = 1;
 
         this.table.setPosition(expectedPosition);
@@ -62,7 +62,7 @@ public class TableTest {
     }
 
     @Test
-    public void testGetPosition(){
+    void testGetPosition(){
         String name = "example";
         int expectedPosition = 1;
         Table newTable = new Table(name, expectedPosition, new ArrayList<>());
@@ -73,7 +73,7 @@ public class TableTest {
     }
 
     @Test
-    public void testSetCardList(){
+    void testSetCardList(){
         this.table.setCardList(this.cardList);
 
         List<Card> result = this.table.getCardList();
@@ -84,7 +84,7 @@ public class TableTest {
     }
 
     @Test
-    public void testSortCardList(){
+    void testSortCardList(){
         this.table.setCardList(this.cardList);
 
         this.table.sortCardList(Table.SortType.REVERSE);
@@ -96,7 +96,7 @@ public class TableTest {
     }
 
     @Test
-    public void testCleanCardList(){
+    void testCleanCardList(){
         this.table.setCardList(this.cardList);
 
         this.table.cleanCardList();
@@ -106,7 +106,7 @@ public class TableTest {
     }
 
     @Test
-    public void testAddCardToCardList(){
+    void testAddCardToCardList(){
         this.table.setCardList(new ArrayList<>());
         Card newCard = new Card("New Card");
 
@@ -119,7 +119,7 @@ public class TableTest {
     }
 
     @Test
-    public void testRemoveCardFromCardList(){
+    void testRemoveCardFromCardList(){
         this.table.setCardList(this.cardList);
 
         this.table.removeCardFromCardList(this.card1);
