@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TableTest {
 
@@ -78,7 +78,7 @@ public class TableTest {
 
         List<Card> result = this.table.getCardList();
 
-        assertThat(result.size()).isEqualTo(2);
+        assertThat(result).hasSize(2);
         assertThat(result.get(0)).isEqualTo(this.card1);
         assertThat(result.get(1)).isEqualTo(this.card2);
     }
@@ -90,7 +90,7 @@ public class TableTest {
         this.table.sortCardList(Table.SortType.REVERSE);
         List<Card> result = this.table.getCardList();
 
-        assertThat(result.size()).isEqualTo(2);
+        assertThat(result).hasSize(2);
         assertThat(result.get(0)).isEqualTo(this.card2);
         assertThat(result.get(1)).isEqualTo(this.card1);
     }
@@ -102,7 +102,7 @@ public class TableTest {
         this.table.cleanCardList();
         List<Card> result = this.table.getCardList();
 
-        assertThat(result.size()).isEqualTo(0);
+        assertThat(result).isEmpty();
     }
 
     @Test
@@ -113,7 +113,7 @@ public class TableTest {
         this.table.addCardToCardList(newCard);
 
         List<Card> result = this.table.getCardList();
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).hasSize(1);
         String resultCardTitle = result.getFirst().getTitle();
         assertThat(resultCardTitle).isEqualTo(newCard.getTitle());
     }
@@ -125,9 +125,9 @@ public class TableTest {
         this.table.removeCardFromCardList(this.card1);
 
         List<Card> result = this.table.getCardList();
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).hasSize(1);
         Card remainingCard = result.getFirst();
         assertThat(remainingCard).isEqualTo(this.card2);
-        assertThat(remainingCard.getPosition()).isEqualTo(0);
+        assertThat(remainingCard.getPosition()).isZero();
     }
 }

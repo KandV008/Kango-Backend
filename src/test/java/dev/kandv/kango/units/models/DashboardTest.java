@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DashboardTest {
     private Dashboard dashboard;
@@ -46,7 +46,7 @@ public class DashboardTest {
         Dashboard dashboard = new Dashboard("Example Dashboard", this.tableList);
         List<Table> result = dashboard.getTableList();
 
-        assertThat(result.size()).isEqualTo(2);
+        assertThat(result).hasSize(2);
         assertThat(result).isEqualTo(this.tableList);
     }
 
@@ -55,7 +55,7 @@ public class DashboardTest {
         this.dashboard.setTableList(this.tableList);
         List<Table> result = dashboard.getTableList();
 
-        assertThat(result.size()).isEqualTo(2);
+        assertThat(result).hasSize(2);
         assertThat(result).isEqualTo(this.tableList);
     }
 
@@ -66,9 +66,9 @@ public class DashboardTest {
         this.dashboard.attachFile(expectedAttachedFile);
         List<AttachedFile> attachedFiles = this.dashboard.getAttachedAttachedFiles();
 
-        Assertions.assertThat(attachedFiles).hasSize(1);
+        assertThat(attachedFiles).hasSize(1);
         AttachedFile attachedFile = attachedFiles.getFirst();
-        Assertions.assertThat(attachedFile).isEqualTo(expectedAttachedFile);
+        assertThat(attachedFile).isEqualTo(expectedAttachedFile);
     }
 
     @Test
@@ -78,10 +78,10 @@ public class DashboardTest {
         this.dashboard.attachFile(expectedAttachedFile);
         List<AttachedFile> attachedFiles = this.dashboard.getAttachedAttachedFiles();
 
-        Assertions.assertThat(attachedFiles).hasSize(1);
+        assertThat(attachedFiles).hasSize(1);
         this.dashboard.detachFile(expectedAttachedFile);
 
-        Assertions.assertThat(attachedFiles).isEmpty();
+        assertThat(attachedFiles).isEmpty();
     }
 
     @Test
@@ -92,8 +92,8 @@ public class DashboardTest {
         List<Table> tables = this.dashboard.getTableList();
         Table resultTable = tables.getLast();
 
-        Assertions.assertThat(tables).hasSize(1);
-        Assertions.assertThat(resultTable).isEqualTo(expectedTable);
+        assertThat(tables).hasSize(1);
+        assertThat(resultTable).isEqualTo(expectedTable);
     }
 
     @Test
@@ -104,10 +104,10 @@ public class DashboardTest {
         List<Table> tables = this.dashboard.getTableList();
         Table resultTable = tables.getLast();
 
-        Assertions.assertThat(tables).hasSize(1);
+        assertThat(tables).hasSize(1);
 
         this.dashboard.removeTable(resultTable);
-        Assertions.assertThat(tables).isEmpty();
+        assertThat(tables).isEmpty();
     }
 
     @Test
@@ -121,8 +121,9 @@ public class DashboardTest {
         this.dashboard.setTemplateCardList(cardList);
         List<Card> templateCardList = this.dashboard.getTemplateCardList();
 
-        Assertions.assertThat(templateCardList).hasSize(2);
-        Assertions.assertThat(templateCardList).isEqualTo(cardList);
+        assertThat(templateCardList)
+                .hasSize(2)
+                .isEqualTo(cardList);
     }
 
     @Test
@@ -131,8 +132,8 @@ public class DashboardTest {
         this.dashboard.addTemplateCard(expectedCard);
 
         List<Card> templateCardList = this.dashboard.getTemplateCardList();
-        Assertions.assertThat(templateCardList).hasSize(1);
-        Assertions.assertThat(templateCardList.getFirst()).isEqualTo(expectedCard);
+        assertThat(templateCardList).hasSize(1);
+        assertThat(templateCardList.getFirst()).isEqualTo(expectedCard);
     }
 
     @Test
@@ -141,11 +142,11 @@ public class DashboardTest {
         this.dashboard.addTemplateCard(expectedCard);
 
         List<Card> templateCardList = this.dashboard.getTemplateCardList();
-        Assertions.assertThat(templateCardList).hasSize(1);
+        assertThat(templateCardList).hasSize(1);
 
         this.dashboard.removeTemplateCard(expectedCard);
         templateCardList = this.dashboard.getTemplateCardList();
-        Assertions.assertThat(templateCardList).isEmpty();
+        assertThat(templateCardList).isEmpty();
     }
 
     @Test
@@ -154,7 +155,7 @@ public class DashboardTest {
 
         this.dashboard.addTagToTagList(newTag);
         List<Tag> tags = this.dashboard.getTagList();
-        Assertions.assertThat(tags).hasSize(1);
+        assertThat(tags).hasSize(1);
     }
 
     @Test
@@ -163,11 +164,11 @@ public class DashboardTest {
 
         this.dashboard.addTagToTagList(newTag);
         List<Tag> tags = this.dashboard.getTagList();
-        Assertions.assertThat(tags).hasSize(1);
+        assertThat(tags).hasSize(1);
 
         this.dashboard.removeTagFromTagList(newTag);
         tags = this.dashboard.getTagList();
-        Assertions.assertThat(tags).isEmpty();
+        assertThat(tags).isEmpty();
     }
 
     @Test
@@ -176,7 +177,7 @@ public class DashboardTest {
 
         this.dashboard.addAutomationToAutomationList(newAutomation);
         List<Automation> automations = this.dashboard.getAutomationList();
-        Assertions.assertThat(automations).hasSize(1);
+        assertThat(automations).hasSize(1);
     }
 
     @Test
@@ -185,10 +186,10 @@ public class DashboardTest {
 
         this.dashboard.addAutomationToAutomationList(newAutomation);
         List<Automation> automations = this.dashboard.getAutomationList();
-        Assertions.assertThat(automations).hasSize(1);
+        assertThat(automations).hasSize(1);
 
         this.dashboard.removeAutomationFromAutomation(newAutomation);
         automations = this.dashboard.getAutomationList();
-        Assertions.assertThat(automations).isEmpty();
+        assertThat(automations).isEmpty();
     }
 }

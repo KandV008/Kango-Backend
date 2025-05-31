@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StateTest {
     private State state;
@@ -63,7 +63,7 @@ public class StateTest {
     public void testGetDashboardList(){
         List<Dashboard> result = this.state.getDashboardList();
 
-        assertThat(result.size()).isEqualTo(this.dashboardList.size());
+        assertThat(result).hasSameSizeAs(this.dashboardList);
         assertThat(result).isEqualTo(this.dashboardList);
     }
 
@@ -73,7 +73,7 @@ public class StateTest {
         this.state.setDashboardList(dashboardList);
 
         List<Dashboard> result = this.state.getDashboardList();
-        assertThat(result.size()).isEqualTo(0);
+        assertThat(result).isEmpty();
         assertThat(result).isEqualTo(dashboardList);
     }
 
@@ -85,7 +85,7 @@ public class StateTest {
         this.state.addDashboard(dashboard);
 
         List<Dashboard> result = this.state.getDashboardList();
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).hasSize(1);
         assertThat(result.getFirst()).isEqualTo(dashboard);
     }
 
@@ -93,7 +93,7 @@ public class StateTest {
     public void testRemoveDashboard(){
         this.state.removeDashboard(this.dashboard1);
         List<Dashboard> dashboardList = this.state.getDashboardList();
-        assertThat(dashboardList.size()).isEqualTo(1);
+        assertThat(dashboardList).hasSize(1);
         assertThat(dashboardList.getFirst()).isEqualTo(this.dashboard2);
     }
 
@@ -103,7 +103,7 @@ public class StateTest {
 
         this.state.addTagToTagList(newTag);
         List<Tag> tags = this.state.getTagList();
-        Assertions.assertThat(tags).hasSize(1);
+        assertThat(tags).hasSize(1);
     }
 
     @Test
@@ -112,11 +112,11 @@ public class StateTest {
 
         this.state.addTagToTagList(newTag);
         List<Tag> tags = this.state.getTagList();
-        Assertions.assertThat(tags).hasSize(1);
+        assertThat(tags).hasSize(1);
 
         this.state.removeTagFromTagList(newTag);
         tags = this.state.getTagList();
-        Assertions.assertThat(tags).isEmpty();
+        assertThat(tags).isEmpty();
     }
 
     @Test
@@ -125,7 +125,7 @@ public class StateTest {
 
         this.state.addAutomationToAutomationList(newAutomation);
         List<Automation> automations = this.state.getAutomationList();
-        Assertions.assertThat(automations).hasSize(1);
+        assertThat(automations).hasSize(1);
     }
 
     @Test
@@ -134,10 +134,10 @@ public class StateTest {
 
         this.state.addAutomationToAutomationList(newAutomation);
         List<Automation> automations = this.state.getAutomationList();
-        Assertions.assertThat(automations).hasSize(1);
+        assertThat(automations).hasSize(1);
 
         this.state.removeAutomationFromAutomation(newAutomation);
         automations = this.state.getAutomationList();
-        Assertions.assertThat(automations).isEmpty();
+        assertThat(automations).isEmpty();
     }
 }
