@@ -17,10 +17,10 @@ import java.util.List;
 public class Dashboard {
     private String name;
     private List<Table> tableList;
-    private List<AttachedFile> attachedAttachedFiles = new ArrayList<>();
-    private List<Card> templateCardList = new ArrayList<>();
-    // TODO Add Tag List
-    // TODO Add Automation List
+    private List<AttachedFile> attachedAttachedFiles = new LinkedList<>();
+    private List<Card> templateCardList = new LinkedList<>();
+    private List<Tag> tagList = new LinkedList<>();
+    private List<Automation> automationList = new LinkedList<>();
 
     public Dashboard(String name) {
         this.name = name;
@@ -54,5 +54,21 @@ public class Dashboard {
 
     public void removeTemplateCard(Card card) {
         this.templateCardList.remove(card);
+    }
+
+    public void addTagToTagList(Tag tag) {
+        this.tagList.add(tag);
+    }
+
+    public void removeTagFromTagList(Tag tag) {
+        this.tagList.remove(tag);
+    }
+
+    public void addAutomationToAutomationList(Automation automation) {
+        this.automationList.add(automation);
+    }
+
+    public void removeAutomationFromAutomation(Automation automation) {
+        this.automationList.remove(automation);
     }
 }

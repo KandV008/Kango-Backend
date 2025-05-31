@@ -1,8 +1,7 @@
 package dev.kandv.kango.units.models;
 
-import dev.kandv.kango.models.Card;
-import dev.kandv.kango.models.Dashboard;
-import dev.kandv.kango.models.Table;
+import dev.kandv.kango.models.*;
+import dev.kandv.kango.models.enums.Color;
 import dev.kandv.kango.models.utils.AttachedFile;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -147,5 +146,49 @@ public class DashboardTest {
         this.dashboard.removeTemplateCard(expectedCard);
         templateCardList = this.dashboard.getTemplateCardList();
         Assertions.assertThat(templateCardList).isEmpty();
+    }
+
+    @Test
+    public void testAddTagToTagList() {
+        Tag newTag = new Tag("example", Color.PURPLE);
+
+        this.dashboard.addTagToTagList(newTag);
+        List<Tag> tags = this.dashboard.getTagList();
+        Assertions.assertThat(tags).hasSize(1);
+    }
+
+    @Test
+    public void testRemoveTagFromTagList() {
+        Tag newTag = new Tag("example", Color.PURPLE);
+
+        this.dashboard.addTagToTagList(newTag);
+        List<Tag> tags = this.dashboard.getTagList();
+        Assertions.assertThat(tags).hasSize(1);
+
+        this.dashboard.removeTagFromTagList(newTag);
+        tags = this.dashboard.getTagList();
+        Assertions.assertThat(tags).isEmpty();
+    }
+
+    @Test
+    public void testAddAutomationToAutomationList() {
+        Automation newAutomation = new Automation();
+
+        this.dashboard.addAutomationToAutomationList(newAutomation);
+        List<Automation> automations = this.dashboard.getAutomationList();
+        Assertions.assertThat(automations).hasSize(1);
+    }
+
+    @Test
+    public void testRemoveAutomationToAutomationList() {
+        Automation newAutomation = new Automation();
+
+        this.dashboard.addAutomationToAutomationList(newAutomation);
+        List<Automation> automations = this.dashboard.getAutomationList();
+        Assertions.assertThat(automations).hasSize(1);
+
+        this.dashboard.removeAutomationFromAutomation(newAutomation);
+        automations = this.dashboard.getAutomationList();
+        Assertions.assertThat(automations).isEmpty();
     }
 }

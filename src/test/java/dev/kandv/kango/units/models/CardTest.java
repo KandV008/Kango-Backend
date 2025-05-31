@@ -1,6 +1,7 @@
 package dev.kandv.kango.units.models;
 
 import dev.kandv.kango.models.Card;
+import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.Color;
 import dev.kandv.kango.models.utils.AttachedFile;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -143,5 +144,29 @@ public class CardTest {
         int result = newCard.getPosition();
 
         AssertionsForClassTypes.assertThat(result).isEqualTo(expectedPosition);
+    }
+
+    @Test
+    public void testAddTagToTagList() {
+        Card card = new Card();
+        Tag newTag = new Tag("example", Color.PURPLE);
+
+        card.addTagToTagList(newTag);
+        List<Tag> tags = card.getTagList();
+        assertThat(tags).hasSize(1);
+    }
+
+    @Test
+    public void testRemoveTagFromTagList() {
+        Card card = new Card();
+        Tag newTag = new Tag("example", Color.PURPLE);
+
+        card.addTagToTagList(newTag);
+        List<Tag> tags = card.getTagList();
+        assertThat(tags).hasSize(1);
+
+        card.removeTagFromTagList(newTag);
+        tags = card.getTagList();
+        assertThat(tags).isEmpty();
     }
 }
