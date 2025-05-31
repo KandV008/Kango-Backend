@@ -2,8 +2,8 @@ package dev.kandv.kango.units.models;
 
 import dev.kandv.kango.models.Card;
 import dev.kandv.kango.models.Table;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
