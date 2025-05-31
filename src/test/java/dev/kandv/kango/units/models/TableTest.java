@@ -45,9 +45,9 @@ public class TableTest {
     @Test
     public void testGetName(){
         String expectedName = "example";
-        Table table = new Table(expectedName);
+        Table exampleTable = new Table(expectedName);
 
-        String result = table.getName();
+        String result = exampleTable.getName();
         assertThat(result).isEqualTo(expectedName);
     }
 

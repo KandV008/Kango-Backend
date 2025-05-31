@@ -43,8 +43,8 @@ public class DashboardTest {
 
     @Test
     public void testGetTables(){
-        Dashboard dashboard = new Dashboard("Example Dashboard", this.tableList);
-        List<Table> result = dashboard.getTableList();
+        Dashboard exampleDashboard = new Dashboard("Example Dashboard", this.tableList);
+        List<Table> result = exampleDashboard.getTableList();
 
         assertThat(result).hasSize(2);
         assertThat(result).isEqualTo(this.tableList);

@@ -69,19 +69,19 @@ public class StateTest {
 
     @Test
     public void testSetDashboardList(){
-        List<Dashboard> dashboardList = new ArrayList<>();
-        this.state.setDashboardList(dashboardList);
+        List<Dashboard> dashboardArrayList = new ArrayList<>();
+        this.state.setDashboardList(dashboardArrayList);
 
         List<Dashboard> result = this.state.getDashboardList();
         assertThat(result).isEmpty();
-        assertThat(result).isEqualTo(dashboardList);
+        assertThat(result).isEqualTo(dashboardArrayList);
     }
 
     @Test
     public void testAddDashboard(){
         Dashboard dashboard = new Dashboard("Example Dashboard 1");
-        List<Dashboard> dashboardList = new ArrayList<>();
-        this.state.setDashboardList(dashboardList);
+        List<Dashboard> dashboardArrayList = new ArrayList<>();
+        this.state.setDashboardList(dashboardArrayList);
         this.state.addDashboard(dashboard);
 
         List<Dashboard> result = this.state.getDashboardList();
@@ -92,9 +92,9 @@ public class StateTest {
     @Test
     public void testRemoveDashboard(){
         this.state.removeDashboard(this.dashboard1);
-        List<Dashboard> dashboardList = this.state.getDashboardList();
-        assertThat(dashboardList).hasSize(1);
-        assertThat(dashboardList.getFirst()).isEqualTo(this.dashboard2);
+        List<Dashboard> stateDashboardList = this.state.getDashboardList();
+        assertThat(stateDashboardList).hasSize(1);
+        assertThat(stateDashboardList.getFirst()).isEqualTo(this.dashboard2);
     }
 
     @Test

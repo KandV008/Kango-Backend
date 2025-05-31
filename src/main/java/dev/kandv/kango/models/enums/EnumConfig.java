@@ -24,4 +24,8 @@ public class EnumConfig {
 
     public static final String ORANGE_HEX_CODE = "ffa846";
     public static final String ORANGE_LABEL = "Orange";
+
+    private EnumConfig() {
+        throw new IllegalStateException("Utility class");
+    }
 }
