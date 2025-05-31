@@ -2,6 +2,7 @@ package dev.kandv.kango.units.models;
 
 import dev.kandv.kango.models.Card;
 import dev.kandv.kango.models.enums.Color;
+import dev.kandv.kango.models.utils.AttachedFile;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.Test;
 
@@ -48,24 +49,24 @@ public class CardTest {
 
     @Test
     public void testAttachFile() {
-        Card.AttachedFile expectedAttachedFile = new Card.AttachedFile("example.png", "example");
+        AttachedFile expectedAttachedFile = new AttachedFile("example.png", "example");
         Card card = new Card();
 
         card.attachFile(expectedAttachedFile);
-        List<Card.AttachedFile> attachedFiles = card.getAttachedAttachedFiles();
+        List<AttachedFile> attachedFiles = card.getAttachedAttachedFiles();
 
         assertThat(attachedFiles).hasSize(1);
-        Card.AttachedFile attachedFile = attachedFiles.getFirst();
+        AttachedFile attachedFile = attachedFiles.getFirst();
         assertThat(attachedFile).isEqualTo(expectedAttachedFile);
     }
 
     @Test
     public void testDetachFile() {
-        Card.AttachedFile expectedAttachedFile = new Card.AttachedFile("example.png", "example");
+        AttachedFile expectedAttachedFile = new AttachedFile("example.png", "example");
         Card card = new Card();
 
         card.attachFile(expectedAttachedFile);
-        List<Card.AttachedFile> attachedFiles = card.getAttachedAttachedFiles();
+        List<AttachedFile> attachedFiles = card.getAttachedAttachedFiles();
 
         assertThat(attachedFiles).hasSize(1);
         card.detachFile(expectedAttachedFile);

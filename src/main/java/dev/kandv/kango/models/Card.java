@@ -1,6 +1,7 @@
 package dev.kandv.kango.models;
 
 import dev.kandv.kango.models.enums.Color;
+import dev.kandv.kango.models.utils.AttachedFile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,14 +24,6 @@ public class Card {
     private List<Check> checks = new ArrayList<>();
     private int position;
     // TODO Add Tag List
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class AttachedFile {
-        private String fileName;
-        private String fileUrl;
-    }
 
     @Getter
     @Setter
