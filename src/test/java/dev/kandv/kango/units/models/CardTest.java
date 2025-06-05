@@ -4,6 +4,7 @@ import dev.kandv.kango.models.Card;
 import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.Color;
 import dev.kandv.kango.models.utils.AttachedFile;
+import dev.kandv.kango.models.utils.Check;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.Test;
 
@@ -54,7 +55,7 @@ public class CardTest {
         Card card = new Card();
 
         card.attachFile(expectedAttachedFile);
-        List<AttachedFile> attachedFiles = card.getAttachedAttachedFiles();
+        List<AttachedFile> attachedFiles = card.getAttachedFiles();
 
         assertThat(attachedFiles).hasSize(1);
         AttachedFile attachedFile = attachedFiles.getFirst();
@@ -67,7 +68,7 @@ public class CardTest {
         Card card = new Card();
 
         card.attachFile(expectedAttachedFile);
-        List<AttachedFile> attachedFiles = card.getAttachedAttachedFiles();
+        List<AttachedFile> attachedFiles = card.getAttachedFiles();
 
         assertThat(attachedFiles).hasSize(1);
         card.detachFile(expectedAttachedFile);
@@ -89,19 +90,19 @@ public class CardTest {
     @Test
     public void testAddCheckToCheckList() {
         Card card = new Card();
-        Card.Check check = new Card.Check("Example", false);
+        Check check = new Check("Example", false);
 
         card.addCheckToCheckList(check);
-        List<Card.Check> checks = card.getChecks();
+        List<Check> checks = card.getChecks();
         assertThat(checks).hasSize(1);
     }
 
     @Test
     public void testRemoveCheckFromCheckList() {
         Card card = new Card();
-        Card.Check check = new Card.Check("Example", false);
+        Check check = new Check("Example", false);
         card.addCheckToCheckList(check);
-        List<Card.Check> checks = card.getChecks();
+        List<Check> checks = card.getChecks();
         assertThat(checks).hasSize(1);
 
         card.removeCheckFromCheckList(check);
@@ -112,13 +113,13 @@ public class CardTest {
     @Test
     public void testUpdateCheckFromCheckList() {
         Card card = new Card();
-        Card.Check check = new Card.Check("Example", false);
+        Check check = new Check("Example", false);
         card.addCheckToCheckList(check);
 
         check.setChecked(true);
         card.updateCheckFromCheckList(check);
 
-        List<Card.Check> checks = card.getChecks();
+        List<Check> checks = card.getChecks();
         assertThat(checks).hasSize(1);
         assertThat(checks.getFirst()).isEqualTo(check);
     }
