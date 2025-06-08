@@ -1,7 +1,10 @@
 package dev.kandv.kango.models;
 
+import dev.kandv.kango.models.enums.CardType;
 import dev.kandv.kango.models.enums.Color;
 import dev.kandv.kango.models.utils.AttachedFile;
+import dev.kandv.kango.models.utils.Check;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,36 +13,47 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Card {
+
+    public static final String NOT_FOUND_CHECK_ERROR = "ERROR: There is no such Check in this Card. Card: ";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
     private String description;
+    private CardType cardType = CardType.NORMAL;
     private Color color;
-    private List<AttachedFile> attachedAttachedFiles = new LinkedList<>();
+    @ElementCollection
+    @CollectionTable(name = "card_attached_file", joinColumns = @JoinColumn(name = "card_id"))
+    private List<AttachedFile> attachedFiles = new LinkedList<>();
     private Date deadLine;
+    @ElementCollection
+    @CollectionTable(name = "card_check", joinColumns = @JoinColumn(name = "card_id"))
     private List<Check> checks = new LinkedList<>();
-    private int position;
+    private int position = -1;
+    @ManyToMany
+    @JoinTable(
+            name = "card_tags",
+            joinColumns = @JoinColumn(name = "card_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
     private List<Tag> tagList = new LinkedList<>();
-
-    @Getter
-    @Setter
-    public static class Check {
-        private String label;
-        private boolean checked;
-        private int position;
-
-        public Check(String label, boolean checked) {
-            this.label = label;
-            this.checked = checked;
-        }
-    }
 
     public Card(String title){
         this.title = title;
+    }
+
+    public Card(String title, CardType cardType){
+        this.title = title;
+        this.cardType = cardType;
     }
 
     public Card(String title, int position){
@@ -48,11 +62,11 @@ public class Card {
     }
 
     public void attachFile(AttachedFile attachedFile){
-        this.attachedAttachedFiles.add(attachedFile);
+        this.attachedFiles.add(attachedFile);
     }
 
-    public void detachFile(AttachedFile attachedFile){
-        this.attachedAttachedFiles.remove(attachedFile);
+    public boolean detachFile(AttachedFile attachedFile){
+        return this.attachedFiles.remove(attachedFile);
     }
 
     public void addCheckToCheckList(Check check){
@@ -60,15 +74,26 @@ public class Card {
         this.checks.add(check);
     }
 
-    public void removeCheckFromCheckList(Check check) {
-        this.checks.remove(check);
+    public boolean removeCheckFromCheckList(Check check) {
+        boolean result = this.checks.remove(check);
+
+        if (!result){
+            return false;
+        }
+
         for (int i = 0; i < this.checks.size(); i++) {
             this.checks.get(i).setPosition(i);
         }
+
+        return true;
     }
 
-    public void updateCheckFromCheckList(Check check){
-        this.checks.set(check.position, check);
+    public void updateCheckFromCheckList(Check check) {
+        try {
+            this.checks.set(check.getPosition(), check);
+        } catch (IndexOutOfBoundsException e) {
+            throw new NoSuchElementException(NOT_FOUND_CHECK_ERROR + this.id);
+        }
     }
 
     public void addTagToTagList(Tag tag) {
@@ -77,5 +102,19 @@ public class Card {
 
     public void removeTagFromTagList(Tag tag) {
         this.tagList.remove(tag);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Card card = (Card) obj;
+        return this.id != null && this.id.equals(card.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
