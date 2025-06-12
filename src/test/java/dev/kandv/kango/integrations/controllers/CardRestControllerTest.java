@@ -2,8 +2,11 @@ package dev.kandv.kango.integrations.controllers;
 
 import dev.kandv.kango.KangoApplication;
 import dev.kandv.kango.dtos.CardDTO;
+import dev.kandv.kango.dtos.TagDTO;
+import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.CardType;
 import dev.kandv.kango.models.enums.Color;
+import dev.kandv.kango.models.enums.Visibility;
 import dev.kandv.kango.models.utils.AttachedFile;
 import dev.kandv.kango.models.utils.Check;
 import dev.kandv.kango.services.CardService;
@@ -27,6 +30,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import static dev.kandv.kango.controllers.CardRestController.*;
+import static dev.kandv.kango.controllers.TagRestController.TAG_NOT_FOUND;
 import static dev.kandv.kango.models.Card.NOT_FOUND_CHECK_ERROR;
 import static dev.kandv.kango.services.CardService.NOT_FOUND_ELEMENT_ERROR;
 import static dev.kandv.kango.services.CardService.NOT_FOUND_ID_ERROR;
@@ -84,7 +88,7 @@ public class CardRestControllerTest {
     @AfterEach
     void afterEach() {
         RestAssured.reset();
-        cardService.removeAllCards();
+        this.cardService.removeAllCards();
     }
 
     @Test
@@ -795,9 +799,119 @@ public class CardRestControllerTest {
                 .body("message", containsString(NOT_FOUND_ID_ERROR));
     }
 
-    // TODO Add functions related with Entity Tag
+    @Test
+    void testAddTagToCard(){
+        long cardId = this.actionCreateCard();
+        Tag tag = new Tag("Example Label", Color.BLUE);
+        long tagId = this.actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
 
-    public long actionCreateCard() {
+        this.actionAddTagToCard(cardId, tagId);
+    }
+
+    @Test
+    void testAddTagToCardWithInvalidTag() {
+        long cardId = actionCreateCard();
+        long tagId = 12345L;
+
+        given()
+                .pathParams("id", cardId)
+                .contentType(ContentType.JSON)
+                .body(tagId)
+                .when()
+                .post("/api/cards/{id}/tags", cardId)
+                .then()
+                .statusCode(404)
+                .body("message", containsString(TAG_NOT_FOUND));
+    }
+
+    @Test
+    void testAddTagToCardWithInvalidId() {
+        long cardId = 12345L;
+        Tag tag = new Tag("Example Label", Color.BLUE);
+        long tagId = this.actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
+
+        given()
+                .pathParams("id", cardId)
+                .contentType(ContentType.JSON)
+                .body(tagId)
+                .when()
+                .post("/api/cards/{id}/tags", cardId)
+                .then()
+                .statusCode(404)
+                .body("message", containsString(CARD_NOT_FOUND));
+    }
+
+    @Test
+    void testRemoveTagFromCard(){
+        long cardId = this.actionCreateCard();
+        Tag tag = new Tag("Example Label", Color.BLUE);
+        long tagId = this.actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
+
+        this.actionAddTagToCard(cardId, tagId);
+
+        given()
+                .pathParams("id", cardId)
+                .contentType(ContentType.JSON)
+                .body(tagId)
+                .when()
+                .delete("/api/cards/{id}/tags", cardId)
+                .then()
+                .statusCode(200)
+                .body("id", equalTo((int) cardId))
+                .body("tagList.size()", equalTo(0));
+    }
+
+    @Test
+    void testRemoveTagFromCardWithInvalidTag() {
+        long cardId = this.actionCreateCard();
+        long tagId = 12345L;
+
+        given()
+                .pathParams("id", cardId)
+                .contentType(ContentType.JSON)
+                .body(tagId)
+                .when()
+                .delete("/api/cards/{id}/tags", cardId)
+                .then()
+                .statusCode(404)
+                .body("message", containsString(TAG_NOT_FOUND));
+    }
+
+    @Test
+    void testRemoveTagFromCardWithInexistentTag() {
+        long cardId = this.actionCreateCard();
+        Tag tag = new Tag("Example Label", Color.BLUE);
+        long tagId = this.actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
+
+        given()
+                .pathParams("id", cardId)
+                .contentType(ContentType.JSON)
+                .body(tagId)
+                .when()
+                .delete("/api/cards/{id}/tags", cardId)
+                .then()
+                .statusCode(404)
+                .body("message", containsString(NOT_FOUND_ELEMENT_ERROR));
+    }
+
+    @Test
+    void testRemoveTagFromCardWithInvalidId() {
+        long cardId = 12345L;
+        Tag tag = new Tag("Example Label", Color.BLUE);
+        long tagId = this.actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
+
+        given()
+                .pathParams("id", cardId)
+                .contentType(ContentType.JSON)
+                .body(tagId)
+                .when()
+                .delete("/api/cards/{id}/tags", cardId)
+                .then()
+                .statusCode(404)
+                .body("message", containsString(NOT_FOUND_ID_ERROR));
+    }
+
+    long actionCreateCard() {
         return actionCreateCard(this.cardTitle, this.cardType);
     }
 
@@ -811,6 +925,21 @@ public class CardRestControllerTest {
                 .when()
                         .post("/api/cards")
                 .then()
+                        .statusCode(201)
+                        .extract()
+                        .path("id")).longValue();
+    }
+
+    long actionCreateTag(String label, Color color, Visibility visibility) {
+        TagDTO tagDTO = new TagDTO(label, color, visibility);
+
+        return ((Integer)
+                given()
+                        .contentType(ContentType.JSON)
+                        .body(tagDTO)
+                        .when()
+                        .post("/api/tags")
+                        .then()
                         .statusCode(201)
                         .extract()
                         .path("id")).longValue();
@@ -848,4 +977,18 @@ public class CardRestControllerTest {
                 .body("id", equalTo((int) cardId))
                 .body("checks.size()", equalTo(1));
     }
+
+    private void actionAddTagToCard(long cardId, long tagId) {
+        given()
+                .pathParams("id", cardId)
+                .contentType(ContentType.JSON)
+                .body(tagId)
+                .when()
+                .post("/api/cards/{id}/tags", cardId)
+                .then()
+                .statusCode(201)
+                .body("id", equalTo((int) cardId))
+                .body("tagList.size()", equalTo(1));
+    }
+
 }

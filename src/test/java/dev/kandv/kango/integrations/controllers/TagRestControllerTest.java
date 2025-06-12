@@ -75,7 +75,7 @@ public class TagRestControllerTest {
     @AfterEach
     void afterEach() {
         RestAssured.reset();
-        this.tagService.removeAllCards();
+        this.tagService.removeAllTags();
     }
 
     @Test
