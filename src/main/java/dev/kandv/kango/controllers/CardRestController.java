@@ -2,11 +2,13 @@ package dev.kandv.kango.controllers;
 
 import dev.kandv.kango.dtos.CardDTO;
 import dev.kandv.kango.models.Card;
+import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.CardType;
 import dev.kandv.kango.models.enums.Color;
 import dev.kandv.kango.models.utils.AttachedFile;
 import dev.kandv.kango.models.utils.Check;
 import dev.kandv.kango.services.CardService;
+import dev.kandv.kango.services.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import static dev.kandv.kango.controllers.TagRestController.TAG_NOT_FOUND;
 
 @RestController
 @RequestMapping("/api")
@@ -32,8 +36,11 @@ public class CardRestController {
     public static final String INVALID_ATTACHED_FILE = "ERROR: Some or all attributes from Attached File are invalid";
     public static final String NULL_CHECK = "ERROR: Check is null";
     public static final String INVALID_CHECK = "ERROR: Some or all attributes from Check are invalid";
+    public static final String INVALID_TAG = "ERROR: The Tag ";
+
 
     private final CardService cardService;
+    private final TagService tagService;
 
     private void checkCardTitle(String title) {
         if (title == null || title.isEmpty()) {
@@ -68,6 +75,12 @@ public class CardRestController {
     private void checkCard(Long id, Card currentCard) {
         if (currentCard == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + id);
+        }
+    }
+
+    private void checkTag(Long id, Tag currentTag) {
+        if (currentTag == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, TAG_NOT_FOUND + id);
         }
     }
 
@@ -268,6 +281,36 @@ public class CardRestController {
 
             return ResponseEntity.status(200).body(updatedCard);
         }catch (NoSuchElementException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PostMapping("/cards/{cardId}/tags")
+    public ResponseEntity<Card> addTagToCard(@PathVariable Long cardId, @RequestBody Long tagId) {
+        Tag tagById = this.tagService.getSpecificTagById(tagId);
+        this.checkTag(tagId, tagById);
+
+        try{
+            this.cardService.addTagToCard(cardId, tagById);
+            Card updatedCard = this.cardService.getSpecificCardById(cardId);
+
+            return ResponseEntity.status(201).body(updatedCard);
+        } catch (NoSuchElementException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + cardId);
+        }
+    }
+
+    @DeleteMapping("/cards/{cardId}/tags")
+    public ResponseEntity<Card> removeTagFromCard(@PathVariable Long cardId, @RequestBody Long tagId) {
+        Tag tagById = this.tagService.getSpecificTagById(tagId);
+        this.checkTag(tagId, tagById);
+
+        try{
+            this.cardService.removeTagFromCard(cardId, tagById);
+            Card updatedCard = this.cardService.getSpecificCardById(cardId);
+
+            return ResponseEntity.status(200).body(updatedCard);
+        } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

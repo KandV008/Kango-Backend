@@ -100,8 +100,8 @@ public class Card {
         this.tagList.add(tag);
     }
 
-    public void removeTagFromTagList(Tag tag) {
-        this.tagList.remove(tag);
+    public boolean removeTagFromTagList(Tag tag) {
+        return this.tagList.remove(tag);
     }
 
     @Override

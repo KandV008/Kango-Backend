@@ -1,15 +1,10 @@
 package dev.kandv.kango.models;
 
 import dev.kandv.kango.models.enums.Color;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import dev.kandv.kango.models.enums.Visibility;
+import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -21,12 +16,21 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NonNull
     private String label;
+    @NonNull
     private Color color;
+    private Visibility visibility = Visibility.LOCAL;
 
-    public Tag(String label, Color color) {
+    public Tag(@NonNull String label, @NonNull Color color) {
         this.label = label;
         this.color = color;
+    }
+
+    public Tag(@NonNull String label, @NonNull Color color, Visibility visibility) {
+        this.label = label;
+        this.color = color;
+        this.visibility = visibility;
     }
 
     @Override
