@@ -35,7 +35,7 @@ public class TagService {
         }
     }
 
-    public void removeAllCards() {
+    public void removeAllTags() {
         this.tagRepository.deleteAll();
     }
 

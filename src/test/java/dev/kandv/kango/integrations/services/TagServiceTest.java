@@ -63,7 +63,7 @@ public class TagServiceTest {
 
     @AfterEach
     void afterEach(){
-        this.tagService.removeAllCards();
+        this.tagService.removeAllTags();
     }
 
     @Test

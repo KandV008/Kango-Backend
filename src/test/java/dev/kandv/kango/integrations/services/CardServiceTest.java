@@ -2,11 +2,13 @@ package dev.kandv.kango.integrations.services;
 
 import dev.kandv.kango.KangoApplication;
 import dev.kandv.kango.models.Card;
+import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.CardType;
 import dev.kandv.kango.models.enums.Color;
 import dev.kandv.kango.models.utils.AttachedFile;
 import dev.kandv.kango.models.utils.Check;
 import dev.kandv.kango.services.CardService;
+import dev.kandv.kango.services.TagService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,6 +52,9 @@ public class CardServiceTest {
     @Autowired
     private CardService cardService;
 
+    @Autowired
+    private TagService tagService;
+
     Card card;
 
     @BeforeAll
@@ -70,6 +75,7 @@ public class CardServiceTest {
     @AfterEach
     void afterEach(){
         this.cardService.removeAllCards();
+        this.tagService.removeAllTags();
     }
 
     @Test
@@ -607,5 +613,121 @@ public class CardServiceTest {
         assertThat(exception.getMessage()).contains(NOT_FOUND_CHECK_ERROR);
     }
 
-    // TODO Add tests related with Entity Tag
+    @Test
+    @Transactional
+    void testAddTagToCard(){
+        Card exampleCard = this.cardService.createCard(this.card);
+        Tag newTag = new Tag("Example Tag", Color.BLUE);
+        Tag exampleTag = this.tagService.createTag(newTag);
+
+        this.cardService.addTagToCard(exampleCard.getId(), exampleTag);
+
+        Card resultCard = this.cardService.getSpecificCardById(exampleCard.getId());
+
+        assertThat(resultCard.getTagList()).hasSize(1);
+        assertThat(resultCard.getTagList().getFirst().getColor()).isEqualTo(exampleTag.getColor());
+    }
+
+    @Test
+    void testAddTagToCardWithInvalidId(){
+        Long invalidId = 12345L;
+
+        Tag newTag = new Tag("Example Tag", Color.BLUE);
+        Tag exampleTag = this.tagService.createTag(newTag);
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+            this.cardService.addTagToCard(invalidId, exampleTag);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+    }
+
+    @Test
+    void testAddTagToCardWithNullId(){
+        Tag newTag = new Tag("Example Tag", Color.BLUE);
+        Tag exampleTag = this.tagService.createTag(newTag);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            this.cardService.addTagToCard(null, exampleTag);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
+    }
+
+    @Test
+    void testAddTagToCardWithInvalidTag(){
+        Card exampleCard = this.cardService.createCard(this.card);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            this.cardService.addTagToCard(exampleCard.getId(), null);
+        });
+
+        assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
+    }
+
+    @Test
+    @Transactional
+    void testRemoveTagFromCard(){
+        Card exampleCard = this.cardService.createCard(this.card);
+        Tag newTag = new Tag("Example Tag", Color.BLUE);
+        Tag exampleTag = this.tagService.createTag(newTag);
+
+        this.cardService.addTagToCard(exampleCard.getId(), exampleTag);
+        Card resultCard = this.cardService.getSpecificCardById(exampleCard.getId());
+
+        assertThat(resultCard.getTagList()).hasSize(1);
+
+        this.cardService.removeTagFromCard(exampleCard.getId(), exampleTag);
+        resultCard = this.cardService.getSpecificCardById(exampleCard.getId());
+
+        assertThat(resultCard.getTagList()).isEmpty();
+    }
+
+    @Test
+    void testRemoveTagFromCardWithInvalidId(){
+        Long invalidId = 12345L;
+        Tag newTag = new Tag("Example Tag", Color.BLUE);
+        Tag exampleTag = this.tagService.createTag(newTag);
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+            this.cardService.removeTagFromCard(invalidId, exampleTag);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+    }
+
+    @Test
+    void testRemoveTagFromCardWithNullId(){
+        Tag newTag = new Tag("Example Tag", Color.BLUE);
+        Tag exampleTag = this.tagService.createTag(newTag);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            this.cardService.removeTagFromCard(null, exampleTag);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
+    }
+
+    @Test
+    void testRemoveTagFromCardWithNullValue(){
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            this.cardService.removeTagFromCard(12345L, null);
+        });
+
+        assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
+    }
+
+    @Test
+    @Transactional
+    void testRemoveTagFromCardWithInvalidTag(){
+        Card exampleCard = this.cardService.createCard(this.card);
+        Tag newTag = new Tag("Example Tag", Color.BLUE);
+        Tag exampleTag = this.tagService.createTag(newTag);
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+            this.cardService.removeTagFromCard(exampleCard.getId(), exampleTag);
+        });
+
+        assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_ERROR);
+    }
 }

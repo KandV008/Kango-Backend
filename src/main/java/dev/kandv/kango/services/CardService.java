@@ -185,5 +185,33 @@ public class CardService {
         this.cardRepository.save(currentCard);
     }
 
-    // TODO Add functions related with Entity Tag
+    public void addTagToCard(Long id, Tag tag) {
+        String element = "tag";
+        this.checkId(id);
+        this.checkElementToUpdate(tag, element);
+
+        Optional<Card> result = this.cardRepository.findById(id);
+
+        Card currentCard = this.checkDatabaseResult(id, result);
+        currentCard.addTagToTagList(tag);
+
+        this.cardRepository.save(currentCard);
+    }
+
+    public void removeTagFromCard(Long id, Tag tag) {
+        String element = "tag";
+        this.checkId(id);
+        this.checkElementToUpdate(tag, element);
+
+        Optional<Card> result = this.cardRepository.findById(id);
+
+        Card currentCard = this.checkDatabaseResult(id, result);
+        boolean isSuccess = currentCard.removeTagFromTagList(tag);
+
+        if (!isSuccess) {
+            throw new NoSuchElementException(NOT_FOUND_ELEMENT_ERROR + element);
+        }
+
+        this.cardRepository.save(currentCard);
+    }
 }
