@@ -2,11 +2,9 @@ package dev.kandv.kango.integrations.controllers;
 
 import dev.kandv.kango.KangoApplication;
 import dev.kandv.kango.dtos.CardDTO;
-import dev.kandv.kango.dtos.TagDTO;
 import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.CardType;
 import dev.kandv.kango.models.enums.Color;
-import dev.kandv.kango.models.enums.Visibility;
 import dev.kandv.kango.models.utils.AttachedFile;
 import dev.kandv.kango.models.utils.Check;
 import dev.kandv.kango.services.CardService;
@@ -31,6 +29,9 @@ import java.util.TimeZone;
 
 import static dev.kandv.kango.controllers.CardRestController.*;
 import static dev.kandv.kango.controllers.TagRestController.TAG_NOT_FOUND;
+import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionCreateCard;
+import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionGetSpecificCardById;
+import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionCreateTag;
 import static dev.kandv.kango.models.Card.NOT_FOUND_CHECK_ERROR;
 import static dev.kandv.kango.services.CardService.NOT_FOUND_ELEMENT_ERROR;
 import static dev.kandv.kango.services.CardService.NOT_FOUND_ID_ERROR;
@@ -64,9 +65,8 @@ public class CardRestControllerTest {
     @Autowired
     CardService cardService;
 
-    String cardTitle = "Example Title";
-    CardType cardType = CardType.NORMAL;
-
+    String cardTitle = CardRestControllerUtils.cardTitle;
+    CardType cardType = CardRestControllerUtils.cardType;
 
     @BeforeAll
     static void beforeAll(){
@@ -801,9 +801,9 @@ public class CardRestControllerTest {
 
     @Test
     void testAddTagToCard(){
-        long cardId = this.actionCreateCard();
+        long cardId = actionCreateCard();
         Tag tag = new Tag("Example Label", Color.BLUE);
-        long tagId = this.actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
+        long tagId = actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
 
         this.actionAddTagToCard(cardId, tagId);
     }
@@ -828,7 +828,7 @@ public class CardRestControllerTest {
     void testAddTagToCardWithInvalidId() {
         long cardId = 12345L;
         Tag tag = new Tag("Example Label", Color.BLUE);
-        long tagId = this.actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
+        long tagId = actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
 
         given()
                 .pathParams("id", cardId)
@@ -843,9 +843,9 @@ public class CardRestControllerTest {
 
     @Test
     void testRemoveTagFromCard(){
-        long cardId = this.actionCreateCard();
+        long cardId = actionCreateCard();
         Tag tag = new Tag("Example Label", Color.BLUE);
-        long tagId = this.actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
+        long tagId = actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
 
         this.actionAddTagToCard(cardId, tagId);
 
@@ -863,7 +863,7 @@ public class CardRestControllerTest {
 
     @Test
     void testRemoveTagFromCardWithInvalidTag() {
-        long cardId = this.actionCreateCard();
+        long cardId = actionCreateCard();
         long tagId = 12345L;
 
         given()
@@ -879,9 +879,9 @@ public class CardRestControllerTest {
 
     @Test
     void testRemoveTagFromCardWithInexistentTag() {
-        long cardId = this.actionCreateCard();
+        long cardId = actionCreateCard();
         Tag tag = new Tag("Example Label", Color.BLUE);
-        long tagId = this.actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
+        long tagId = actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
 
         given()
                 .pathParams("id", cardId)
@@ -898,7 +898,7 @@ public class CardRestControllerTest {
     void testRemoveTagFromCardWithInvalidId() {
         long cardId = 12345L;
         Tag tag = new Tag("Example Label", Color.BLUE);
-        long tagId = this.actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
+        long tagId = actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
 
         given()
                 .pathParams("id", cardId)
@@ -909,47 +909,6 @@ public class CardRestControllerTest {
                 .then()
                 .statusCode(404)
                 .body("message", containsString(NOT_FOUND_ID_ERROR));
-    }
-
-    long actionCreateCard() {
-        return actionCreateCard(this.cardTitle, this.cardType);
-    }
-
-    long actionCreateCard(String title, CardType cardType) {
-        CardDTO cardDTO = new CardDTO(title, cardType);
-
-        return ((Integer)
-                given()
-                        .contentType(ContentType.JSON)
-                        .body(cardDTO)
-                .when()
-                        .post("/api/cards")
-                .then()
-                        .statusCode(201)
-                        .extract()
-                        .path("id")).longValue();
-    }
-
-    long actionCreateTag(String label, Color color, Visibility visibility) {
-        TagDTO tagDTO = new TagDTO(label, color, visibility);
-
-        return ((Integer)
-                given()
-                        .contentType(ContentType.JSON)
-                        .body(tagDTO)
-                        .when()
-                        .post("/api/tags")
-                        .then()
-                        .statusCode(201)
-                        .extract()
-                        .path("id")).longValue();
-    }
-
-    Response actionGetSpecificCardById(Long id){
-        return  given()
-                    .pathParams("id", id)
-                .when()
-                    .get("/api/cards/{id}", id);
     }
 
     private void actionAttachFileToCard(long cardId, AttachedFile attachedFile) {

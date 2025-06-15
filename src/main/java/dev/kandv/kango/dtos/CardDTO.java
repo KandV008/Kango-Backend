@@ -1,6 +1,5 @@
 package dev.kandv.kango.dtos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import dev.kandv.kango.models.enums.CardType;
 import dev.kandv.kango.models.enums.Color;
 import lombok.AllArgsConstructor;

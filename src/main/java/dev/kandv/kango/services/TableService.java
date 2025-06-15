@@ -4,6 +4,7 @@ import dev.kandv.kango.models.Card;
 import dev.kandv.kango.models.Table;
 import dev.kandv.kango.models.enums.CardListSort;
 import dev.kandv.kango.repositories.TableRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +79,7 @@ public class TableService {
         this.tableRepository.save(currentTable);
     }
 
+    @Transactional
     public void addCardToTable(Long tableId, Long cardId) {
         this.checkId(tableId);
         this.checkElementToUpdate(cardId, "card_id");
@@ -95,6 +97,7 @@ public class TableService {
         this.tableRepository.save(currentTable);
     }
 
+    @Transactional
     public void removeCardFromTable(Long tableId, Long cardId) {
         this.checkId(tableId);
         this.checkElementToUpdate(cardId, "card_id");
@@ -118,6 +121,7 @@ public class TableService {
         this.tableRepository.save(currentTable);
     }
 
+    @Transactional
     public void sortCardListFromTable(Long id, CardListSort cardListSort) {
         this.checkId(id);
         this.checkElementToUpdate(cardListSort, "card_list_sort");
@@ -129,6 +133,7 @@ public class TableService {
         this.tableRepository.save(currentTable);
     }
 
+    @Transactional
     public void updateCardPositionFromTable(Long tableId, Long cardId, int newPosition) {
         this.checkId(tableId);
         this.checkElementToUpdate(cardId, "card_id");
@@ -151,6 +156,7 @@ public class TableService {
         this.tableRepository.save(currentTable);
     }
 
+    @Transactional
     public void moveCardFromTableToAnotherTable(Long originTableId, Long cardId, Long destinyTableId, int newPosition) {
         this.checkId(originTableId);
         this.checkElementToUpdate(cardId, "card_id");
@@ -175,6 +181,7 @@ public class TableService {
         this.tableRepository.save(destinyTable);
     }
 
+    @Transactional
     public void moveCardListFromTableToAnotherTable(Long originTableId, Long destinyTableId) {
         this.checkId(originTableId);
         this.checkElementToUpdate(destinyTableId, "destiny_table_id");
@@ -185,14 +192,16 @@ public class TableService {
         Table destinyTable = this.checkTableDatabaseResult(destinyTableId, destinyById);
 
         List<Card> cardListOrigin = originTable.getCardList();
-        originTable.setCardList(new LinkedList<>());
 
         cardListOrigin.forEach(destinyTable::addCardToCardList);
+
+        cardListOrigin.clear();
 
         this.tableRepository.save(originTable);
         this.tableRepository.save(destinyTable);
     }
 
+    @Transactional
     public void copyCardListFromTableToAnotherTable(Long originTableId, Long destinyTableId) {
         this.checkId(originTableId);
         this.checkElementToUpdate(destinyTableId, "destiny_table_id");
