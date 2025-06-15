@@ -21,6 +21,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static dev.kandv.kango.controllers.TagRestController.*;
+import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionCreateTag;
+import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionGetTagById;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -52,9 +54,9 @@ public class TagRestControllerTest {
     @Autowired
     TagService tagService;
 
-    String label = "Example Label";
-    Color color = Color.GREEN;
-    Visibility visibility = Visibility.GLOBAL;
+    String label = TagRestControllerUtils.label;
+    Color color = TagRestControllerUtils.color;
+    Visibility visibility = TagRestControllerUtils.visibility;
 
     @BeforeAll
     static void beforeAll(){
@@ -297,32 +299,6 @@ public class TagRestControllerTest {
                 .then()
                 .statusCode(400)
                 .body("message", containsString(INVALID_LABEL));
-    }
-
-    long actionCreateTag() {
-        return actionCreateTag(this.label, this.color, this.visibility);
-    }
-
-    long actionCreateTag(String label, Color color, Visibility visibility) {
-        TagDTO tagDTO = new TagDTO(label, color, visibility);
-
-        return ((Integer)
-                given()
-                        .contentType(ContentType.JSON)
-                        .body(tagDTO)
-                        .when()
-                        .post("/api/tags")
-                        .then()
-                        .statusCode(201)
-                        .extract()
-                        .path("id")).longValue();
-    }
-
-    private Response actionGetTagById(long tagId) {
-        return  given()
-                .pathParams("id", tagId)
-                .when()
-                .get("/api/tags/{id}", tagId);
     }
 
 }

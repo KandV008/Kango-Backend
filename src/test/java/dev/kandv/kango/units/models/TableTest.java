@@ -2,6 +2,7 @@ package dev.kandv.kango.units.models;
 
 import dev.kandv.kango.models.Card;
 import dev.kandv.kango.models.Table;
+import dev.kandv.kango.models.enums.CardListSort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -65,7 +66,7 @@ class TableTest {
     void testGetPosition(){
         String name = "example";
         int expectedPosition = 1;
-        Table newTable = new Table(name, expectedPosition, new ArrayList<>());
+        Table newTable = new Table(name, expectedPosition);
 
         int result = newTable.getPosition();
 
@@ -87,7 +88,7 @@ class TableTest {
     void testSortCardList(){
         this.table.setCardList(this.cardList);
 
-        this.table.sortCardList(Table.SortType.REVERSE);
+        this.table.sortCardList(CardListSort.BY_TITLE_REVERSE);
         List<Card> result = this.table.getCardList();
 
         assertThat(result).hasSize(2);
@@ -129,5 +130,27 @@ class TableTest {
         Card remainingCard = result.getFirst();
         assertThat(remainingCard).isEqualTo(this.card2);
         assertThat(remainingCard.getPosition()).isZero();
+    }
+
+    @Test
+    void testCopyCardList(){
+        this.table.setCardList(this.cardList);
+
+        List<Card> copy = this.table.copyCardList();
+
+        assertThat(copy).hasSize(this.cardList.size());
+
+        for (int i = 0; i < this.cardList.size(); i++) {
+            System.out.println("INDEX: " + 1);
+            Card element = this.cardList.get(i);
+            Card copyElement = copy.get(i);
+
+            assertThat(copyElement.getTitle()).isEqualTo(element.getTitle());
+            assertThat(copyElement.getPosition()).isEqualTo(element.getPosition());
+            assertThat(copyElement.getDescription()).isEqualTo(element.getDescription());
+            assertThat(copyElement.getCardType()).isEqualTo(element.getCardType());
+            assertThat(copyElement.getColor()).isEqualTo(element.getColor());
+            assertThat(copyElement.getDeadLine()).isEqualTo(element.getDeadLine());
+        }
     }
 }

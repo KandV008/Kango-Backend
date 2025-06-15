@@ -41,6 +41,11 @@ public class CardService {
     }
 
     public void removeAllCards() {
+        List<Card> cards = this.cardRepository.findAll();
+        for (Card card : cards) {
+            card.setTable(null);
+        }
+        this.cardRepository.saveAll(cards);
         this.cardRepository.deleteAll();
     }
 

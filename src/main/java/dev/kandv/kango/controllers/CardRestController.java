@@ -38,7 +38,6 @@ public class CardRestController {
     public static final String INVALID_CHECK = "ERROR: Some or all attributes from Check are invalid";
     public static final String INVALID_TAG = "ERROR: The Tag ";
 
-
     private final CardService cardService;
     private final TagService tagService;
 

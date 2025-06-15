@@ -1,5 +1,7 @@
 package dev.kandv.kango.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.kandv.kango.models.enums.CardType;
 import dev.kandv.kango.models.enums.Color;
 import dev.kandv.kango.models.utils.AttachedFile;
@@ -19,6 +21,10 @@ import java.util.NoSuchElementException;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 @Entity
 public class Card {
 
@@ -46,6 +52,9 @@ public class Card {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tagList = new LinkedList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "table_id")
+    private Table table;
 
     public Card(String title){
         this.title = title;
@@ -54,12 +63,29 @@ public class Card {
     public Card(String title, CardType cardType){
         this.title = title;
         this.cardType = cardType;
+        this.table = null;
     }
 
     public Card(String title, int position){
         this.title = title;
         this.position = position;
+        this.table = null;
     }
+
+    public Card(Card other) {
+        this.id = null;
+        this.title = other.title;
+        this.description = other.description;
+        this.cardType = other.cardType;
+        this.color = other.color;
+        this.attachedFiles = new LinkedList<>(other.attachedFiles); // TODO See about doing a deep copy
+        this.deadLine = other.deadLine != null ? new Date(other.deadLine.getTime()) : null;
+        this.checks = new LinkedList<>(other.checks); // TODO See about doing a deep copy
+        this.position = other.position;
+        this.tagList = new LinkedList<>(other.tagList); // TODO See about doing a deep copy
+        this.table = null;
+    }
+
 
     public void attachFile(AttachedFile attachedFile){
         this.attachedFiles.add(attachedFile);
