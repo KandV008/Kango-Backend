@@ -1,6 +1,9 @@
 package dev.kandv.kango.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.kandv.kango.models.utils.AttachedFile;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,13 +16,27 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
+@Entity
 public class Dashboard {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
+    @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Table> tableList;
+    @ElementCollection
+    @CollectionTable(name = "card_attached_file", joinColumns = @JoinColumn(name = "card_id"))
     private List<AttachedFile> attachedAttachedFiles = new LinkedList<>();
+    @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> templateCardList = new LinkedList<>();
+    @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tagList = new LinkedList<>();
-    private List<Automation> automationList = new LinkedList<>();
+    //private List<Automation> automationList = new LinkedList<>(); TODO Decide what to do
 
     public Dashboard(String name) {
         this.name = name;
@@ -63,11 +80,11 @@ public class Dashboard {
         this.tagList.remove(tag);
     }
 
-    public void addAutomationToAutomationList(Automation automation) {
-        this.automationList.add(automation);
-    }
-
-    public void removeAutomationFromAutomation(Automation automation) {
-        this.automationList.remove(automation);
-    }
+    //public void addAutomationToAutomationList(Automation automation) { TODO Decide what to do
+    //    this.automationList.add(automation);
+    //}
+//
+    //public void removeAutomationFromAutomation(Automation automation) {
+    //    this.automationList.remove(automation);
+    //}
 }

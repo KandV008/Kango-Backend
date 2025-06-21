@@ -33,6 +33,16 @@ public class Tag {
         this.visibility = visibility;
     }
 
+    public Tag(@NonNull String label, Visibility visibility){
+        this.label = label;
+        this.visibility = visibility;
+    }
+
+    public Tag(@NonNull Color color, Visibility visibility){
+        this.color = color;
+        this.visibility = visibility;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
