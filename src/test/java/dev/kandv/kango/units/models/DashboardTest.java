@@ -64,7 +64,7 @@ public class DashboardTest {
         AttachedFile expectedAttachedFile = new AttachedFile("example.png", "example");
 
         this.dashboard.attachFile(expectedAttachedFile);
-        List<AttachedFile> attachedFiles = this.dashboard.getAttachedAttachedFiles();
+        List<AttachedFile> attachedFiles = this.dashboard.getAttachedFiles();
 
         assertThat(attachedFiles).hasSize(1);
         AttachedFile attachedFile = attachedFiles.getFirst();
@@ -76,7 +76,7 @@ public class DashboardTest {
         AttachedFile expectedAttachedFile = new AttachedFile("example.png", "example");
 
         this.dashboard.attachFile(expectedAttachedFile);
-        List<AttachedFile> attachedFiles = this.dashboard.getAttachedAttachedFiles();
+        List<AttachedFile> attachedFiles = this.dashboard.getAttachedFiles();
 
         assertThat(attachedFiles).hasSize(1);
         this.dashboard.detachFile(expectedAttachedFile);

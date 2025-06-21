@@ -21,6 +21,9 @@ public class Tag {
     @NonNull
     private Color color;
     private Visibility visibility = Visibility.LOCAL;
+    @ManyToOne
+    @JoinColumn(name = "dashboard_id")
+    private Dashboard dashboard;
 
     public Tag(@NonNull String label, @NonNull Color color) {
         this.label = label;
