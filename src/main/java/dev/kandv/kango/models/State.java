@@ -1,5 +1,9 @@
 package dev.kandv.kango.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,13 +17,15 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class State {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private FontSize fontSize = FontSize.MEDIUM;
     private Language language = Language.ENGLISH;
     private ColorBlind colorBlind = ColorBlind.NONE;
-    private List<Dashboard> dashboardList = new ArrayList<>();
-    private List<Tag> tagList = new LinkedList<>();
-    private List<Automation> automationList = new LinkedList<>();
+    //private List<Automation> automationList = new LinkedList<>(); TODO Decide what to do
 
     public enum FontSize {
         SMALL, MEDIUM, LARGE
@@ -33,27 +39,26 @@ public class State {
         NONE, ANY
     }
 
-    public void addDashboard(Dashboard dashboard) {
-        this.dashboardList.add(dashboard);
+    //public void addAutomationToAutomationList(Automation automation) {
+    //    this.automationList.add(automation);
+    //}
+//
+    //public void removeAutomationFromAutomation(Automation automation) {
+    //    this.automationList.remove(automation);
+    //}
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        State state = (State) obj;
+        return this.id != null && this.id.equals(state.id);
     }
 
-    public void removeDashboard(Dashboard dashboard) {
-        this.dashboardList.remove(dashboard);
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 
-    public void addTagToTagList(Tag tag) {
-        this.tagList.add(tag);
-    }
-
-    public void removeTagFromTagList(Tag tag) {
-        this.tagList.remove(tag);
-    }
-
-    public void addAutomationToAutomationList(Automation automation) {
-        this.automationList.add(automation);
-    }
-
-    public void removeAutomationFromAutomation(Automation automation) {
-        this.automationList.remove(automation);
-    }
 }
