@@ -20,6 +20,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.TAG_NOT_FOUND;
 import static dev.kandv.kango.controllers.TagRestController.*;
 import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionCreateTag;
 import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionGetTagById;

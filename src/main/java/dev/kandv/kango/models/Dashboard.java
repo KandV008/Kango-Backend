@@ -1,6 +1,9 @@
 package dev.kandv.kango.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.kandv.kango.models.utils.AttachedFile;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,13 +16,27 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
+@Entity
 public class Dashboard {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
+    @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Table> tableList;
-    private List<AttachedFile> attachedAttachedFiles = new LinkedList<>();
+    @ElementCollection
+    @CollectionTable(name = "dashboard_attached_file", joinColumns = @JoinColumn(name = "dashboard_id"))
+    private List<AttachedFile> attachedFiles = new LinkedList<>();
+    @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> templateCardList = new LinkedList<>();
+    @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tagList = new LinkedList<>();
-    private List<Automation> automationList = new LinkedList<>();
+    //private List<Automation> automationList = new LinkedList<>(); TODO Decide what to do
 
     public Dashboard(String name) {
         this.name = name;
@@ -32,42 +49,61 @@ public class Dashboard {
     }
 
     public void attachFile(AttachedFile attachedFile) {
-        this.attachedAttachedFiles.add(attachedFile);
+        this.attachedFiles.add(attachedFile);
     }
 
-    public void detachFile(AttachedFile attachedFile) {
-        this.attachedAttachedFiles.remove(attachedFile);
+    public boolean detachFile(AttachedFile attachedFile) {
+        return this.attachedFiles.remove(attachedFile);
     }
 
     public void addTable(Table table) {
         this.tableList.add(table);
     }
 
-    public void removeTable(Table table) {
-        this.tableList.remove(table);
+    public boolean removeTable(Table table) {
+        boolean isSuccess = this.tableList.remove(table);
+
+        if (!isSuccess){
+            return false;
+        }
+
+        for (int i = 0; i < this.tableList.size(); i++) {
+            this.tableList.get(i).setPosition(i);
+        }
+
+        return true;
     }
 
     public void addTemplateCard(Card card) {
+        card.setDashboard(this);
         this.templateCardList.add(card);
     }
 
-    public void removeTemplateCard(Card card) {
-        this.templateCardList.remove(card);
+    public boolean removeTemplateCard(Card card) {
+        return this.templateCardList.remove(card);
     }
 
     public void addTagToTagList(Tag tag) {
         this.tagList.add(tag);
     }
 
-    public void removeTagFromTagList(Tag tag) {
-        this.tagList.remove(tag);
+    public boolean removeTagFromTagList(Tag tag) {
+        return this.tagList.remove(tag);
     }
 
-    public void addAutomationToAutomationList(Automation automation) {
-        this.automationList.add(automation);
-    }
+    //public void addAutomationToAutomationList(Automation automation) { TODO Decide what to do
+    //    this.automationList.add(automation);
+    //}
+//
+    //public void removeAutomationFromAutomation(Automation automation) {
+    //    this.automationList.remove(automation);
+    //}
 
-    public void removeAutomationFromAutomation(Automation automation) {
-        this.automationList.remove(automation);
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Dashboard tag = (Dashboard) obj;
+        return this.id != null && this.id.equals(tag.id);
     }
 }

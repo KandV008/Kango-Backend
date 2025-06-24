@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static dev.kandv.kango.controllers.TagRestController.TAG_NOT_FOUND;
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
 
 @RestController
 @RequestMapping("/api")
@@ -30,13 +30,6 @@ public class CardRestController {
     public static final String INVALID_CARD_TYPE = "ERROR: Invalid Card Type. Value: ";
     public static final String INVALID_COLOR = "ERROR: Invalid Card Color. Value: ";
     public static final String INVALID_DEAD_LINE = "ERROR: Invalid Card Color. Value: ";
-    public static final String CARD_NOT_FOUND = "ERROR: Card Not Found with that ID. ID: ";
-    public static final String INTERNAL_SERVER_ERROR = "ERROR: Something gone wrong at server. It is not you fault.";
-    public static final String NULL_ATTACHED_FILE = "ERROR: Attached File is null";
-    public static final String INVALID_ATTACHED_FILE = "ERROR: Some or all attributes from Attached File are invalid";
-    public static final String NULL_CHECK = "ERROR: Check is null";
-    public static final String INVALID_CHECK = "ERROR: Some or all attributes from Check are invalid";
-    public static final String INVALID_TAG = "ERROR: The Tag ";
 
     private final CardService cardService;
     private final TagService tagService;
@@ -229,7 +222,7 @@ public class CardRestController {
     }
 
     @DeleteMapping("/cards/{id}/attached-files")
-    public ResponseEntity<Card> detachFileToCard(@PathVariable Long id, @RequestBody AttachedFile attachedFile) {
+    public ResponseEntity<Card> detachFileFromCard(@PathVariable Long id, @RequestBody AttachedFile attachedFile) {
         this.checkAttachedFile(attachedFile);
 
         try{

@@ -21,6 +21,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static dev.kandv.kango.services.ErrorMessagesServices.*;
 import static dev.kandv.kango.services.TableService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -140,7 +141,7 @@ public class TableServiceTest {
 
         NoSuchElementException noSuchElementException = assertThrows(NoSuchElementException.class, () ->  this.tableService.updateNameTable(12345L, tableName));
 
-        assertThat(noSuchElementException.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(noSuchElementException.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -149,7 +150,7 @@ public class TableServiceTest {
 
         NoSuchElementException noSuchElementException = assertThrows(NoSuchElementException.class, () ->  this.tableService.updateNameTable(12345L, tableName));
 
-        assertThat(noSuchElementException.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(noSuchElementException.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -179,7 +180,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.addCardToTable(tableId, expectedCard.getId()));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -198,7 +199,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.addCardToTable(expectedTable.getId(), cardId));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -232,7 +233,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.removeCardFromTable(tableId, expectedCard.getId()));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -251,7 +252,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.removeCardFromTable(expectedTable.getId(), cardId));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -311,7 +312,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.sortCardListFromTable(tableId, typeSort));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -363,7 +364,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.updateCardPositionFromTable(tableId, expectedCard.getId(), 0));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -382,7 +383,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.updateCardPositionFromTable(expectedTable.getId(), cardId, 0));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -437,7 +438,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTableId, expectedCard.getId(), destinedTable.getId(), 0));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -458,7 +459,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTable.getId(), expectedCard.getId(), destinedTableId, 0));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -479,7 +480,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTable.getId(), cardId, destinedTable.getId(),0));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -572,7 +573,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardListFromTableToAnotherTable(originTableId, destinedTable.getId()));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -591,7 +592,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardListFromTableToAnotherTable(originTable.getId(), destinedTableId));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -689,7 +690,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.copyCardListFromTableToAnotherTable(originTableId, destinedTable.getId()));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
@@ -708,7 +709,7 @@ public class TableServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.copyCardListFromTableToAnotherTable(originTable.getId(), destinedTableId));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test

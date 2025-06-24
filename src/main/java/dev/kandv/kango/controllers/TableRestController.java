@@ -16,6 +16,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.INTERNAL_SERVER_ERROR;
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.TABLE_NOT_FOUND;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -24,9 +27,7 @@ public class TableRestController {
     public static final String INVALID_NAME = "ERROR: Invalid Table Name. Value: ";
     public static final String INVALID_CARD_LIST = "ERROR: Invalid Table Card List. Value: ";
     public static final String NULL_CARD_IN_CARD_LIST = "ERROR: Null Card in Card List. Index: ";
-    public static final String TABLE_NOT_FOUND = "ERROR: Table Not Found with that ID. ID: ";
     public static final String INVALID_CARD_LIST_SORT = "ERROR: Card List Sort is null";
-    public static final String INTERNAL_SERVER_ERROR = "ERROR: Something gone wrong at server. It is not you fault.";
 
     private final TableService tableService;
     private final CardService cardService;

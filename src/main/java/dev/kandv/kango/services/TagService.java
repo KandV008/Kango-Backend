@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static dev.kandv.kango.services.ErrorMessagesServices.INVALID_ID_ERROR;
+import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_TAG_WITH_ID_ERROR;
+
 @Service
 @RequiredArgsConstructor
 public class TagService {
 
     public static final String INVALID_TAG_CREATION_ERROR = "ERROR: Invalid Tag. Value: ";
-    public static final String INVALID_ID_ERROR = "ERROR: The ID value is invalid. ID: ";
-    public static final String NOT_FOUND_ID_ERROR = "ERROR: There is no Tag with such ID. ID: ";
     public static final String NULL_TAG_ERROR = "ERROR: The Tag is null.";
-    public static final String INVALID_TAG_ERROR = "ERROR: The Tag with the updated data is not valid. Case: ";
 
     private final TagRepository tagRepository;
 
@@ -61,7 +61,7 @@ public class TagService {
 
     private Tag checkDatabaseResult(Long id, Optional<Tag> result) {
         if (result.isEmpty()) {
-            throw new NoSuchElementException(NOT_FOUND_ID_ERROR + id);
+            throw new NoSuchElementException(NOT_FOUND_TAG_WITH_ID_ERROR + id);
         }
 
         return result.get();

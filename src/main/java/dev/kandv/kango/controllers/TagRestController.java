@@ -11,6 +11,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.INTERNAL_SERVER_ERROR;
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.TAG_NOT_FOUND;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -19,8 +22,6 @@ public class TagRestController {
     public static final String INVALID_LABEL = "ERROR: Invalid Tag Label. Value: ";
     public static final String INVALID_COLOR = "ERROR: Invalid Tag Color. Value: ";
     public static final String INVALID_VISIBILITY = "ERROR: Invalid Tag Visibility. Value: ";
-    public static final String TAG_NOT_FOUND = "ERROR: Tag Not Found with that ID. ID: ";
-    public static final String INTERNAL_SERVER_ERROR = "ERROR: Something gone wrong at server. It is not you fault.";
 
     private final TagService tagService;
 
