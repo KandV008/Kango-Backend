@@ -55,6 +55,9 @@ public class Card {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id")
     private Table table;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dashboard_id")
+    private Dashboard dashboard;
 
     public Card(String title){
         this.title = title;

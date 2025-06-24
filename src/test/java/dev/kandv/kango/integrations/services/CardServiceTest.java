@@ -27,6 +27,7 @@ import java.util.NoSuchElementException;
 
 import static dev.kandv.kango.models.Card.NOT_FOUND_CHECK_ERROR;
 import static dev.kandv.kango.services.CardService.*;
+import static dev.kandv.kango.services.ErrorMessagesServices.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -213,20 +214,16 @@ public class CardServiceTest {
         Long invalidId = 12345L;
         String newTitle = "New Title";
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.updateTitleCard(invalidId, newTitle);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.updateTitleCard(invalidId, newTitle));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
     void testUpdateTitleCardWithNullId(){
         String newTitle = "New Title";
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.updateTitleCard(null, newTitle);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.updateTitleCard(null, newTitle));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
@@ -248,20 +245,16 @@ public class CardServiceTest {
         Long invalidId = 12345L;
         String newDescription = "New Description";
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.updateDescriptionCard(invalidId, newDescription);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.updateDescriptionCard(invalidId, newDescription));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
     void testUpdateDescriptionCardWithNullId(){
         String newDescription = "New Description";
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.updateDescriptionCard(null, newDescription);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.updateDescriptionCard(null, newDescription));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
@@ -283,20 +276,16 @@ public class CardServiceTest {
         Long invalidId = 12345L;
         Color newColor = Color.PURPLE;
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.updateColorCard(invalidId, newColor);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.updateColorCard(invalidId, newColor));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
     void testUpdateColorCardWithNullId(){
         Color newColor = Color.PURPLE;
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.updateColorCard(null, newColor);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.updateColorCard(null, newColor));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
@@ -318,20 +307,16 @@ public class CardServiceTest {
         Long invalidId = 12345L;
         Date newDeadLine = new Date();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.updateDeadLineCard(invalidId, newDeadLine);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.updateDeadLineCard(invalidId, newDeadLine));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
     void testUpdateDeadLineCardWithNullId(){
         Date newDeadLine = new Date();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.updateDeadLineCard(null, newDeadLine);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.updateDeadLineCard(null, newDeadLine));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
@@ -354,29 +339,23 @@ public class CardServiceTest {
         Long invalidId = 12345L;
         AttachedFile newAttachedFile = new AttachedFile("example.pdf", "/");
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.attachFileToCard(invalidId, newAttachedFile);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.attachFileToCard(invalidId, newAttachedFile));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
     void testAddNewFileToCardWithNullId(){
         AttachedFile newAttachedFile = new AttachedFile("example.pdf", "/");
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.attachFileToCard(null, newAttachedFile);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.attachFileToCard(null, newAttachedFile));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
     void testAddNewFileToCardWithNullValue(){
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.attachFileToCard(1234L, null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.attachFileToCard(1234L, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -404,29 +383,23 @@ public class CardServiceTest {
         Long invalidId = 12345L;
         AttachedFile newAttachedFile = new AttachedFile("example.pdf", "/");
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.detachFileToCard(invalidId, newAttachedFile);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.detachFileToCard(invalidId, newAttachedFile));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
     void testRemoveFileFromCardWithNullId(){
         AttachedFile newAttachedFile = new AttachedFile("example.pdf", "/");
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.detachFileToCard(null, newAttachedFile);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.detachFileToCard(null, newAttachedFile));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
     void testRemoveFileFromCardWithNullValue(){
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.detachFileToCard(1234L, null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.detachFileToCard(1234L, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -437,11 +410,9 @@ public class CardServiceTest {
         Card exampleCard = this.cardService.createCard(this.card);
         AttachedFile newAttachedFile = new AttachedFile("example.pdf", "/");
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.detachFileToCard(exampleCard.getId(), newAttachedFile);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.detachFileToCard(exampleCard.getId(), newAttachedFile));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_IN_CARD_ERROR);
     }
 
     @Test
@@ -462,29 +433,23 @@ public class CardServiceTest {
         Long invalidId = 12345L;
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.addCheckToCard(invalidId, newCheck);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.addCheckToCard(invalidId, newCheck));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
     void testAddNewCheckToCardWithNullId(){
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.addCheckToCard(null, newCheck);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.addCheckToCard(null, newCheck));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
     void testAddNewCheckToCardWithNullValue(){
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.addCheckToCard(1234L, null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.addCheckToCard(1234L, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -512,29 +477,23 @@ public class CardServiceTest {
         Long invalidId = 12345L;
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.removeCheckFromCard(invalidId, newCheck);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.removeCheckFromCard(invalidId, newCheck));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
     void testRemoveCheckFromCardWithNullId(){
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.removeCheckFromCard(null, newCheck);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.removeCheckFromCard(null, newCheck));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
     void testRemoveCheckFromCardWithNullValue(){
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.removeCheckFromCard(1234L, null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.removeCheckFromCard(1234L, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -545,11 +504,9 @@ public class CardServiceTest {
         Card exampleCard = this.cardService.createCard(this.card);
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.removeCheckFromCard(exampleCard.getId(), newCheck);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.removeCheckFromCard(exampleCard.getId(), newCheck));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_IN_CARD_ERROR);
     }
 
     @Test
@@ -573,29 +530,23 @@ public class CardServiceTest {
         Long invalidId = 12345L;
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.updateCheckFromCard(invalidId, newCheck);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.updateCheckFromCard(invalidId, newCheck));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
     void testUpdateCheckFromCardWithNullId(){
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.updateCheckFromCard(null, newCheck);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.updateCheckFromCard(null, newCheck));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
     void testUpdateCheckFromCardWithNullValue(){
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.updateCheckFromCard(1234L, null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.updateCheckFromCard(1234L, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -606,9 +557,7 @@ public class CardServiceTest {
         Card exampleCard = this.cardService.createCard(this.card);
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.updateCheckFromCard(exampleCard.getId(), newCheck);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.updateCheckFromCard(exampleCard.getId(), newCheck));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CHECK_ERROR);
     }
@@ -635,11 +584,9 @@ public class CardServiceTest {
         Tag newTag = new Tag("Example Tag", Color.BLUE);
         Tag exampleTag = this.tagService.createTag(newTag);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.addTagToCard(invalidId, exampleTag);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.addTagToCard(invalidId, exampleTag));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
@@ -647,9 +594,7 @@ public class CardServiceTest {
         Tag newTag = new Tag("Example Tag", Color.BLUE);
         Tag exampleTag = this.tagService.createTag(newTag);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.addTagToCard(null, exampleTag);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.addTagToCard(null, exampleTag));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
@@ -658,9 +603,7 @@ public class CardServiceTest {
     void testAddTagToCardWithInvalidTag(){
         Card exampleCard = this.cardService.createCard(this.card);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.addTagToCard(exampleCard.getId(), null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.addTagToCard(exampleCard.getId(), null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -689,11 +632,9 @@ public class CardServiceTest {
         Tag newTag = new Tag("Example Tag", Color.BLUE);
         Tag exampleTag = this.tagService.createTag(newTag);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.removeTagFromCard(invalidId, exampleTag);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.removeTagFromCard(invalidId, exampleTag));
 
-        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_CARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
@@ -701,18 +642,14 @@ public class CardServiceTest {
         Tag newTag = new Tag("Example Tag", Color.BLUE);
         Tag exampleTag = this.tagService.createTag(newTag);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.removeTagFromCard(null, exampleTag);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.removeTagFromCard(null, exampleTag));
 
         assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
     void testRemoveTagFromCardWithNullValue(){
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.cardService.removeTagFromCard(12345L, null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.removeTagFromCard(12345L, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -724,10 +661,8 @@ public class CardServiceTest {
         Tag newTag = new Tag("Example Tag", Color.BLUE);
         Tag exampleTag = this.tagService.createTag(newTag);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            this.cardService.removeTagFromCard(exampleCard.getId(), exampleTag);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.removeTagFromCard(exampleCard.getId(), exampleTag));
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_IN_CARD_ERROR);
     }
 }

@@ -25,9 +25,12 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.TABLE_NOT_FOUND;
 import static dev.kandv.kango.controllers.TableRestController.*;
 import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionCreateCard;
 import static dev.kandv.kango.integrations.controllers.TableRestControllerUtils.*;
+import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_CARD_WITH_ID_ERROR;
+import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_TABLE_WITH_ID_ERROR;
 import static dev.kandv.kango.services.TableService.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
@@ -333,7 +336,7 @@ public class TableRestControllerTest {
                 .post("/api/tables/{id}/cards")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_TABLE_ERROR));
+                .body("message", containsString(NOT_FOUND_TABLE_WITH_ID_ERROR));
     }
 
     @Test
@@ -349,7 +352,7 @@ public class TableRestControllerTest {
                 .post("/api/tables/{id}/cards")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_CARD_ERROR));
+                .body("message", containsString(NOT_FOUND_CARD_WITH_ID_ERROR));
     }
 
     @Test
@@ -383,7 +386,7 @@ public class TableRestControllerTest {
                 .delete("/api/tables/{id}/cards")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_TABLE_ERROR));
+                .body("message", containsString(NOT_FOUND_TABLE_WITH_ID_ERROR));
     }
 
     @Test
@@ -399,7 +402,7 @@ public class TableRestControllerTest {
                 .delete("/api/tables/{id}/cards")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_CARD_ERROR));
+                .body("message", containsString(NOT_FOUND_CARD_WITH_ID_ERROR));
     }
 
     @Test
@@ -521,7 +524,7 @@ public class TableRestControllerTest {
                 .put("/api/tables/{tableId}/cards/{cardId}/position")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_TABLE_ERROR));
+                .body("message", containsString(NOT_FOUND_TABLE_WITH_ID_ERROR));
     }
 
     @Test
@@ -539,7 +542,7 @@ public class TableRestControllerTest {
                 .put("/api/tables/{tableId}/cards/{cardId}/position")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_CARD_ERROR));
+                .body("message", containsString(NOT_FOUND_CARD_WITH_ID_ERROR));
     }
 
     @Test
@@ -609,7 +612,7 @@ public class TableRestControllerTest {
                 .put("/api/tables/{tableId}/cards/{cardId}")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_TABLE_ERROR));
+                .body("message", containsString(NOT_FOUND_TABLE_WITH_ID_ERROR));
     }
 
     @Test
@@ -629,7 +632,7 @@ public class TableRestControllerTest {
                 .put("/api/tables/{tableId}/cards/{cardId}")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_CARD_ERROR));
+                .body("message", containsString(NOT_FOUND_CARD_WITH_ID_ERROR));
     }
 
     @Test
@@ -649,7 +652,7 @@ public class TableRestControllerTest {
                 .put("/api/tables/{tableId}/cards/{cardId}")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_TABLE_ERROR));
+                .body("message", containsString(NOT_FOUND_TABLE_WITH_ID_ERROR));
     }
 
     @Test
@@ -716,7 +719,7 @@ public class TableRestControllerTest {
                 .put("/api/tables/{tableId}/cards")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_TABLE_ERROR));
+                .body("message", containsString(NOT_FOUND_TABLE_WITH_ID_ERROR));
     }
 
     @Test
@@ -732,7 +735,7 @@ public class TableRestControllerTest {
                 .put("/api/tables/{tableId}/cards")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_TABLE_ERROR));
+                .body("message", containsString(NOT_FOUND_TABLE_WITH_ID_ERROR));
     }
 
     @Test
@@ -779,7 +782,7 @@ public class TableRestControllerTest {
                 .put("/api/tables/{tableId}/cards/copy")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_TABLE_ERROR));
+                .body("message", containsString(NOT_FOUND_TABLE_WITH_ID_ERROR));
     }
 
     @Test
@@ -795,7 +798,7 @@ public class TableRestControllerTest {
                 .put("/api/tables/{tableId}/cards/copy")
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_TABLE_ERROR));
+                .body("message", containsString(NOT_FOUND_TABLE_WITH_ID_ERROR));
     }
 
 }

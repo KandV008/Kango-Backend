@@ -31,6 +31,9 @@ public class Table {
     private int position;
     @OneToMany(mappedBy = "table", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cardList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "dashboard_id")
+    private Dashboard dashboard;
 
     public Table(@NonNull String name) {
         this.name = name;

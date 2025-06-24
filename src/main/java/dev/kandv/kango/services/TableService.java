@@ -8,20 +8,17 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static dev.kandv.kango.services.ErrorMessagesServices.*;
 
 @Service
 @RequiredArgsConstructor
 public class TableService {
 
     public static final String INVALID_TABLE_CREATION_ERROR = "ERROR: Invalid Table. Value: ";
-    public static final String INVALID_ID_ERROR = "ERROR: The ID value is invalid. ID: ";
-    public static final String NOT_FOUND_TABLE_ERROR = "ERROR: There is no Table with such ID. ID: ";
-    public static final String NOT_FOUND_CARD_ERROR = "ERROR: There is no Card with such ID. ID: ";
-    public static final String INVALID_ELEMENT_ERROR = "ERROR: The element value is null. Element: ";
     public static final String NOT_FOUND_CARD_IN_THE_TABLE_ERROR = "ERROR: There is no Card with such ID in the Table. ID: ";
 
     private final TableRepository tableRepository;
@@ -50,7 +47,7 @@ public class TableService {
 
     private Table checkTableDatabaseResult(Long id, Optional<Table> result) {
         if (result.isEmpty()) {
-            throw new NoSuchElementException(NOT_FOUND_TABLE_ERROR + id);
+            throw new NoSuchElementException(NOT_FOUND_TABLE_WITH_ID_ERROR + id);
         }
 
         return result.get();
@@ -87,7 +84,7 @@ public class TableService {
         Card currentCard = this.cardService.getSpecificCardById(cardId);
 
         if (currentCard == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_ERROR + cardId);
+            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + cardId);
         }
 
         Optional<Table> result = this.tableRepository.findById(tableId);
@@ -105,7 +102,7 @@ public class TableService {
         Card currentCard = this.cardService.getSpecificCardById(cardId);
 
         if (currentCard == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_ERROR + cardId);
+            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + cardId);
         }
 
         Optional<Table> result = this.tableRepository.findById(tableId);
@@ -141,7 +138,7 @@ public class TableService {
         Card currentCard = this.cardService.getSpecificCardById(cardId);
 
         if (currentCard == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_ERROR + cardId);
+            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + cardId);
         }
 
         Optional<Table> result = this.tableRepository.findById(tableId);
@@ -165,7 +162,7 @@ public class TableService {
         Card currentCard = this.cardService.getSpecificCardById(cardId);
 
         if (currentCard == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_ERROR + cardId);
+            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + cardId);
         }
 
         Optional<Table> destinyTableById = this.tableRepository.findById(destinyTableId);

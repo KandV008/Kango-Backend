@@ -1,4 +1,4 @@
-# Kango, a personal kanban
+# Kango, an auto-hosted Kanban
 
 <p align="center">
 <strong>This project is in development...</strong>
@@ -6,7 +6,7 @@
 
 Kango is a desktop application where you can use a Kanban board in a very simple way. Oriented for personal use, you can manage your hobbies or projects as well as your daily life.  
 
-It stands out for the possibility of configuring the database associated to your needs, although by default it will use Firebase.
+It stands out for the possibility of configuring the database associated to your needs, although by default it will use PostgreSQL locally.
 
 ## :clapper: Preview
 

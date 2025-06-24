@@ -10,6 +10,7 @@ on:
       - .gitattributes
       - .gitignore
       - compose.yaml
+      - docs/**
 
   pull_request:
     branches:

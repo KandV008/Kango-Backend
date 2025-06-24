@@ -15,15 +15,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static dev.kandv.kango.services.ErrorMessagesServices.*;
+
 @Service
 @RequiredArgsConstructor
 public class CardService {
 
     public static final String INVALID_CARD_CREATION_ERROR = "ERROR: Invalid Card. Value: ";
-    public static final String INVALID_ID_ERROR = "ERROR: The ID value is invalid. ID: ";
-    public static final String NOT_FOUND_ID_ERROR = "ERROR: There is no Card with such ID. ID: ";
-    public static final String INVALID_ELEMENT_ERROR = "ERROR: The element value is null. Element: ";
-    public static final String NOT_FOUND_ELEMENT_ERROR = "ERROR: There is no such Element in that Card. Element: ";
+    public static final String NOT_FOUND_ELEMENT_IN_CARD_ERROR = "ERROR: There is no such Element in that Card. Element: ";
 
     private final CardRepository cardRepository;
 
@@ -63,7 +62,7 @@ public class CardService {
 
     private Card checkDatabaseResult(Long id, Optional<Card> result) {
         if (result.isEmpty()) {
-            throw new NoSuchElementException(NOT_FOUND_ID_ERROR + id);
+            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + id);
         }
 
         return result.get();
@@ -143,7 +142,7 @@ public class CardService {
         boolean isSuccess = currentCard.detachFile(attachedFile);
 
         if (!isSuccess) {
-            throw new NoSuchElementException(NOT_FOUND_ELEMENT_ERROR + element);
+            throw new NoSuchElementException(NOT_FOUND_ELEMENT_IN_CARD_ERROR + element);
         }
 
         this.cardRepository.save(currentCard);
@@ -171,7 +170,7 @@ public class CardService {
         boolean isSuccess = currentCard.removeCheckFromCheckList(newCheck);
 
         if (!isSuccess) {
-            throw new NoSuchElementException(NOT_FOUND_ELEMENT_ERROR + element);
+            throw new NoSuchElementException(NOT_FOUND_ELEMENT_IN_CARD_ERROR + element);
         }
 
         this.cardRepository.save(currentCard);
@@ -214,7 +213,7 @@ public class CardService {
         boolean isSuccess = currentCard.removeTagFromTagList(tag);
 
         if (!isSuccess) {
-            throw new NoSuchElementException(NOT_FOUND_ELEMENT_ERROR + element);
+            throw new NoSuchElementException(NOT_FOUND_ELEMENT_IN_CARD_ERROR + element);
         }
 
         this.cardRepository.save(currentCard);
