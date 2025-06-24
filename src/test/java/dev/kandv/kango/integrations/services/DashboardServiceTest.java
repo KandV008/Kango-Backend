@@ -639,7 +639,7 @@ public class DashboardServiceTest {
                         this.dashboardService.removeTableFromDashboard(exampleDashboard.getId(), invalidId)
         );
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test
