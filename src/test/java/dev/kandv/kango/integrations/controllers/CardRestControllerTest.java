@@ -28,13 +28,13 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import static dev.kandv.kango.controllers.CardRestController.*;
-import static dev.kandv.kango.controllers.TagRestController.TAG_NOT_FOUND;
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
 import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionCreateCard;
 import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionGetSpecificCardById;
 import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionCreateTag;
 import static dev.kandv.kango.models.Card.NOT_FOUND_CHECK_ERROR;
-import static dev.kandv.kango.services.CardService.NOT_FOUND_ELEMENT_ERROR;
-import static dev.kandv.kango.services.CardService.NOT_FOUND_ID_ERROR;
+import static dev.kandv.kango.services.CardService.NOT_FOUND_ELEMENT_IN_CARD_ERROR;
+import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_CARD_WITH_ID_ERROR;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -557,7 +557,7 @@ public class CardRestControllerTest {
     }
 
     @Test
-    void testDetachFileToCard(){
+    void testDetachFileFromCard(){
         long cardId = actionCreateCard();
         AttachedFile attachedFile = new AttachedFile("example.png", "/example.png");
 
@@ -604,11 +604,11 @@ public class CardRestControllerTest {
                 .delete("/api/cards/{id}/attached-files", cardId)
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_ELEMENT_ERROR));
+                .body("message", containsString(NOT_FOUND_ELEMENT_IN_CARD_ERROR));
     }
 
     @Test
-    void testDetachFileToCardWithInvalidId() {
+    void testDetachFileFromCardWithInvalidId() {
         long cardId = 12345L;
         AttachedFile attachedFile = new AttachedFile("example.png", "/example.png");
 
@@ -620,7 +620,7 @@ public class CardRestControllerTest {
                 .delete("/api/cards/{id}/attached-files", cardId)
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_ID_ERROR));
+                .body("message", containsString(NOT_FOUND_CARD_WITH_ID_ERROR));
     }
 
     @Test
@@ -711,7 +711,7 @@ public class CardRestControllerTest {
                 .delete("/api/cards/{id}/checks", cardId)
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_ELEMENT_ERROR));
+                .body("message", containsString(NOT_FOUND_ELEMENT_IN_CARD_ERROR));
     }
 
     @Test
@@ -727,7 +727,7 @@ public class CardRestControllerTest {
                 .delete("/api/cards/{id}/attached-files", cardId)
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_ID_ERROR));
+                .body("message", containsString(NOT_FOUND_CARD_WITH_ID_ERROR));
     }
 
     @Test
@@ -796,7 +796,7 @@ public class CardRestControllerTest {
                 .put("/api/cards/{id}/checks", cardId)
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_ID_ERROR));
+                .body("message", containsString(NOT_FOUND_CARD_WITH_ID_ERROR));
     }
 
     @Test
@@ -891,7 +891,7 @@ public class CardRestControllerTest {
                 .delete("/api/cards/{id}/tags", cardId)
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_ELEMENT_ERROR));
+                .body("message", containsString(NOT_FOUND_ELEMENT_IN_CARD_ERROR));
     }
 
     @Test
@@ -908,7 +908,7 @@ public class CardRestControllerTest {
                 .delete("/api/cards/{id}/tags", cardId)
                 .then()
                 .statusCode(404)
-                .body("message", containsString(NOT_FOUND_ID_ERROR));
+                .body("message", containsString(NOT_FOUND_CARD_WITH_ID_ERROR));
     }
 
     private void actionAttachFileToCard(long cardId, AttachedFile attachedFile) {
