@@ -28,7 +28,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.NoSuchElementException;
 
 import static dev.kandv.kango.services.DashboardService.*;
-import static dev.kandv.kango.services.TableService.INVALID_ELEMENT_ERROR;
+import static dev.kandv.kango.services.ErrorMessagesServices.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -157,8 +157,9 @@ public class DashboardServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.updateName(invalidId, newName));
 
-        assertThat(exception.getMessage()).isEqualTo(DashboardService.NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_DASHBOARD_WITH_ID_ERROR + invalidId);
     }
+
 
     @Test
     void testUpdateNameDashboardWithNullId(){
@@ -166,7 +167,7 @@ public class DashboardServiceTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.dashboardService.updateName(null, newName));
 
-        assertThat(exception.getMessage()).isEqualTo(DashboardService.INVALID_ID_ERROR + null);
+        assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
@@ -189,7 +190,7 @@ public class DashboardServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.attachFileToDashboard(invalidId, newAttachedFile));
 
-        assertThat(exception.getMessage()).isEqualTo(DashboardService.NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_DASHBOARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
@@ -198,7 +199,7 @@ public class DashboardServiceTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.dashboardService.attachFileToDashboard(null, newAttachedFile));
 
-        assertThat(exception.getMessage()).isEqualTo(DashboardService.INVALID_ID_ERROR + null);
+        assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
@@ -233,7 +234,7 @@ public class DashboardServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.detachFileFromDashboard(invalidId, newAttachedFile));
 
-        assertThat(exception.getMessage()).isEqualTo(DashboardService.NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_DASHBOARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
@@ -242,7 +243,7 @@ public class DashboardServiceTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.dashboardService.detachFileFromDashboard(null, newAttachedFile));
 
-        assertThat(exception.getMessage()).isEqualTo(DashboardService.INVALID_ID_ERROR + null);
+        assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
@@ -260,7 +261,7 @@ public class DashboardServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.detachFileFromDashboard(exampleDashboard.getId(), newAttachedFile));
 
-        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_ELEMENT_ERROR_IN_DASHBOARD);
     }
 
     @Test
@@ -287,7 +288,7 @@ public class DashboardServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.addTagToDashboard(invalidId, exampleTag));
 
-        assertThat(exception.getMessage()).isEqualTo(DashboardService.NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_DASHBOARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
@@ -297,7 +298,7 @@ public class DashboardServiceTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.dashboardService.addTagToDashboard(null, exampleTag));
 
-        assertThat(exception.getMessage()).isEqualTo(DashboardService.INVALID_ID_ERROR + null);
+        assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
@@ -306,7 +307,7 @@ public class DashboardServiceTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.dashboardService.addTagToDashboard(exampleDashboard.getId(), null));
 
-        assertThat(exception.getMessage()).contains(DashboardService.INVALID_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
 
     @Test
@@ -335,7 +336,7 @@ public class DashboardServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.removeTagFromDashboard(invalidId, exampleTag));
 
-        assertThat(exception.getMessage()).isEqualTo(DashboardService.NOT_FOUND_ID_ERROR + invalidId);
+        assertThat(exception.getMessage()).isEqualTo(NOT_FOUND_DASHBOARD_WITH_ID_ERROR + invalidId);
     }
 
     @Test
@@ -345,14 +346,14 @@ public class DashboardServiceTest {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.dashboardService.removeTagFromDashboard(null, exampleTag));
 
-        assertThat(exception.getMessage()).isEqualTo(DashboardService.INVALID_ID_ERROR + null);
+        assertThat(exception.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
     }
 
     @Test
     void testRemoveTagFromDashboardWithNullValue(){
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.dashboardService.removeTagFromDashboard(12345L, null));
 
-        assertThat(exception.getMessage()).contains(DashboardService.INVALID_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
 
     @Test
@@ -364,7 +365,7 @@ public class DashboardServiceTest {
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.removeTagFromDashboard(exampleDashboard.getId(), exampleTag));
 
-        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_ELEMENT_ERROR_IN_DASHBOARD);
     }
 
     @Test
@@ -391,7 +392,7 @@ public class DashboardServiceTest {
                         this.dashboardService.addTemplateCardToDashboard(invalidId, expectedCard.getId())
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_ID_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_DASHBOARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -404,7 +405,7 @@ public class DashboardServiceTest {
                         this.dashboardService.addTemplateCardToDashboard(null, expectedCard.getId())
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.INVALID_ID_ERROR);
+        assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
     }
 
     @Test
@@ -418,7 +419,7 @@ public class DashboardServiceTest {
                         this.dashboardService.addTemplateCardToDashboard(exampleDashboard.getId(), invalidId)
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_CARD_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -431,7 +432,7 @@ public class DashboardServiceTest {
                         this.dashboardService.addTemplateCardToDashboard(exampleDashboard.getId(), null)
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.INVALID_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
 
     @Test
@@ -460,7 +461,7 @@ public class DashboardServiceTest {
                     this.dashboardService.removeTemplateCardFromDashboard(invalidId, expectedCard.getId())
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_ID_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_DASHBOARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -473,7 +474,7 @@ public class DashboardServiceTest {
                         this.dashboardService.removeTemplateCardFromDashboard(null, expectedCard.getId())
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.INVALID_ID_ERROR);
+        assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
     }
 
     @Test
@@ -487,7 +488,7 @@ public class DashboardServiceTest {
                         this.dashboardService.removeTemplateCardFromDashboard(exampleDashboard.getId(), invalidId)
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_CARD_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -500,7 +501,7 @@ public class DashboardServiceTest {
                         this.dashboardService.removeTemplateCardFromDashboard(exampleDashboard.getId(), null)
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.INVALID_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
 
     @Test
@@ -542,7 +543,7 @@ public class DashboardServiceTest {
                         this.dashboardService.addTableToDashboard(invalidId, expectedTable.getId())
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_ID_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_DASHBOARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -555,7 +556,7 @@ public class DashboardServiceTest {
                         this.dashboardService.addTableToDashboard(null, expectedTable.getId())
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.INVALID_ID_ERROR);
+        assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
     }
 
     @Test
@@ -569,7 +570,7 @@ public class DashboardServiceTest {
                         this.dashboardService.addTableToDashboard(exampleDashboard.getId(), invalidId)
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -582,7 +583,7 @@ public class DashboardServiceTest {
                         this.dashboardService.addTableToDashboard(exampleDashboard.getId(), null)
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.INVALID_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
 
     @Test
@@ -611,7 +612,7 @@ public class DashboardServiceTest {
                         this.dashboardService.removeTableFromDashboard(invalidId, expectedTable.getId())
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_ID_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_DASHBOARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -624,7 +625,7 @@ public class DashboardServiceTest {
                         this.dashboardService.removeTableFromDashboard(null, expectedTable.getId())
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.INVALID_ID_ERROR);
+        assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
     }
 
     @Test
@@ -638,7 +639,7 @@ public class DashboardServiceTest {
                         this.dashboardService.removeTableFromDashboard(exampleDashboard.getId(), invalidId)
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_TABLE_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
 
     @Test
@@ -651,7 +652,7 @@ public class DashboardServiceTest {
                         this.dashboardService.removeTableFromDashboard(exampleDashboard.getId(), null)
         );
 
-        assertThat(exception.getMessage()).contains(DashboardService.INVALID_ELEMENT_ERROR);
+        assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
 
     @Test

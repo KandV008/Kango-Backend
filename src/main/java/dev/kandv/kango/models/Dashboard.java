@@ -30,7 +30,7 @@ public class Dashboard {
     @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Table> tableList;
     @ElementCollection
-    @CollectionTable(name = "card_attached_file", joinColumns = @JoinColumn(name = "card_id"))
+    @CollectionTable(name = "dashboard_attached_file", joinColumns = @JoinColumn(name = "dashboard_id"))
     private List<AttachedFile> attachedFiles = new LinkedList<>();
     @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> templateCardList = new LinkedList<>();
