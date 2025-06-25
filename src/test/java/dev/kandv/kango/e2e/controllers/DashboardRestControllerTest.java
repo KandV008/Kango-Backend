@@ -1,4 +1,4 @@
-package dev.kandv.kango.integrations.controllers;
+package dev.kandv.kango.e2e.controllers;
 
 import dev.kandv.kango.KangoApplication;
 import dev.kandv.kango.dtos.DashboardDTO;
@@ -26,11 +26,11 @@ import java.util.ArrayList;
 
 import static dev.kandv.kango.controllers.DashboardRestController.*;
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
-import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionCreateCard;
-import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionGetSpecificCardById;
-import static dev.kandv.kango.integrations.controllers.DashboardRestControllerUtils.*;
-import static dev.kandv.kango.integrations.controllers.TableRestControllerUtils.actionCreateTable;
-import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionCreateTag;
+import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionCreateCard;
+import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionGetSpecificCardById;
+import static dev.kandv.kango.e2e.controllers.DashboardRestControllerUtils.*;
+import static dev.kandv.kango.e2e.controllers.TableRestControllerUtils.actionCreateTable;
+import static dev.kandv.kango.e2e.controllers.TagRestControllerUtils.actionCreateTag;
 import static dev.kandv.kango.services.DashboardService.*;
 import static dev.kandv.kango.services.ErrorMessagesServices.*;
 import static io.restassured.RestAssured.given;

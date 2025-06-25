@@ -1,4 +1,4 @@
-package dev.kandv.kango.integrations.controllers;
+package dev.kandv.kango.e2e.controllers;
 
 import dev.kandv.kango.KangoApplication;
 import dev.kandv.kango.dtos.CardDTO;
@@ -27,8 +27,8 @@ import java.util.List;
 
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.TABLE_NOT_FOUND;
 import static dev.kandv.kango.controllers.TableRestController.*;
-import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionCreateCard;
-import static dev.kandv.kango.integrations.controllers.TableRestControllerUtils.*;
+import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionCreateCard;
+import static dev.kandv.kango.e2e.controllers.TableRestControllerUtils.*;
 import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_CARD_WITH_ID_ERROR;
 import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_TABLE_WITH_ID_ERROR;
 import static dev.kandv.kango.services.TableService.*;

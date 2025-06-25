@@ -1,4 +1,4 @@
-package dev.kandv.kango.integrations.controllers;
+package dev.kandv.kango.e2e.controllers;
 
 import dev.kandv.kango.KangoApplication;
 import dev.kandv.kango.dtos.TagDTO;
@@ -22,8 +22,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.TAG_NOT_FOUND;
 import static dev.kandv.kango.controllers.TagRestController.*;
-import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionCreateTag;
-import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionGetTagById;
+import static dev.kandv.kango.e2e.controllers.TagRestControllerUtils.actionCreateTag;
+import static dev.kandv.kango.e2e.controllers.TagRestControllerUtils.actionGetTagById;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
