@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Testcontainers
 @SpringBootTest(classes = KangoApplication.class)
 @ExtendWith(SpringExtension.class)
-public class DashboardServiceTest {
+class DashboardServiceTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer =

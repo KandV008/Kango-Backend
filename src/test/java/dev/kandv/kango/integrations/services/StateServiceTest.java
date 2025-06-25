@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Testcontainers
 @SpringBootTest(classes = KangoApplication.class)
 @ExtendWith(SpringExtension.class)
-public class StateServiceTest {
+class StateServiceTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer =

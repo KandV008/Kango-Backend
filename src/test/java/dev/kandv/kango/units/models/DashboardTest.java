@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DashboardTest {
+class DashboardTest {
     private Dashboard dashboard;
     private List<Table> tableList;
 

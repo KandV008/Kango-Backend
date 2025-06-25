@@ -34,7 +34,7 @@ import static org.hamcrest.Matchers.equalTo;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ExtendWith(SpringExtension.class)
-public class TagRestControllerTest {
+class TagRestControllerTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer =
