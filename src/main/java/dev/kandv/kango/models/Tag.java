@@ -17,9 +17,9 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NonNull
-    private String label;
+    private String label = "";
     @NonNull
-    private Color color;
+    private Color color = Color.GREEN;
     private Visibility visibility = Visibility.LOCAL;
     @ManyToOne
     @JoinColumn(name = "dashboard_id")
@@ -53,5 +53,10 @@ public class Tag {
 
         Tag tag = (Tag) obj;
         return this.id != null && this.id.equals(tag.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

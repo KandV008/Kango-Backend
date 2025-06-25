@@ -323,7 +323,7 @@ public class CardServiceTest {
         this.cardService.detachFileToCard(currentId, newAttachedFile);
         resultCard = this.cardService.getSpecificCardById(currentId);
 
-        assertThat(resultCard.getAttachedFiles()).hasSize(0);
+        assertThat(resultCard.getAttachedFiles()).isEmpty();
     }
 
     @Test
@@ -417,7 +417,7 @@ public class CardServiceTest {
         this.cardService.removeCheckFromCard(currentId, newCheck);
         resultCard = this.cardService.getSpecificCardById(currentId);
 
-        assertThat(resultCard.getChecks()).hasSize(0);
+        assertThat(resultCard.getChecks()).isEmpty();
     }
 
     @Test

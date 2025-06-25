@@ -170,7 +170,7 @@ public class TableServiceTest {
         this.tableService.addCardToTable(expectedTable.getId(), expectedCard.getId());
 
         Table result = this.tableService.getSpecificTableById(expectedTable.getId());
-        assertThat(result.getCardList().size()).isEqualTo(1);
+        assertThat(result.getCardList()).hasSize(1);
         assertThat(result.getCardList()).contains(expectedCard);
     }
 
@@ -220,11 +220,11 @@ public class TableServiceTest {
 
         this.tableService.addCardToTable(expectedTable.getId(), expectedCard.getId());
         Table result = this.tableService.getSpecificTableById(expectedTable.getId());
-        assertThat(result.getCardList().size()).isEqualTo(1);
+        assertThat(result.getCardList()).hasSize(1);
 
         this.tableService.removeCardFromTable(expectedTable.getId(), expectedCard.getId());
         result = this.tableService.getSpecificTableById(expectedTable.getId());
-        assertThat(result.getCardList().size()).isEqualTo(0);
+        assertThat(result.getCardList()).isEmpty();
     }
 
     @Test
@@ -290,7 +290,7 @@ public class TableServiceTest {
 
         Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
 
-        assertThat(resultTable.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable.getCardList()).hasSize(2);
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList.get(0)).isEqualTo(expectedCard1);
         assertThat(cardList.get(1)).isEqualTo(expectedCard2);
@@ -300,7 +300,7 @@ public class TableServiceTest {
 
         resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
 
-        assertThat(resultTable.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable.getCardList()).hasSize(2);
         cardList = resultTable.getCardList();
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
@@ -347,13 +347,13 @@ public class TableServiceTest {
         this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
 
         Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
-        assertThat(resultTable.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable.getCardList()).hasSize(2);
 
         this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard1.getId(), 1);
 
         resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
         List<Card> cardList = resultTable.getCardList();
-        assertThat(cardList.size()).isEqualTo(2);
+        assertThat(cardList).hasSize(2);
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
     }
@@ -420,15 +420,15 @@ public class TableServiceTest {
         this.tableService.addCardToTable(table1.getId(), expectedCard.getId());
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(1);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).hasSize(1);
+        assertThat(resultTable2.getCardList()).isEmpty();
 
         this.tableService.moveCardFromTableToAnotherTable(table1.getId(), expectedCard.getId(), table2.getId(), 0);
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(1);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).hasSize(1);
     }
 
     @Test
@@ -527,15 +527,15 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(2);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).hasSize(2);
+        assertThat(resultTable2.getCardList()).isEmpty();
 
         this.tableService.moveCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).hasSize(2);
     }
 
     @Test
@@ -556,15 +556,15 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(1);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(1);
+        assertThat(resultTable1.getCardList()).hasSize(1);
+        assertThat(resultTable2.getCardList()).hasSize(1);
 
         this.tableService.moveCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).hasSize(2);
     }
 
     @Test
@@ -615,15 +615,15 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).isEmpty();
 
         this.tableService.moveCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).isEmpty();
     }
 
     @Test
@@ -644,15 +644,15 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(2);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).hasSize(2);
+        assertThat(resultTable2.getCardList()).isEmpty();
 
         this.tableService.copyCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(2);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable1.getCardList()).hasSize(2);
+        assertThat(resultTable2.getCardList()).hasSize(2);
     }
 
     @Test
@@ -673,15 +673,15 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(1);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(1);
+        assertThat(resultTable1.getCardList()).hasSize(1);
+        assertThat(resultTable2.getCardList()).hasSize(1);
 
         this.tableService.copyCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(1);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable1.getCardList()).hasSize(1);
+        assertThat(resultTable2.getCardList()).hasSize(2);
     }
 
     @Test
@@ -732,14 +732,14 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).isEmpty();
 
         this.tableService.copyCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).isEmpty();
     }
 }

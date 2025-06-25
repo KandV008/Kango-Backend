@@ -100,10 +100,10 @@ public class DashboardServiceTest {
         Dashboard expectedDashboard = this.dashboardService.createDashboard(this.dashboard);
 
         assertThat(expectedDashboard.getName()).isEqualTo(this.dashboard.getName());
-        assertThat(expectedDashboard.getAttachedFiles()).hasSize(0);
-        assertThat(expectedDashboard.getTableList()).hasSize(0);
-        assertThat(expectedDashboard.getTagList()).hasSize(0);
-        assertThat(expectedDashboard.getTemplateCardList()).hasSize(0);
+        assertThat(expectedDashboard.getAttachedFiles()).isEmpty();
+        assertThat(expectedDashboard.getTableList()).isEmpty();
+        assertThat(expectedDashboard.getTagList()).isEmpty();
+        assertThat(expectedDashboard.getTemplateCardList()).isEmpty();
     }
 
     @Test
@@ -225,7 +225,7 @@ public class DashboardServiceTest {
         this.dashboardService.detachFileFromDashboard(currentId, newAttachedFile);
         resultCard = this.dashboardService.getSpecificDashboardById(currentId);
 
-        assertThat(resultCard.getAttachedFiles()).hasSize(0);
+        assertThat(resultCard.getAttachedFiles()).isEmpty();
     }
 
     @Test
@@ -378,7 +378,7 @@ public class DashboardServiceTest {
         this.dashboardService.addTemplateCardToDashboard(exampleDashboard.getId(), expectedCard.getId());
 
         Dashboard result = this.dashboardService.getSpecificDashboardById(exampleDashboard.getId());
-        assertThat(result.getTemplateCardList().size()).isEqualTo(1);
+        assertThat(result.getTemplateCardList()).hasSize(1);
         assertThat(result.getTemplateCardList()).contains(expectedCard);
     }
 
@@ -448,7 +448,7 @@ public class DashboardServiceTest {
 
         this.dashboardService.removeTemplateCardFromDashboard(exampleDashboard.getId(), expectedCard.getId());
         result = this.dashboardService.getSpecificDashboardById(exampleDashboard.getId());
-        assertThat(result.getTemplateCardList()).hasSize(0);
+        assertThat(result.getTemplateCardList()).isEmpty();
     }
 
     @Test
@@ -529,7 +529,7 @@ public class DashboardServiceTest {
         this.dashboardService.addTableToDashboard(exampleDashboard.getId(), expectedTable.getId());
 
         Dashboard result = this.dashboardService.getSpecificDashboardById(exampleDashboard.getId());
-        assertThat(result.getTableList().size()).isEqualTo(1);
+        assertThat(result.getTableList()).hasSize(1);
         assertThat(result.getTableList()).contains(expectedTable);
     }
 
@@ -599,7 +599,7 @@ public class DashboardServiceTest {
 
         this.dashboardService.removeTableFromDashboard(exampleDashboard.getId(), expectedTable.getId());
         result = this.dashboardService.getSpecificDashboardById(exampleDashboard.getId());
-        assertThat(result.getTableList()).hasSize(0);
+        assertThat(result.getTableList()).isEmpty();
     }
 
     @Test
@@ -679,8 +679,9 @@ public class DashboardServiceTest {
 
         List<Dashboard> dashboardList = this.dashboardService.getAllDashboards();
 
-        assertThat(dashboardList).hasSize(3);
-        assertThat(dashboardList).contains(dashboard1, dashboard2, dashboard3);
+        assertThat(dashboardList)
+                .hasSize(3)
+                .contains(dashboard1, dashboard2, dashboard3);
     }
 
     @Test
@@ -703,13 +704,13 @@ public class DashboardServiceTest {
         this.dashboardService.addTableToDashboard(expectedDashboard.getId(), expectedTable2.getId());
 
         Dashboard resultDashboard = this.dashboardService.getSpecificDashboardById(expectedDashboard.getId());
-        assertThat(resultDashboard.getTableList().size()).isEqualTo(2);
+        assertThat(resultDashboard.getTableList()).hasSize(2);
 
         this.dashboardService.updateTablePositionFromDashboard(expectedDashboard.getId(), newTable1.getId(), 1);
 
         resultDashboard = this.dashboardService.getSpecificDashboardById(expectedDashboard.getId());
         List<Table> tableList = resultDashboard.getTableList();
-        assertThat(tableList.size()).isEqualTo(2);
+        assertThat(tableList).hasSize(2);
         assertThat(tableList.get(0)).isEqualTo(expectedTable2);
         assertThat(tableList.get(1)).isEqualTo(expectedTable1);
     }

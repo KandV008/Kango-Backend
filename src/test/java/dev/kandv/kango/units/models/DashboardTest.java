@@ -48,8 +48,9 @@ public class DashboardTest {
         Dashboard exampleDashboard = new Dashboard("Example Dashboard", this.tableList);
         List<Table> result = exampleDashboard.getTableList();
 
-        assertThat(result).hasSize(2);
-        assertThat(result).isEqualTo(this.tableList);
+        assertThat(result)
+                .hasSize(2)
+                .isEqualTo(this.tableList);
     }
 
     @Test
@@ -57,8 +58,9 @@ public class DashboardTest {
         this.dashboard.setTableList(this.tableList);
         List<Table> result = dashboard.getTableList();
 
-        assertThat(result).hasSize(2);
-        assertThat(result).isEqualTo(this.tableList);
+        assertThat(result)
+                .hasSize(2)
+                .isEqualTo(this.tableList);
     }
 
     @Test

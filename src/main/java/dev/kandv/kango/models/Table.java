@@ -71,20 +71,6 @@ public class Table {
         return true;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        Table table = (Table) obj;
-        return this.id != null && this.id.equals(table.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
     public boolean updateCardPosition(Card currentCard, int newPosition) {
         boolean success = this.cardList.remove(currentCard);
 
@@ -113,4 +99,17 @@ public class Table {
         return copyList;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Table table = (Table) obj;
+        return this.id != null && this.id.equals(table.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

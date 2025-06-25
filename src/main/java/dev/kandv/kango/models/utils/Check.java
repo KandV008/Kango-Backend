@@ -29,4 +29,9 @@ public class Check {
         boolean checkCheckedCheck = this.checked == (((Check) obj).checked);
         return checkCheckLabel && checkCheckedCheck;
     }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

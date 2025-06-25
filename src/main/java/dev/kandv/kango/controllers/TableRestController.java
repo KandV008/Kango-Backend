@@ -71,7 +71,7 @@ public class TableRestController {
 
         Table table = new Table(name);
 
-        cards.forEach((card) -> {
+        cards.forEach(card -> {
             Card newCard = new Card(card.getTitle(), card.getCardType());
             Card createdCard = this.cardService.createCard(newCard);
 

@@ -90,14 +90,6 @@ public class Dashboard {
         return this.tagList.remove(tag);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Dashboard tag = (Dashboard) obj;
-        return this.id != null && this.id.equals(tag.id);
-    }
-
     public boolean updateTablePosition(Table currentTable, int newPosition) {
         boolean success = this.tableList.remove(currentTable);
 
@@ -114,5 +106,18 @@ public class Dashboard {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Dashboard tag = (Dashboard) obj;
+        return this.id != null && this.id.equals(tag.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
