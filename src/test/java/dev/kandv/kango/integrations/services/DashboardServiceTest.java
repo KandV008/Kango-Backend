@@ -690,6 +690,99 @@ public class DashboardServiceTest {
         assertThat(dashboardList).isEmpty();
     }
 
+    @Test
+    @Transactional
+    void testUpdateTablePositionFromDashboard(){
+        Dashboard expectedDashboard = this.dashboardService.createDashboard(this.dashboard);
+        Table newTable1 = new Table("Table 1");
+        Table expectedTable1 = this.tableService.createTable(newTable1);
+        Table newTable2 = new Table("Table 2");
+        Table expectedTable2 = this.tableService.createTable(newTable2);
+
+        this.dashboardService.addTableToDashboard(expectedDashboard.getId(), expectedTable1.getId());
+        this.dashboardService.addTableToDashboard(expectedDashboard.getId(), expectedTable2.getId());
+
+        Dashboard resultDashboard = this.dashboardService.getSpecificDashboardById(expectedDashboard.getId());
+        assertThat(resultDashboard.getTableList().size()).isEqualTo(2);
+
+        this.dashboardService.updateTablePositionFromDashboard(expectedDashboard.getId(), newTable1.getId(), 1);
+
+        resultDashboard = this.dashboardService.getSpecificDashboardById(expectedDashboard.getId());
+        List<Table> tableList = resultDashboard.getTableList();
+        assertThat(tableList.size()).isEqualTo(2);
+        assertThat(tableList.get(0)).isEqualTo(expectedTable2);
+        assertThat(tableList.get(1)).isEqualTo(expectedTable1);
+    }
+
+    @Test
+    void testUpdateTablePositionFromDashboardWithInvalidDashboardId(){
+        Long dashboardId = 12345L;
+        Table expectedTable = this.tableService.createTable(this.table);
+
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () ->
+                        this.dashboardService.updateTablePositionFromDashboard(dashboardId, expectedTable.getId(), 1)
+        );
+
+        assertThat(exception.getMessage()).contains(NOT_FOUND_DASHBOARD_WITH_ID_ERROR);
+    }
+
+    @Test
+    void testUpdateTablePositionFromDashboardWithNullDashboardId(){
+        Table expectedTable = this.tableService.createTable(this.table);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        this.dashboardService.updateTablePositionFromDashboard(null, expectedTable.getId(), 1)
+        );
+
+        assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
+    }
+
+    @Test
+    void testUpdateTablePositionFromDashboardWithInvalidTableId(){
+        Dashboard expectedDashboard = this.dashboardService.createDashboard(this.dashboard);
+        Long tableId = 12345L;
+
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () ->
+                        this.dashboardService.updateTablePositionFromDashboard(expectedDashboard.getId(), tableId, 1)
+        );
+
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
+    }
+
+    @Test
+    void testUpdateTablePositionFromDashboardWithNullTableId(){
+        Dashboard expectedDashboard = this.dashboardService.createDashboard(this.dashboard);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        this.tableService.updateCardPositionFromTable(expectedDashboard.getId(), null, 0)
+        );
+
+        assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
+    }
+
+    @Test
+    @Transactional
+    void testUpdateTablePositionFromDashboardWithNoTables(){
+        Dashboard expectedDashboard = this.dashboardService.createDashboard(this.dashboard);
+        Table expectedTable = this.tableService.createTable(this.table);
+
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () ->
+                        this.dashboardService.updateTablePositionFromDashboard(expectedDashboard.getId(), expectedTable.getId(), 1)
+        );
+
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_IN_THE_DASHBOARD_ERROR);
+    }
+
 }
 
 

@@ -106,4 +106,22 @@ public class Dashboard {
         Dashboard tag = (Dashboard) obj;
         return this.id != null && this.id.equals(tag.id);
     }
+
+    public boolean updateTablePosition(Table currentTable, int newPosition) {
+        boolean success = this.tableList.remove(currentTable);
+
+        if (!success) {
+            return false;
+        }
+
+        currentTable.setPosition(newPosition);
+
+        this.tableList.add(newPosition, currentTable);
+
+        for (int i = newPosition; i < this.tableList.size(); i++) {
+            this.tableList.get(i).setPosition(i);
+        }
+
+        return true;
+    }
 }

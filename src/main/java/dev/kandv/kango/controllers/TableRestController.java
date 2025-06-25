@@ -165,7 +165,7 @@ public class TableRestController {
     }
 
     @PutMapping("/tables/{tableId}/cards/{cardId}/position")
-    public ResponseEntity<TableDTO> sortCardListFromTable(@PathVariable Long tableId, @PathVariable Long cardId, @RequestParam int position) {
+    public ResponseEntity<TableDTO> updateCardPositionFromTable(@PathVariable Long tableId, @PathVariable Long cardId, @RequestParam int position) {
         try{
             this.tableService.updateCardPositionFromTable(tableId, cardId, position);
             Table updatedTable = this.tableService.getSpecificTableById(tableId);

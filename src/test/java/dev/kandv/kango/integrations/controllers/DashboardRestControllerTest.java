@@ -22,6 +22,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.ArrayList;
+
 import static dev.kandv.kango.controllers.DashboardRestController.*;
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
 import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionCreateCard;
@@ -720,6 +722,86 @@ public class DashboardRestControllerTest {
                 .then()
                 .statusCode(200)
                 .body("size()", equalTo(0));
+    }
+
+    @Test
+    void testUpdateTablePositionFromDashboard() {
+        long dashboardId = actionCreateDashboard();
+        String tableName =  "This is the updated card";
+        long tableId1 = actionCreateTable(tableName, new ArrayList<>());
+        long tableId2 = actionCreateTable();
+
+        int newPosition = 1;
+
+        actionAddTableToDashboard(dashboardId, tableId1);
+        actionAddTableToDashboard(dashboardId, tableId2, 2);
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParams("dashboardId", dashboardId)
+                .pathParams("tableId", tableId1)
+                .queryParam("position", newPosition)
+                .when()
+                .put("/api/dashboards/{dashboardId}/tables/{tableId}/position")
+                .then()
+                .statusCode(200)
+                .body("tableList.size()", equalTo(2))
+                .body("tableList.get(0).name", equalTo(TableRestControllerUtils.name))
+                .body("tableList.get(1).name", equalTo(tableName));
+    }
+
+    @Test
+    void testUpdateTablePositionFromDashboardWithInvalidDashboardId() {
+        long dashboardId = 12345L;
+        long tableId = actionCreateTable();
+        int newPosition = 1;
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParams("dashboardId", dashboardId)
+                .pathParams("tableId", tableId)
+                .queryParam("position", newPosition)
+                .when()
+                .put("/api/dashboards/{dashboardId}/tables/{tableId}/position")
+                .then()
+                .statusCode(404)
+                .body("message", containsString(NOT_FOUND_DASHBOARD_WITH_ID_ERROR));
+    }
+
+    @Test
+    void testUpdateTablePositionFromDashboardWithInvalidTableId() {
+        long dashboardId = actionCreateDashboard();
+        long tableId = 12345L;
+        int newPosition = 1;
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParams("dashboardId", dashboardId)
+                .pathParams("tableId", tableId)
+                .queryParam("position", newPosition)
+                .when()
+                .put("/api/dashboards/{dashboardId}/tables/{tableId}/position")
+                .then()
+                .statusCode(404)
+                .body("message", containsString(NOT_FOUND_TABLE_WITH_ID_ERROR));
+    }
+
+    @Test
+    void testUpdateTablePositionFromDashboardWithNoTableList() {
+        long dashboardId = actionCreateDashboard();
+        long tableId = actionCreateTable();
+        int newPosition = 1;
+
+        given()
+                .contentType(ContentType.JSON)
+                .pathParams("dashboardId", dashboardId)
+                .pathParams("tableId", tableId)
+                .queryParam("position", newPosition)
+                .when()
+                .put("/api/dashboards/{dashboardId}/tables/{tableId}/position")
+                .then()
+                .statusCode(404)
+                .body("message", containsString(NOT_FOUND_TABLE_IN_THE_DASHBOARD_ERROR));
     }
 
     private void actionAttachFileToDashboard(long dashboardId, AttachedFile attachedFile) {
