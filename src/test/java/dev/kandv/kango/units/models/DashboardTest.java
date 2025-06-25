@@ -170,26 +170,4 @@ public class DashboardTest {
         tags = this.dashboard.getTagList();
         assertThat(tags).isEmpty();
     }
-
-    //@Test  TODO Decide what to do
-    //void testAddAutomationToAutomationList() {
-    //    Automation newAutomation = new Automation();
-
-    //    this.dashboard.addAutomationToAutomationList(newAutomation);
-    //    List<Automation> automations = this.dashboard.getAutomationList();
-    //    assertThat(automations).hasSize(1);
-    //}
-
-    //@Test
-    //void testRemoveAutomationToAutomationList() {
-    //    Automation newAutomation = new Automation();
-
-    //    this.dashboard.addAutomationToAutomationList(newAutomation);
-    //    List<Automation> automations = this.dashboard.getAutomationList();
-    //    assertThat(automations).hasSize(1);
-
-    //    this.dashboard.removeAutomationFromAutomation(newAutomation);
-    //    automations = this.dashboard.getAutomationList();
-    //    assertThat(automations).isEmpty();
-    //}
 }

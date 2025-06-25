@@ -52,10 +52,6 @@ public class CardService {
         this.cardRepository.deleteById(id);
     }
 
-    public List<Card> getAllLocalTemplateCards() {
-        return this.cardRepository.findAllByCardTypeEquals(CardType.LOCAL_TEMPLATE);
-    } //TODO Check what to do with this method
-
     public List<Card> getAllGlobalTemplateCards() {
         return this.cardRepository.findAllByCardTypeEquals(CardType.GLOBAL_TEMPLATE);
     }

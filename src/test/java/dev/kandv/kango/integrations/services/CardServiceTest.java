@@ -127,24 +127,6 @@ public class CardServiceTest {
     }
 
     @Test
-    void testGetAllLocalTemplateCards(){
-        Card localTemplateCard1 = new Card("TEMPLATE 1", CardType.LOCAL_TEMPLATE);
-        Card localTemplateCard2 = new Card("TEMPLATE 2", CardType.LOCAL_TEMPLATE);
-        Card localTemplateCard3 = new Card("TEMPLATE 3", CardType.LOCAL_TEMPLATE);
-
-        this.cardService.createCard(localTemplateCard1);
-        this.cardService.createCard(localTemplateCard2);
-        this.cardService.createCard(localTemplateCard3);
-
-        List<Card> localTemplateCardList = this.cardService.getAllLocalTemplateCards();
-
-        assertThat(localTemplateCardList).hasSize(3);
-        assertThat(localTemplateCardList.get(0)).isEqualTo(localTemplateCard1);
-        assertThat(localTemplateCardList.get(1)).isEqualTo(localTemplateCard2);
-        assertThat(localTemplateCardList.get(2)).isEqualTo(localTemplateCard3);
-    }
-
-    @Test
     void testGetAllGlobalTemplateCards(){
         Card globalTemplateCard1 = new Card("TEMPLATE 1", CardType.GLOBAL_TEMPLATE);
         Card globalTemplateCard2 = new Card("TEMPLATE 2", CardType.GLOBAL_TEMPLATE);
@@ -160,41 +142,6 @@ public class CardServiceTest {
         assertThat(localTemplateCardList.get(0)).isEqualTo(globalTemplateCard1);
         assertThat(localTemplateCardList.get(1)).isEqualTo(globalTemplateCard2);
         assertThat(localTemplateCardList.get(2)).isEqualTo(globalTemplateCard3);
-    }
-
-    @Test
-    void testCreateTemplateCard(){
-        Card localTemplateCard1 = new Card("TEMPLATE 1", CardType.LOCAL_TEMPLATE);
-        Card globalTemplateCard2 = new Card("TEMPLATE 2", CardType.GLOBAL_TEMPLATE);
-
-        Card result1 = this.cardService.createCard(localTemplateCard1);
-        Card result2 = this.cardService.createCard(globalTemplateCard2);
-
-        List<Card> allGlobalTemplateCards = this.cardService.getAllGlobalTemplateCards();
-        assertThat(allGlobalTemplateCards).hasSize(1);
-        assertThat(allGlobalTemplateCards.getFirst()).isEqualTo(result2);
-
-        List<Card> allLocalTemplateCards = this.cardService.getAllLocalTemplateCards();
-        assertThat(allLocalTemplateCards).hasSize(1);
-        assertThat(allLocalTemplateCards.getFirst()).isEqualTo(result1);
-    }
-    
-    @Test
-    void testDeleteTemplateCard(){
-        Card localTemplateCard1 = new Card("TEMPLATE 1", CardType.LOCAL_TEMPLATE);
-        Card globalTemplateCard2 = new Card("TEMPLATE 2", CardType.GLOBAL_TEMPLATE);
-
-        Card result1 = this.cardService.createCard(localTemplateCard1);
-        Card result2 = this.cardService.createCard(globalTemplateCard2);
-
-        this.cardService.removeCardById(result1.getId());
-        this.cardService.removeCardById(result2.getId());
-
-        List<Card> allLocalTemplateCards = this.cardService.getAllLocalTemplateCards();
-        assertThat(allLocalTemplateCards).isEmpty();
-
-        List<Card> allGlobalTemplateCards = this.cardService.getAllGlobalTemplateCards();
-        assertThat(allGlobalTemplateCards).isEmpty();
     }
 
     @Test
