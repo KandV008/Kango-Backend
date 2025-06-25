@@ -16,6 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static dev.kandv.kango.services.ErrorMessagesServices.*;
+import static dev.kandv.kango.services.ServiceUtils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -118,7 +119,7 @@ public class CardService {
 
     public void attachFileToCard(Long id, AttachedFile newAttachedFile) {
         this.checkId(id);
-        this.checkElementToUpdate(newAttachedFile, "attachFile");
+        this.checkElementToUpdate(newAttachedFile, FILE_ELEMENT);
 
         Optional<Card> result = this.cardRepository.findById(id);
 
@@ -128,9 +129,8 @@ public class CardService {
     }
 
     public void detachFileToCard(Long id, AttachedFile attachedFile) {
-        String element = "attachFile";
         this.checkId(id);
-        this.checkElementToUpdate(attachedFile, element);
+        this.checkElementToUpdate(attachedFile, FILE_ELEMENT);
 
         Optional<Card> result = this.cardRepository.findById(id);
 
@@ -138,7 +138,7 @@ public class CardService {
         boolean isSuccess = currentCard.detachFile(attachedFile);
 
         if (!isSuccess) {
-            throw new NoSuchElementException(NOT_FOUND_ELEMENT_IN_CARD_ERROR + element);
+            throw new NoSuchElementException(NOT_FOUND_ELEMENT_IN_CARD_ERROR + FILE_ELEMENT);
         }
 
         this.cardRepository.save(currentCard);
@@ -146,7 +146,7 @@ public class CardService {
 
     public void addCheckToCard(Long id, Check newCheck) {
         this.checkId(id);
-        this.checkElementToUpdate(newCheck, "check");
+        this.checkElementToUpdate(newCheck, CHECK_ELEMENT);
 
         Optional<Card> result = this.cardRepository.findById(id);
 
@@ -156,9 +156,8 @@ public class CardService {
     }
 
     public void removeCheckFromCard(Long id, Check newCheck) {
-        String element = "check";
         this.checkId(id);
-        this.checkElementToUpdate(newCheck, element);
+        this.checkElementToUpdate(newCheck, CHECK_ELEMENT);
 
         Optional<Card> result = this.cardRepository.findById(id);
 
@@ -166,16 +165,15 @@ public class CardService {
         boolean isSuccess = currentCard.removeCheckFromCheckList(newCheck);
 
         if (!isSuccess) {
-            throw new NoSuchElementException(NOT_FOUND_ELEMENT_IN_CARD_ERROR + element);
+            throw new NoSuchElementException(NOT_FOUND_ELEMENT_IN_CARD_ERROR + CHECK_ELEMENT);
         }
 
         this.cardRepository.save(currentCard);
     }
 
     public void updateCheckFromCard(Long id, Check newCheck) {
-        String element = "check";
         this.checkId(id);
-        this.checkElementToUpdate(newCheck, element);
+        this.checkElementToUpdate(newCheck, CHECK_ELEMENT);
 
         Optional<Card> result = this.cardRepository.findById(id);
 
@@ -186,9 +184,8 @@ public class CardService {
     }
 
     public void addTagToCard(Long id, Tag tag) {
-        String element = "tag";
         this.checkId(id);
-        this.checkElementToUpdate(tag, element);
+        this.checkElementToUpdate(tag, TAG_ELEMENT);
 
         Optional<Card> result = this.cardRepository.findById(id);
 
@@ -199,9 +196,8 @@ public class CardService {
     }
 
     public void removeTagFromCard(Long id, Tag tag) {
-        String element = "tag";
         this.checkId(id);
-        this.checkElementToUpdate(tag, element);
+        this.checkElementToUpdate(tag, TAG_ELEMENT);
 
         Optional<Card> result = this.cardRepository.findById(id);
 
@@ -209,7 +205,7 @@ public class CardService {
         boolean isSuccess = currentCard.removeTagFromTagList(tag);
 
         if (!isSuccess) {
-            throw new NoSuchElementException(NOT_FOUND_ELEMENT_IN_CARD_ERROR + element);
+            throw new NoSuchElementException(NOT_FOUND_ELEMENT_IN_CARD_ERROR + TAG_ELEMENT);
         }
 
         this.cardRepository.save(currentCard);

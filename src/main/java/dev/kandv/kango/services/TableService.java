@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static dev.kandv.kango.services.ErrorMessagesServices.*;
+import static dev.kandv.kango.services.ServiceUtils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +68,7 @@ public class TableService {
 
     public void updateNameTable(Long id, String newName) {
         this.checkId(id);
-        this.checkElementToUpdate(newName, "name");
+        this.checkElementToUpdate(newName, NAME_ELEMENT);
 
         Optional<Table> result = this.tableRepository.findById(id);
 
@@ -79,7 +80,7 @@ public class TableService {
     @Transactional
     public void addCardToTable(Long tableId, Long cardId) {
         this.checkId(tableId);
-        this.checkElementToUpdate(cardId, "card_id");
+        this.checkElementToUpdate(cardId, CARD_ID_ELEMENT);
 
         Card currentCard = this.cardService.getSpecificCardById(cardId);
 
@@ -97,7 +98,7 @@ public class TableService {
     @Transactional
     public void removeCardFromTable(Long tableId, Long cardId) {
         this.checkId(tableId);
-        this.checkElementToUpdate(cardId, "card_id");
+        this.checkElementToUpdate(cardId, CARD_ID_ELEMENT);
 
         Card currentCard = this.cardService.getSpecificCardById(cardId);
 
@@ -121,7 +122,7 @@ public class TableService {
     @Transactional
     public void sortCardListFromTable(Long id, CardListSort cardListSort) {
         this.checkId(id);
-        this.checkElementToUpdate(cardListSort, "card_list_sort");
+        this.checkElementToUpdate(cardListSort, CARD_LIST_SORT_ELEMENT);
 
         Optional<Table> result = this.tableRepository.findById(id);
         Table currentTable = this.checkTableDatabaseResult(id, result);
@@ -133,7 +134,7 @@ public class TableService {
     @Transactional
     public void updateCardPositionFromTable(Long tableId, Long cardId, int newPosition) {
         this.checkId(tableId);
-        this.checkElementToUpdate(cardId, "card_id");
+        this.checkElementToUpdate(cardId, CARD_ID_ELEMENT);
 
         Card currentCard = this.cardService.getSpecificCardById(cardId);
 
@@ -156,8 +157,8 @@ public class TableService {
     @Transactional
     public void moveCardFromTableToAnotherTable(Long originTableId, Long cardId, Long destinyTableId, int newPosition) {
         this.checkId(originTableId);
-        this.checkElementToUpdate(cardId, "card_id");
-        this.checkElementToUpdate(destinyTableId, "destiny_table_id");
+        this.checkElementToUpdate(cardId, CARD_ID_ELEMENT);
+        this.checkElementToUpdate(destinyTableId, DESTINY_TABLE_ID_ELEMENT);
 
         Card currentCard = this.cardService.getSpecificCardById(cardId);
 
@@ -181,7 +182,7 @@ public class TableService {
     @Transactional
     public void moveCardListFromTableToAnotherTable(Long originTableId, Long destinyTableId) {
         this.checkId(originTableId);
-        this.checkElementToUpdate(destinyTableId, "destiny_table_id");
+        this.checkElementToUpdate(destinyTableId, DESTINY_TABLE_ID_ELEMENT);
 
         Optional<Table> originById = this.tableRepository.findById(originTableId);
         Table originTable = this.checkTableDatabaseResult(originTableId, originById);
@@ -201,7 +202,7 @@ public class TableService {
     @Transactional
     public void copyCardListFromTableToAnotherTable(Long originTableId, Long destinyTableId) {
         this.checkId(originTableId);
-        this.checkElementToUpdate(destinyTableId, "destiny_table_id");
+        this.checkElementToUpdate(destinyTableId, DESTINY_TABLE_ID_ELEMENT);
 
         Optional<Table> originById = this.tableRepository.findById(originTableId);
         Table originTable = this.checkTableDatabaseResult(originTableId, originById);
