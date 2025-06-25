@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static dev.kandv.kango.models.Card.NOT_FOUND_CHECK_ERROR;
-import static dev.kandv.kango.services.CardService.*;
+import static dev.kandv.kango.services.CardService.INVALID_CARD_CREATION_ERROR;
+import static dev.kandv.kango.services.CardService.NOT_FOUND_ELEMENT_IN_CARD_ERROR;
 import static dev.kandv.kango.services.ErrorMessagesServices.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

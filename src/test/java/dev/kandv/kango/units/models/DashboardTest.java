@@ -1,9 +1,11 @@
 package dev.kandv.kango.units.models;
 
-import dev.kandv.kango.models.*;
+import dev.kandv.kango.models.Card;
+import dev.kandv.kango.models.Dashboard;
+import dev.kandv.kango.models.Table;
+import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.Color;
 import dev.kandv.kango.models.utils.AttachedFile;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

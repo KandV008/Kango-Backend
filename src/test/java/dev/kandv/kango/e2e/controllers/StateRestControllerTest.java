@@ -19,14 +19,13 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.STATE_NOT_FOUND;
 import static dev.kandv.kango.controllers.StateRestController.*;
 import static dev.kandv.kango.e2e.controllers.StateRestControllerUtils.actionCreateState;
 import static dev.kandv.kango.e2e.controllers.StateRestControllerUtils.actionGetState;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-
-import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.STATE_NOT_FOUND;
 
 @Testcontainers
 @SpringBootTest(

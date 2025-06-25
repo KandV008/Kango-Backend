@@ -1,7 +1,5 @@
 package dev.kandv.kango.e2e.controllers;
 
-import dev.kandv.kango.dtos.CardDTO;
-import dev.kandv.kango.models.enums.CardType;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 

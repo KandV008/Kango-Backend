@@ -11,7 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.NoSuchElementException;
 
-import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.INTERNAL_SERVER_ERROR;
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.STATE_NOT_FOUND;
 
 @RestController
 @RequestMapping("/api")

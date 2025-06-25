@@ -31,7 +31,7 @@ import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionCrea
 import static dev.kandv.kango.e2e.controllers.TableRestControllerUtils.*;
 import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_CARD_WITH_ID_ERROR;
 import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_TABLE_WITH_ID_ERROR;
-import static dev.kandv.kango.services.TableService.*;
+import static dev.kandv.kango.services.TableService.NOT_FOUND_CARD_IN_THE_TABLE_ERROR;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;

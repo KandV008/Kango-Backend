@@ -24,7 +24,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.ArrayList;
 
-import static dev.kandv.kango.controllers.DashboardRestController.*;
+import static dev.kandv.kango.controllers.DashboardRestController.INVALID_DASHBOARD_NAME;
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
 import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionCreateCard;
 import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionGetSpecificCardById;

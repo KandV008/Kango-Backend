@@ -1,14 +1,12 @@
 package dev.kandv.kango.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import dev.kandv.kango.models.enums.CardListSort;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Getter

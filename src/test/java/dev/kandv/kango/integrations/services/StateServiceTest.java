@@ -16,7 +16,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.NoSuchElementException;
 
-import static dev.kandv.kango.services.ErrorMessagesServices.*;
+import static dev.kandv.kango.services.ErrorMessagesServices.INVALID_ELEMENT_ERROR;
+import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_STATE_ERROR;
 import static dev.kandv.kango.services.StateService.INVALID_STATE_CREATION_ERROR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

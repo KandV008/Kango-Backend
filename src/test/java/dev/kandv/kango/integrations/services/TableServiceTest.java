@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static dev.kandv.kango.services.ErrorMessagesServices.*;
-import static dev.kandv.kango.services.TableService.*;
+import static dev.kandv.kango.services.TableService.INVALID_TABLE_CREATION_ERROR;
+import static dev.kandv.kango.services.TableService.NOT_FOUND_CARD_IN_THE_TABLE_ERROR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
