@@ -488,8 +488,15 @@ public class DashboardRestControllerTest {
         long dashboardId = actionCreateDashboard();
         long tableId = actionCreateTable();
 
-        actionAddTableToDashboard(dashboardId, tableId);
-    }
+        given()
+                .contentType(ContentType.JSON)
+                .body(tableId)
+                .pathParams("id", dashboardId)
+                .when()
+                .post("/api/dashboards/{id}/tables", dashboardId)
+                .then()
+                .statusCode(201)
+                .body("tableList.size()", equalTo(1));    }
 
     @Test
     void testAddTableToDashboardWithInvalidTableId() {
@@ -595,7 +602,15 @@ public class DashboardRestControllerTest {
         long dashboardId = actionCreateDashboard();
         long cardId = actionCreateCard(cardTitle, CardType.LOCAL_TEMPLATE);
 
-        actionAddTemplateCardToDashboard(dashboardId, cardId);
+        given()
+                .contentType(ContentType.JSON)
+                .body(cardId)
+                .pathParams("id", dashboardId)
+                .when()
+                .post("/api/dashboards/{id}/template-cards")
+                .then()
+                .statusCode(201)
+                .body("templateCardList.size()", equalTo(1));
     }
 
     @Test

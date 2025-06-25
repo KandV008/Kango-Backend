@@ -320,7 +320,15 @@ public class TableRestControllerTest {
         long tableId = actionCreateTable();
         long cardId = actionCreateCard();
 
-        actionAddCardToTable(tableId, cardId);
+        given()
+                .contentType(ContentType.JSON)
+                .body(cardId)
+                .pathParams("id", tableId)
+                .when()
+                .post("/api/tables/{id}/cards")
+                .then()
+                .statusCode(201)
+                .body("cardList.size()", equalTo(1));
     }
 
     @Test
