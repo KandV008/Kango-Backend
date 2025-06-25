@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -231,5 +232,9 @@ public class DashboardService {
 
         this.tableRepository.delete(currentTable);
         this.dashboardRepository.save(currentDashboard);
+    }
+
+    public List<Dashboard> getAllDashboards() {
+        return this.dashboardRepository.findAll();
     }
 }

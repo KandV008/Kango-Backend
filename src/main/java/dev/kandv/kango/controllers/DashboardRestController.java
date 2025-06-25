@@ -228,6 +228,12 @@ public class DashboardRestController {
         }
     }
 
+    @GetMapping("/dashboards")
+    public ResponseEntity<List<Dashboard>> getAllDashboards(){
+        List<Dashboard> dashboardList = this.dashboardService.getAllDashboards();
+        return ResponseEntity.status(200).body(dashboardList);
+    }
+
     static DashboardDTO mapToDashboardDTO(Dashboard currentDashboard) {
         List<Table> tableList = currentDashboard.getTableList();
         List<TableDTO> tableDTOList = tableList.stream().map((TableRestController::mapToTableDTO)).toList();

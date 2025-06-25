@@ -25,6 +25,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static dev.kandv.kango.services.DashboardService.*;
@@ -668,6 +669,25 @@ public class DashboardServiceTest {
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_IN_THE_DASHBOARD_ERROR);
+    }
+
+    @Test
+    void testGetAllDashboards(){
+        Dashboard dashboard1 = this.dashboardService.createDashboard(new Dashboard());
+        Dashboard dashboard2 = this.dashboardService.createDashboard(new Dashboard());
+        Dashboard dashboard3 = this.dashboardService.createDashboard(new Dashboard());
+
+        List<Dashboard> dashboardList = this.dashboardService.getAllDashboards();
+
+        assertThat(dashboardList).hasSize(3);
+        assertThat(dashboardList).contains(dashboard1, dashboard2, dashboard3);
+    }
+
+    @Test
+    void testGetAllDashboardsWithNoDashboards(){
+        List<Dashboard> dashboardList = this.dashboardService.getAllDashboards();
+
+        assertThat(dashboardList).isEmpty();
     }
 
 }

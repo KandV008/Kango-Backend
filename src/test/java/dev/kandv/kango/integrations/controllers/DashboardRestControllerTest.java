@@ -698,6 +698,30 @@ public class DashboardRestControllerTest {
                 .body("message", containsString(NOT_FOUND_CARD_IN_THE_DASHBOARD_ERROR));
     }
 
+    @Test
+    void testGetAllDashboards() {
+        actionCreateDashboard("Example 1");
+        actionCreateDashboard("Example 2");
+        actionCreateDashboard("Example 3");
+
+        given()
+                .when()
+                .get("api/dashboards")
+                .then()
+                .statusCode(200)
+                .body("size()", equalTo(3));
+    }
+
+    @Test
+    void testGetAllDashboardsWithNoDashboards() {
+        given()
+                .when()
+                .get("api/dashboards")
+                .then()
+                .statusCode(200)
+                .body("size()", equalTo(0));
+    }
+
     private void actionAttachFileToDashboard(long dashboardId, AttachedFile attachedFile) {
         given()
                 .pathParams("id", dashboardId)
@@ -723,5 +747,4 @@ public class DashboardRestControllerTest {
                 .body("id", equalTo((int) dashboardId))
                 .body("tagList.size()", equalTo(1));
     }
-
 }
