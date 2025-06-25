@@ -591,7 +591,7 @@ class DashboardServiceTest {
                         this.dashboardService.addTableToDashboard(dashboardId, invalidId)
         );
 
-        assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
+        assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
 
     @Test

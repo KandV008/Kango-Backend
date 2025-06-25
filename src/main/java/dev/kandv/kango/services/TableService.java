@@ -80,13 +80,7 @@ public class TableService {
     @Transactional
     public void addCardToTable(Long tableId, Long cardId) {
         this.checkId(tableId);
-        this.checkElementToUpdate(cardId, CARD_ID_ELEMENT);
-
-        Card currentCard = this.cardService.getSpecificCardById(cardId);
-
-        if (currentCard == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + cardId);
-        }
+        Card currentCard = obtainCard(cardId, cardService);
 
         Optional<Table> result = this.tableRepository.findById(tableId);
         Table currentTable = this.checkTableDatabaseResult(tableId, result);
@@ -98,13 +92,7 @@ public class TableService {
     @Transactional
     public void removeCardFromTable(Long tableId, Long cardId) {
         this.checkId(tableId);
-        this.checkElementToUpdate(cardId, CARD_ID_ELEMENT);
-
-        Card currentCard = this.cardService.getSpecificCardById(cardId);
-
-        if (currentCard == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + cardId);
-        }
+        Card currentCard = obtainCard(cardId, cardService);
 
         Optional<Table> result = this.tableRepository.findById(tableId);
         Table currentTable = this.checkTableDatabaseResult(tableId, result);
@@ -134,13 +122,7 @@ public class TableService {
     @Transactional
     public void updateCardPositionFromTable(Long tableId, Long cardId, int newPosition) {
         this.checkId(tableId);
-        this.checkElementToUpdate(cardId, CARD_ID_ELEMENT);
-
-        Card currentCard = this.cardService.getSpecificCardById(cardId);
-
-        if (currentCard == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + cardId);
-        }
+        Card currentCard = obtainCard(cardId, cardService);
 
         Optional<Table> result = this.tableRepository.findById(tableId);
         Table currentTable = this.checkTableDatabaseResult(tableId, result);
@@ -157,17 +139,10 @@ public class TableService {
     @Transactional
     public void moveCardFromTableToAnotherTable(Long originTableId, Long cardId, Long destinyTableId, int newPosition) {
         this.checkId(originTableId);
-        this.checkElementToUpdate(cardId, CARD_ID_ELEMENT);
-        this.checkElementToUpdate(destinyTableId, DESTINY_TABLE_ID_ELEMENT);
 
-        Card currentCard = this.cardService.getSpecificCardById(cardId);
+        Card currentCard = obtainCard(cardId, this.cardService);
 
-        if (currentCard == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + cardId);
-        }
-
-        Optional<Table> destinyTableById = this.tableRepository.findById(destinyTableId);
-        Table destinyTable = this.checkTableDatabaseResult(destinyTableId, destinyTableById);
+        Table destinyTable = obtainDestinationTable(destinyTableId);
 
         this.removeCardFromTable(originTableId, cardId);
 
@@ -181,13 +156,8 @@ public class TableService {
 
     @Transactional
     public void moveCardListFromTableToAnotherTable(Long originTableId, Long destinyTableId) {
-        this.checkId(originTableId);
-        this.checkElementToUpdate(destinyTableId, DESTINY_TABLE_ID_ELEMENT);
-
-        Optional<Table> originById = this.tableRepository.findById(originTableId);
-        Table originTable = this.checkTableDatabaseResult(originTableId, originById);
-        Optional<Table> destinyById = this.tableRepository.findById(destinyTableId);
-        Table destinyTable = this.checkTableDatabaseResult(destinyTableId, destinyById);
+        Table originTable = obtainOriginTable(originTableId);
+        Table destinyTable = obtainDestinationTable(destinyTableId);
 
         List<Card> cardListOrigin = originTable.getCardList();
 
@@ -201,13 +171,8 @@ public class TableService {
 
     @Transactional
     public void copyCardListFromTableToAnotherTable(Long originTableId, Long destinyTableId) {
-        this.checkId(originTableId);
-        this.checkElementToUpdate(destinyTableId, DESTINY_TABLE_ID_ELEMENT);
-
-        Optional<Table> originById = this.tableRepository.findById(originTableId);
-        Table originTable = this.checkTableDatabaseResult(originTableId, originById);
-        Optional<Table> destinyById = this.tableRepository.findById(destinyTableId);
-        Table destinyTable = this.checkTableDatabaseResult(destinyTableId, destinyById);
+        Table originTable = obtainOriginTable(originTableId);
+        Table destinyTable = obtainDestinationTable(destinyTableId);
 
         List<Card> copyCardList = originTable.copyCardList();
 
@@ -219,4 +184,15 @@ public class TableService {
         this.tableRepository.save(destinyTable);
     }
 
+    private Table obtainOriginTable(Long originTableId) {
+        this.checkId(originTableId);
+        Optional<Table> originById = this.tableRepository.findById(originTableId);
+        return this.checkTableDatabaseResult(originTableId, originById);
+    }
+
+    private Table obtainDestinationTable(Long destinyTableId) {
+        this.checkElementToUpdate(destinyTableId, DESTINY_TABLE_ID_ELEMENT);
+        Optional<Table> destinyById = this.tableRepository.findById(destinyTableId);
+        return this.checkTableDatabaseResult(destinyTableId, destinyById);
+    }
 }

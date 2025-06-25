@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
+import static dev.kandv.kango.controllers.RestControllerUtils.*;
 
 @RestController
 @RequestMapping("/api")
@@ -64,31 +65,6 @@ public class CardRestController {
         }
     }
 
-    private void checkCard(Long id, Card currentCard) {
-        if (currentCard == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + id);
-        }
-    }
-
-    private void checkTag(Long id, Tag currentTag) {
-        if (currentTag == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, TAG_NOT_FOUND + id);
-        }
-    }
-
-    private void checkAttachedFile(AttachedFile attachedFile) {
-        if (attachedFile == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NULL_ATTACHED_FILE);
-        }
-
-        String fileName = attachedFile.getFileName();
-        String fileUrl = attachedFile.getFileUrl();
-
-        if (fileName.isEmpty() || fileUrl.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ATTACHED_FILE);
-        }
-    }
-
     private void checkCheck(Check check) {
         if (check == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NULL_CHECK);
@@ -118,7 +94,7 @@ public class CardRestController {
     public ResponseEntity<Card> getCard(@PathVariable Long id) {
         Card currentCard = this.cardService.getSpecificCardById(id);
 
-        this.checkCard(id, currentCard);
+        checkCard(id, currentCard);
 
         return ResponseEntity.status(200).body(currentCard);
     }
@@ -127,7 +103,7 @@ public class CardRestController {
     public ResponseEntity<CardDTO> deleteCard(@PathVariable Long id) {
         Card currentCard = this.cardService.getSpecificCardById(id);
 
-        this.checkCard(id, currentCard);
+        checkCard(id, currentCard);
 
         this.cardService.removeCardById(id);
         Card nullCard = this.cardService.getSpecificCardById(id);
@@ -209,7 +185,7 @@ public class CardRestController {
 
     @PostMapping("/cards/{id}/attached-files")
     public ResponseEntity<Card> attachFileToCard(@PathVariable Long id, @RequestBody AttachedFile attachedFile) {
-        this.checkAttachedFile(attachedFile);
+        checkAttachedFile(attachedFile);
 
         try{
             this.cardService.attachFileToCard(id, attachedFile);
@@ -223,7 +199,7 @@ public class CardRestController {
 
     @DeleteMapping("/cards/{id}/attached-files")
     public ResponseEntity<Card> detachFileFromCard(@PathVariable Long id, @RequestBody AttachedFile attachedFile) {
-        this.checkAttachedFile(attachedFile);
+        checkAttachedFile(attachedFile);
 
         try{
             this.cardService.detachFileToCard(id, attachedFile);
@@ -280,7 +256,7 @@ public class CardRestController {
     @PostMapping("/cards/{cardId}/tags")
     public ResponseEntity<Card> addTagToCard(@PathVariable Long cardId, @RequestBody Long tagId) {
         Tag tagById = this.tagService.getSpecificTagById(tagId);
-        this.checkTag(tagId, tagById);
+        checkTag(tagId, tagById);
 
         try{
             this.cardService.addTagToCard(cardId, tagById);
@@ -295,7 +271,7 @@ public class CardRestController {
     @DeleteMapping("/cards/{cardId}/tags")
     public ResponseEntity<Card> removeTagFromCard(@PathVariable Long cardId, @RequestBody Long tagId) {
         Tag tagById = this.tagService.getSpecificTagById(tagId);
-        this.checkTag(tagId, tagById);
+        checkTag(tagId, tagById);
 
         try{
             this.cardService.removeTagFromCard(cardId, tagById);

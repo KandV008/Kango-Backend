@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.INTERNAL_SERVER_ERROR;
-import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.TAG_NOT_FOUND;
+import static dev.kandv.kango.controllers.RestControllerUtils.checkTag;
 
 @RestController
 @RequestMapping("/api")
@@ -38,7 +38,7 @@ public class TagRestController {
     public ResponseEntity<Tag> getTag(@PathVariable Long id) {
         Tag currentTag = this.tagService.getSpecificTagById(id);
 
-        this.checkTag(id, currentTag);
+        checkTag(id, currentTag);
 
         return ResponseEntity.status(200).body(currentTag);
     }
@@ -54,7 +54,7 @@ public class TagRestController {
     public ResponseEntity<TagDTO> deleteTag(@PathVariable Long id) {
         Tag currentTag = this.tagService.getSpecificTagById(id);
 
-        this.checkTag(id, currentTag);
+        checkTag(id, currentTag);
 
         this.tagService.removeTagById(id);
         Tag nullTag = this.tagService.getSpecificTagById(id);
@@ -72,7 +72,7 @@ public class TagRestController {
         this.checkTagDTO(tagDTO);
 
         Tag currentTag = this.tagService.getSpecificTagById(id);
-        this.checkTag(id, currentTag);
+        checkTag(id, currentTag);
 
         currentTag.setLabel(tagDTO.getLabel());
         currentTag.setColor(tagDTO.getColor());
@@ -96,12 +96,6 @@ public class TagRestController {
         }
 
         return new Tag(tagDTO.getLabel(), tagDTO.getColor(), tagDTO.getVisibility());
-    }
-
-    private void checkTag(Long id, Tag currentTag) {
-        if (currentTag == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, TAG_NOT_FOUND + id);
-        }
     }
 
 }

@@ -9,9 +9,7 @@ import dev.kandv.kango.models.Dashboard;
 import dev.kandv.kango.models.Table;
 import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.utils.AttachedFile;
-import dev.kandv.kango.services.CardService;
 import dev.kandv.kango.services.DashboardService;
-import dev.kandv.kango.services.TableService;
 import dev.kandv.kango.services.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +21,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
+import static dev.kandv.kango.controllers.RestControllerUtils.*;
 
 @RestController
 @RequestMapping("/api")
@@ -31,38 +30,11 @@ public class DashboardRestController {
     public static final String INVALID_DASHBOARD_NAME = "ERROR: Invalid Dashboard Name. Value: ";
 
     private final DashboardService dashboardService;
-    private final TableService tableService;
-    private final CardService cardService;
     private final TagService tagService;
 
     private void checkDashboardName(String name) {
         if (name == null || name.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_DASHBOARD_NAME + name);
-        }
-    }
-
-    private void checkDashboard(Long id, Dashboard currentDashboard) {
-        if (currentDashboard == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, DASHBOARD_NOT_FOUND + id);
-        }
-    }
-
-    private void checkAttachedFile(AttachedFile attachedFile) {
-        if (attachedFile == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NULL_ATTACHED_FILE);
-        }
-
-        String fileName = attachedFile.getFileName();
-        String fileUrl = attachedFile.getFileUrl();
-
-        if (fileName.isEmpty() || fileUrl.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ATTACHED_FILE);
-        }
-    }
-
-    private void checkTag(Long id, Tag currentTag) {
-        if (currentTag == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, TAG_NOT_FOUND + id);
         }
     }
 
@@ -81,7 +53,7 @@ public class DashboardRestController {
     public ResponseEntity<Dashboard> getDashboard(@PathVariable Long id) {
         Dashboard currentDashboard = this.dashboardService.getSpecificDashboardById(id);
 
-        this.checkDashboard(id, currentDashboard);
+        checkDashboard(id, currentDashboard);
 
         return ResponseEntity.status(200).body(currentDashboard);
     }
@@ -90,7 +62,7 @@ public class DashboardRestController {
     public ResponseEntity<DashboardDTO> deleteDashboard(@PathVariable Long id) {
         Dashboard currentDashboard = this.dashboardService.getSpecificDashboardById(id);
 
-        this.checkDashboard(id, currentDashboard);
+        checkDashboard(id, currentDashboard);
 
         this.dashboardService.removeDashboardById(id);
         Dashboard nullDashboard = this.dashboardService.getSpecificDashboardById(id);
@@ -120,7 +92,7 @@ public class DashboardRestController {
 
     @PostMapping("/dashboards/{id}/attached-files")
     public ResponseEntity<Dashboard> attachFileToDashboard(@PathVariable Long id, @RequestBody AttachedFile attachedFile) {
-        this.checkAttachedFile(attachedFile);
+        checkAttachedFile(attachedFile);
 
         try{
             this.dashboardService.attachFileToDashboard(id, attachedFile);
@@ -134,7 +106,7 @@ public class DashboardRestController {
 
     @DeleteMapping("/dashboards/{id}/attached-files")
     public ResponseEntity<Dashboard> detachFileFromDashboard(@PathVariable Long id, @RequestBody AttachedFile attachedFile) {
-        this.checkAttachedFile(attachedFile);
+        checkAttachedFile(attachedFile);
 
         try{
             this.dashboardService.detachFileFromDashboard(id, attachedFile);
@@ -149,7 +121,7 @@ public class DashboardRestController {
     @PostMapping("/dashboards/{dashboardId}/tags")
     public ResponseEntity<Dashboard> addTagToDashboard(@PathVariable Long dashboardId, @RequestBody Long tagId) {
         Tag tagById = this.tagService.getSpecificTagById(tagId);
-        this.checkTag(tagId, tagById);
+        checkTag(tagId, tagById);
 
         try{
             this.dashboardService.addTagToDashboard(dashboardId, tagById);
@@ -164,7 +136,7 @@ public class DashboardRestController {
     @DeleteMapping("/dashboards/{dashboardId}/tags")
     public ResponseEntity<Dashboard> removeTagFromDashboard(@PathVariable Long dashboardId, @RequestBody Long tagId) {
         Tag tagById = this.tagService.getSpecificTagById(tagId);
-        this.checkTag(tagId, tagById);
+        checkTag(tagId, tagById);
 
         try{
             this.dashboardService.removeTagFromDashboard(dashboardId, tagById);

@@ -18,6 +18,7 @@ import java.util.NoSuchElementException;
 
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.INTERNAL_SERVER_ERROR;
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.TABLE_NOT_FOUND;
+import static dev.kandv.kango.controllers.RestControllerUtils.checkTable;
 
 @RestController
 @RequestMapping("/api")
@@ -56,12 +57,6 @@ public class TableRestController {
         }
     }
 
-    private void checkTable(Long id, Table currentTable) {
-        if (currentTable == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, TABLE_NOT_FOUND + id);
-        }
-    }
-
     @PostMapping("/tables")
     public ResponseEntity<Table> createTable(@RequestBody TableDTO tableDTO) {
         String name = tableDTO.getName();
@@ -87,7 +82,7 @@ public class TableRestController {
     public ResponseEntity<Table> getCard(@PathVariable Long id) {
         Table currentTable = this.tableService.getSpecificTableById(id);
 
-        this.checkTable(id, currentTable);
+        checkTable(id, currentTable);
 
         return ResponseEntity.status(200).body(currentTable);
     }
@@ -111,7 +106,7 @@ public class TableRestController {
     public ResponseEntity<TableDTO> deleteTable(@PathVariable Long id) {
         Table currentTable = this.tableService.getSpecificTableById(id);
 
-        this.checkTable(id, currentTable);
+        checkTable(id, currentTable);
 
         this.tableService.removeTableById(id);
         Table nullCard = this.tableService.getSpecificTableById(id);
