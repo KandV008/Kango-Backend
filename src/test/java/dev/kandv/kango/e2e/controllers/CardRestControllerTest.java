@@ -717,14 +717,14 @@ public class CardRestControllerTest {
     @Test
     void testRemoveCheckFromCardWithInvalidId() {
         long cardId = 12345L;
-        AttachedFile attachedFile = new AttachedFile("example.png", "/example.png");
+        Check check = new Check("Example", false);
 
         given()
                 .pathParams("id", cardId)
                 .contentType(ContentType.JSON)
-                .body(attachedFile)
+                .body(check)
                 .when()
-                .delete("/api/cards/{id}/attached-files", cardId)
+                .delete("/api/cards/{id}/checks", cardId)
                 .then()
                 .statusCode(404)
                 .body("message", containsString(NOT_FOUND_CARD_WITH_ID_ERROR));

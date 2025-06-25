@@ -174,11 +174,11 @@ public class DashboardServiceTest {
     @Test
     @Transactional
     void testAddNewFileToDashboard(){
-        Dashboard dashboard = this.dashboardService.createDashboard(this.dashboard);
+        Dashboard currentDashboard = this.dashboardService.createDashboard(this.dashboard);
         AttachedFile newAttachedFile = new AttachedFile("example.pdf", "/");
 
-        this.dashboardService.attachFileToDashboard(dashboard.getId(), newAttachedFile);
-        Dashboard resultCard = this.dashboardService.getSpecificDashboardById(dashboard.getId());
+        this.dashboardService.attachFileToDashboard(currentDashboard.getId(), newAttachedFile);
+        Dashboard resultCard = this.dashboardService.getSpecificDashboardById(currentDashboard.getId());
 
         assertThat(resultCard.getAttachedFiles()).hasSize(1);
         assertThat(resultCard.getAttachedFiles().getFirst()).isEqualTo(newAttachedFile);
@@ -258,9 +258,10 @@ public class DashboardServiceTest {
     @Transactional
     void testRemoveFileFromCardWithInvalidFile(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
         AttachedFile newAttachedFile = new AttachedFile("example.pdf", "/");
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.detachFileFromDashboard(exampleDashboard.getId(), newAttachedFile));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.detachFileFromDashboard(dashboardId, newAttachedFile));
 
         assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_ELEMENT_ERROR_IN_DASHBOARD);
     }
@@ -305,8 +306,9 @@ public class DashboardServiceTest {
     @Test
     void testAddTagToDashboardWithInvalidTag(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.dashboardService.addTagToDashboard(exampleDashboard.getId(), null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.dashboardService.addTagToDashboard(dashboardId, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -361,10 +363,12 @@ public class DashboardServiceTest {
     @Transactional
     void testRemoveTagFromDashboardWithInvalidTag(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
+
         Tag newTag = new Tag("Example Tag", Color.BLUE);
         Tag exampleTag = this.tagService.createTag(newTag);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.removeTagFromDashboard(exampleDashboard.getId(), exampleTag));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.dashboardService.removeTagFromDashboard(dashboardId, exampleTag));
 
         assertThat(exception.getMessage()).contains(DashboardService.NOT_FOUND_ELEMENT_ERROR_IN_DASHBOARD);
     }
@@ -386,11 +390,12 @@ public class DashboardServiceTest {
     void testAddTemplateCardToDashboardWithInvalidDashboardId(){
         Long invalidId = 12345L;
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.addTemplateCardToDashboard(invalidId, expectedCard.getId())
+                        this.dashboardService.addTemplateCardToDashboard(invalidId, cardId)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_DASHBOARD_WITH_ID_ERROR);
@@ -399,11 +404,12 @@ public class DashboardServiceTest {
     @Test
     void testAddTemplateCardToDashboardWithNullDashboardId(){
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        this.dashboardService.addTemplateCardToDashboard(null, expectedCard.getId())
+                        this.dashboardService.addTemplateCardToDashboard(null, cardId)
         );
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
@@ -412,12 +418,14 @@ public class DashboardServiceTest {
     @Test
     void testAddTemplateCardToDashboardWithInvalidCardId(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
+
         Long invalidId = 12345L;
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.addTemplateCardToDashboard(exampleDashboard.getId(), invalidId)
+                        this.dashboardService.addTemplateCardToDashboard(dashboardId, invalidId)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
@@ -426,11 +434,12 @@ public class DashboardServiceTest {
     @Test
     void testAddTemplateCardToTableWithNullCardId(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        this.dashboardService.addTemplateCardToDashboard(exampleDashboard.getId(), null)
+                        this.dashboardService.addTemplateCardToDashboard(dashboardId, null)
         );
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
@@ -455,11 +464,12 @@ public class DashboardServiceTest {
     void testRemoveTemplateCardFromDashboardWithInvalidDashboardId(){
         Long invalidId = 12345L;
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                    this.dashboardService.removeTemplateCardFromDashboard(invalidId, expectedCard.getId())
+                    this.dashboardService.removeTemplateCardFromDashboard(invalidId, cardId)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_DASHBOARD_WITH_ID_ERROR);
@@ -468,11 +478,12 @@ public class DashboardServiceTest {
     @Test
     void testRemoveTemplateCardFromDashboardWithNullDashboardId(){
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        this.dashboardService.removeTemplateCardFromDashboard(null, expectedCard.getId())
+                        this.dashboardService.removeTemplateCardFromDashboard(null, cardId)
         );
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
@@ -481,12 +492,13 @@ public class DashboardServiceTest {
     @Test
     void testRemoveTemplateCardFromDashboardWithInvalidCardId(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
         Long invalidId = 12345L;
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.removeTemplateCardFromDashboard(exampleDashboard.getId(), invalidId)
+                        this.dashboardService.removeTemplateCardFromDashboard(dashboardId, invalidId)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
@@ -495,11 +507,12 @@ public class DashboardServiceTest {
     @Test
     void testRemoveTemplateCardFromDashboardWithNullCardId(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        this.dashboardService.removeTemplateCardFromDashboard(exampleDashboard.getId(), null)
+                        this.dashboardService.removeTemplateCardFromDashboard(dashboardId, null)
         );
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
@@ -509,12 +522,14 @@ public class DashboardServiceTest {
     @Transactional
     void testRemoveTemplateCardFromDashboardWithNoCards(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.removeTemplateCardFromDashboard(exampleDashboard.getId(), expectedCard.getId())
+                        this.dashboardService.removeTemplateCardFromDashboard(dashboardId, cardId)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_IN_THE_DASHBOARD_ERROR);
@@ -524,9 +539,11 @@ public class DashboardServiceTest {
     @Transactional
     void testAddTableToDashboard(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
 
-        this.dashboardService.addTableToDashboard(exampleDashboard.getId(), expectedTable.getId());
+        this.dashboardService.addTableToDashboard(dashboardId, tableId);
 
         Dashboard result = this.dashboardService.getSpecificDashboardById(exampleDashboard.getId());
         assertThat(result.getTableList()).hasSize(1);
@@ -537,11 +554,12 @@ public class DashboardServiceTest {
     void testAddTableToDashboardWithInvalidDashboardId(){
         Long invalidId = 12345L;
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.addTableToDashboard(invalidId, expectedTable.getId())
+                        this.dashboardService.addTableToDashboard(invalidId, tableId)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_DASHBOARD_WITH_ID_ERROR);
@@ -550,11 +568,12 @@ public class DashboardServiceTest {
     @Test
     void testAddTableToDashboardWithNullDashboardId(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        this.dashboardService.addTableToDashboard(null, expectedTable.getId())
+                        this.dashboardService.addTableToDashboard(null, tableId)
         );
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
@@ -563,12 +582,13 @@ public class DashboardServiceTest {
     @Test
     void testAddTableToDashboardWithInvalidTableId(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
         Long invalidId = 12345L;
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.addTableToDashboard(exampleDashboard.getId(), invalidId)
+                        this.dashboardService.addTableToDashboard(dashboardId, invalidId)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
@@ -577,11 +597,12 @@ public class DashboardServiceTest {
     @Test
     void testAddTableToTableWithNullCardId(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        this.dashboardService.addTableToDashboard(exampleDashboard.getId(), null)
+                        this.dashboardService.addTableToDashboard(dashboardId, null)
         );
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
@@ -606,11 +627,12 @@ public class DashboardServiceTest {
     void testRemoveTableFromDashboardWithInvalidDashboardId(){
         Long invalidId = 12345L;
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.removeTableFromDashboard(invalidId, expectedTable.getId())
+                        this.dashboardService.removeTableFromDashboard(invalidId, tableId)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_DASHBOARD_WITH_ID_ERROR);
@@ -619,11 +641,12 @@ public class DashboardServiceTest {
     @Test
     void testRemoveTableFromDashboardWithNullDashboardId(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        this.dashboardService.removeTableFromDashboard(null, expectedTable.getId())
+                        this.dashboardService.removeTableFromDashboard(null, tableId)
         );
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
@@ -632,12 +655,13 @@ public class DashboardServiceTest {
     @Test
     void testRemoveTableFromDashboardWithInvalidTableId(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
         Long invalidId = 12345L;
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.removeTableFromDashboard(exampleDashboard.getId(), invalidId)
+                        this.dashboardService.removeTableFromDashboard(dashboardId, invalidId)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
@@ -646,11 +670,12 @@ public class DashboardServiceTest {
     @Test
     void testRemoveTableFromDashboardWithNullTableId(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        this.dashboardService.removeTableFromDashboard(exampleDashboard.getId(), null)
+                        this.dashboardService.removeTableFromDashboard(dashboardId, null)
         );
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
@@ -660,12 +685,15 @@ public class DashboardServiceTest {
     @Transactional
     void testRemoveTableFromDashboardWithNoTables(){
         Dashboard exampleDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = exampleDashboard.getId();
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
+
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.removeTableFromDashboard(exampleDashboard.getId(), expectedTable.getId())
+                        this.dashboardService.removeTableFromDashboard(dashboardId, tableId)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_IN_THE_DASHBOARD_ERROR);
@@ -719,11 +747,13 @@ public class DashboardServiceTest {
     void testUpdateTablePositionFromDashboardWithInvalidDashboardId(){
         Long dashboardId = 12345L;
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
+
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.updateTablePositionFromDashboard(dashboardId, expectedTable.getId(), 1)
+                        this.dashboardService.updateTablePositionFromDashboard(dashboardId, tableId, 1)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_DASHBOARD_WITH_ID_ERROR);
@@ -732,11 +762,12 @@ public class DashboardServiceTest {
     @Test
     void testUpdateTablePositionFromDashboardWithNullDashboardId(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        this.dashboardService.updateTablePositionFromDashboard(null, expectedTable.getId(), 1)
+                        this.dashboardService.updateTablePositionFromDashboard(null, tableId, 1)
         );
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
@@ -745,12 +776,14 @@ public class DashboardServiceTest {
     @Test
     void testUpdateTablePositionFromDashboardWithInvalidTableId(){
         Dashboard expectedDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = expectedDashboard.getId();
+
         Long tableId = 12345L;
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.updateTablePositionFromDashboard(expectedDashboard.getId(), tableId, 1)
+                        this.dashboardService.updateTablePositionFromDashboard(dashboardId, tableId, 1)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
@@ -759,11 +792,12 @@ public class DashboardServiceTest {
     @Test
     void testUpdateTablePositionFromDashboardWithNullTableId(){
         Dashboard expectedDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = expectedDashboard.getId();
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        this.tableService.updateCardPositionFromTable(expectedDashboard.getId(), null, 0)
+                        this.tableService.updateCardPositionFromTable(dashboardId, null, 0)
         );
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
@@ -773,12 +807,14 @@ public class DashboardServiceTest {
     @Transactional
     void testUpdateTablePositionFromDashboardWithNoTables(){
         Dashboard expectedDashboard = this.dashboardService.createDashboard(this.dashboard);
+        long dashboardId = expectedDashboard.getId();
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
 
         NoSuchElementException exception = assertThrows(
                 NoSuchElementException.class,
                 () ->
-                        this.dashboardService.updateTablePositionFromDashboard(expectedDashboard.getId(), expectedTable.getId(), 1)
+                        this.dashboardService.updateTablePositionFromDashboard(dashboardId, tableId, 1)
         );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_IN_THE_DASHBOARD_ERROR);

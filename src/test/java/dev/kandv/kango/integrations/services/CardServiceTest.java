@@ -356,9 +356,14 @@ public class CardServiceTest {
     @Transactional
     void testRemoveFileFromCardWithInvalidFile(){
         Card exampleCard = this.cardService.createCard(this.card);
+        long cardId = exampleCard.getId();
         AttachedFile newAttachedFile = new AttachedFile("example.pdf", "/");
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.detachFileToCard(exampleCard.getId(), newAttachedFile));
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () ->
+                        this.cardService.detachFileToCard(cardId, newAttachedFile)
+        );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_IN_CARD_ERROR);
     }
@@ -450,9 +455,14 @@ public class CardServiceTest {
     @Transactional
     void testRemoveCheckFromCardWithInvalidCheck(){
         Card exampleCard = this.cardService.createCard(this.card);
+        long cardId = exampleCard.getId();
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.removeCheckFromCard(exampleCard.getId(), newCheck));
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () ->
+                        this.cardService.removeCheckFromCard(cardId, newCheck)
+        );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_IN_CARD_ERROR);
     }
@@ -503,9 +513,14 @@ public class CardServiceTest {
     @Transactional
     void testUpdateCheckFromCardWithInvalidCheck(){
         Card exampleCard = this.cardService.createCard(this.card);
+        long cardId = exampleCard.getId();
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.updateCheckFromCard(exampleCard.getId(), newCheck));
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () ->
+                        this.cardService.updateCheckFromCard(cardId, newCheck)
+        );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CHECK_ERROR);
     }
@@ -550,8 +565,9 @@ public class CardServiceTest {
     @Test
     void testAddTagToCardWithInvalidTag(){
         Card exampleCard = this.cardService.createCard(this.card);
+        long cardId = exampleCard.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.addTagToCard(exampleCard.getId(), null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.addTagToCard(cardId, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -606,10 +622,11 @@ public class CardServiceTest {
     @Transactional
     void testRemoveTagFromCardWithInvalidTag(){
         Card exampleCard = this.cardService.createCard(this.card);
+        long cardId = exampleCard.getId();
         Tag newTag = new Tag("Example Tag", Color.BLUE);
         Tag exampleTag = this.tagService.createTag(newTag);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.removeTagFromCard(exampleCard.getId(), exampleTag));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.removeTagFromCard(cardId, exampleTag));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_IN_CARD_ERROR);
     }
