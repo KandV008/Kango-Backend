@@ -228,6 +228,25 @@ public class DashboardRestController {
         }
     }
 
+    @GetMapping("/dashboards")
+    public ResponseEntity<List<Dashboard>> getAllDashboards(){
+        List<Dashboard> dashboardList = this.dashboardService.getAllDashboards();
+        return ResponseEntity.status(200).body(dashboardList);
+    }
+
+    @PutMapping("/dashboards/{dashboardId}/tables/{tableId}/position")
+    public ResponseEntity<DashboardDTO> updateTablePositionFromDashboard(@PathVariable Long dashboardId, @PathVariable Long tableId, @RequestParam int position) {
+        try{
+            this.dashboardService.updateTablePositionFromDashboard(dashboardId, tableId, position);
+            Dashboard updatedDashboard = this.dashboardService.getSpecificDashboardById(dashboardId);
+
+            DashboardDTO dashboardDTO = mapToDashboardDTO(updatedDashboard);
+            return ResponseEntity.status(200).body(dashboardDTO);
+        } catch (NoSuchElementException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
     static DashboardDTO mapToDashboardDTO(Dashboard currentDashboard) {
         List<Table> tableList = currentDashboard.getTableList();
         List<TableDTO> tableDTOList = tableList.stream().map((TableRestController::mapToTableDTO)).toList();

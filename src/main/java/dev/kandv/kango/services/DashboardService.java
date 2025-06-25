@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -230,6 +231,32 @@ public class DashboardService {
         }
 
         this.tableRepository.delete(currentTable);
+        this.dashboardRepository.save(currentDashboard);
+    }
+
+    public List<Dashboard> getAllDashboards() {
+        return this.dashboardRepository.findAll();
+    }
+
+    public void updateTablePositionFromDashboard(Long dashboardId, Long tableId, int newPosition) {
+        this.checkId(dashboardId);
+        this.checkElementToUpdate(tableId, "table_id");
+
+        Table currentTable = this.tableService.getSpecificTableById(tableId);
+
+        if (currentTable == null) {
+            throw new NoSuchElementException(NOT_FOUND_TABLE_WITH_ID_ERROR + tableId);
+        }
+
+        Optional<Dashboard> result = this.dashboardRepository.findById(dashboardId);
+        Dashboard currentDashboard = this.checkDatabaseResult(dashboardId, result);
+
+        boolean isSuccess = currentDashboard.updateTablePosition(currentTable, newPosition);
+
+        if (!isSuccess) {
+            throw new NoSuchElementException(NOT_FOUND_TABLE_IN_THE_DASHBOARD_ERROR + tableId);
+        }
+
         this.dashboardRepository.save(currentDashboard);
     }
 }
