@@ -1,0 +1,51 @@
+package dev.kandv.kango.models;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class State {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private FontSize fontSize = FontSize.MEDIUM;
+    private Language language = Language.ENGLISH;
+    private ColorBlind colorBlind = ColorBlind.NONE;
+
+    public enum FontSize {
+        SMALL, MEDIUM, LARGE
+    }
+
+    public enum Language {
+        SPANISH, ENGLISH
+    }
+
+    public enum ColorBlind {
+        NONE, ANY
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        State state = (State) obj;
+        return this.id != null && this.id.equals(state.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+}

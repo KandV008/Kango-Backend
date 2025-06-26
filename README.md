@@ -126,7 +126,7 @@ Here are the diferent actions that can be done in the application:
 | UH-301 See Card |
 | UH-302 Update Card |
 | UH-303 Delete Card |
-| UH-304 Attach file to a Card |
+| UH-304 Attach attachedFile to a Card |
 | UH-305 Set deadline to a Card|
 | UH-306 Set checklist to a Card |
 | UH-307 Set Tags to a Card |
