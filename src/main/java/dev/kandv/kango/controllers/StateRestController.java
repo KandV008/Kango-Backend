@@ -11,7 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.NoSuchElementException;
 
-import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.INTERNAL_SERVER_ERROR;
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.STATE_NOT_FOUND;
 
 @RestController
 @RequestMapping("/api")
@@ -89,7 +90,7 @@ public class StateRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, STATE_NOT_FOUND);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/state/font-size")

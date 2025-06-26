@@ -24,4 +24,9 @@ public class AttachedFile {
         boolean checkFileUrl = this.fileUrl.equals(((AttachedFile) obj).fileUrl);
         return checkFileName && checkFileUrl;
     }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

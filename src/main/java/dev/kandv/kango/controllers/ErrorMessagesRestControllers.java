@@ -13,4 +13,8 @@ public class ErrorMessagesRestControllers {
     public static final String TABLE_NOT_FOUND = "ERROR: Table Not Found with that ID. ID: ";
     public static final String TAG_NOT_FOUND = "ERROR: Tag Not Found with that ID. ID: ";
     public static final String STATE_NOT_FOUND = "ERROR: State Not Found";
+
+    private ErrorMessagesRestControllers() {
+        throw new IllegalStateException("Utility class");
+    }
 }

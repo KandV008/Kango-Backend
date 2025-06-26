@@ -1,4 +1,4 @@
-package dev.kandv.kango.integrations.controllers;
+package dev.kandv.kango.e2e.controllers;
 
 import dev.kandv.kango.dtos.TagDTO;
 import dev.kandv.kango.models.enums.Color;

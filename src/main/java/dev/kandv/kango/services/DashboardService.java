@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static dev.kandv.kango.services.ErrorMessagesServices.*;
+import static dev.kandv.kango.services.ServiceUtils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,12 +55,6 @@ public class DashboardService {
         this.dashboardRepository.deleteById(id);
     }
 
-    private void checkId(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException(INVALID_ID_ERROR + null);
-        }
-    }
-
     private Dashboard checkDatabaseResult(Long id, Optional<Dashboard> result) {
         if (result.isEmpty()) {
             throw new NoSuchElementException(NOT_FOUND_DASHBOARD_WITH_ID_ERROR + id);
@@ -68,14 +63,8 @@ public class DashboardService {
         return result.get();
     }
 
-    private void checkElementToUpdate(Object newObject, String element) {
-        if (newObject == null) {
-            throw new IllegalArgumentException(INVALID_ELEMENT_ERROR + element);
-        }
-    }
-
     public void updateName(Long id, String newName) {
-        this.checkId(id);
+        checkId(id);
 
         Optional<Dashboard> result = this.dashboardRepository.findById(id);
 
@@ -86,8 +75,8 @@ public class DashboardService {
 
     @Transactional
     public void attachFileToDashboard(Long id, AttachedFile newAttachedFile) {
-        this.checkId(id);
-        this.checkElementToUpdate(newAttachedFile, "attachFile");
+        checkId(id);
+        checkElementToUpdate(newAttachedFile, FILE_ELEMENT);
 
         Optional<Dashboard> result = this.dashboardRepository.findById(id);
 
@@ -98,9 +87,8 @@ public class DashboardService {
 
     @Transactional
     public void detachFileFromDashboard(Long id, AttachedFile attachedFile) {
-        String element = "attachFile";
-        this.checkId(id);
-        this.checkElementToUpdate(attachedFile, element);
+        checkId(id);
+        checkElementToUpdate(attachedFile, FILE_ELEMENT);
 
         Optional<Dashboard> result = this.dashboardRepository.findById(id);
 
@@ -108,7 +96,7 @@ public class DashboardService {
         boolean isSuccess = currentDashboard.detachFile(attachedFile);
 
         if (!isSuccess) {
-            throw new NoSuchElementException(NOT_FOUND_ELEMENT_ERROR_IN_DASHBOARD + element);
+            throw new NoSuchElementException(NOT_FOUND_ELEMENT_ERROR_IN_DASHBOARD + FILE_ELEMENT);
         }
 
         this.dashboardRepository.save(currentDashboard);
@@ -116,9 +104,8 @@ public class DashboardService {
 
     @Transactional
     public void addTagToDashboard(Long id, Tag tag) {
-        String element = "tag";
-        this.checkId(id);
-        this.checkElementToUpdate(tag, element);
+        checkId(id);
+        checkElementToUpdate(tag, TAG_ELEMENT);
 
         Optional<Dashboard> result = this.dashboardRepository.findById(id);
 
@@ -132,9 +119,8 @@ public class DashboardService {
 
     @Transactional
     public void removeTagFromDashboard(Long id, Tag tag) {
-        String element = "tag";
-        this.checkId(id);
-        this.checkElementToUpdate(tag, element);
+        checkId(id);
+        checkElementToUpdate(tag, TAG_ELEMENT);
 
         Optional<Dashboard> result = this.dashboardRepository.findById(id);
 
@@ -142,7 +128,7 @@ public class DashboardService {
         boolean isSuccess = currentDashboard.removeTagFromTagList(tag);
 
         if (!isSuccess) {
-            throw new NoSuchElementException(NOT_FOUND_ELEMENT_ERROR_IN_DASHBOARD + element);
+            throw new NoSuchElementException(NOT_FOUND_ELEMENT_ERROR_IN_DASHBOARD + TAG_ELEMENT);
         }
 
         this.tagRepository.delete(tag);
@@ -150,34 +136,16 @@ public class DashboardService {
     }
 
     public void addTemplateCardToDashboard(Long dashboardId, Long cardId) {
-        this.checkId(dashboardId);
-        this.checkElementToUpdate(cardId, "card_id");
-
-        Card currentCard = this.cardService.getSpecificCardById(cardId);
-
-        if (currentCard == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + cardId);
-        }
-
-        Optional<Dashboard> result = this.dashboardRepository.findById(dashboardId);
-        Dashboard currentDashboard = this.checkDatabaseResult(dashboardId, result);
+        Card currentCard = obtainCard(cardId, this.cardService);
+        Dashboard currentDashboard = obtainDashboard(dashboardId);
 
         currentDashboard.addTemplateCard(currentCard);
         this.dashboardRepository.save(currentDashboard);
     }
 
     public void removeTemplateCardFromDashboard(Long dashboardId, Long cardId) {
-        this.checkId(dashboardId);
-        this.checkElementToUpdate(cardId, "card_id");
-
-        Card currentCard = this.cardService.getSpecificCardById(cardId);
-
-        if (currentCard == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + cardId);
-        }
-
-        Optional<Dashboard> result = this.dashboardRepository.findById(dashboardId);
-        Dashboard currentDashboard = this.checkDatabaseResult(dashboardId, result);
+        Card currentCard = obtainCard(cardId, this.cardService);
+        Dashboard currentDashboard = obtainDashboard(dashboardId);
 
         boolean isSuccess = currentDashboard.removeTemplateCard(currentCard);
 
@@ -191,17 +159,8 @@ public class DashboardService {
 
     @Transactional
     public void addTableToDashboard(Long dashboardId, Long tableId) {
-        this.checkId(dashboardId);
-        this.checkElementToUpdate(tableId, "table_id");
-
-        Table currentTable = this.tableService.getSpecificTableById(tableId);
-
-        if (currentTable == null) {
-            throw new NoSuchElementException(NOT_FOUND_CARD_WITH_ID_ERROR + tableId);
-        }
-
-        Optional<Dashboard> result = this.dashboardRepository.findById(dashboardId);
-        Dashboard currentDashboard = this.checkDatabaseResult(dashboardId, result);
+        Table currentTable = obtainTable(tableId);
+        Dashboard currentDashboard = obtainDashboard(dashboardId);
 
         currentDashboard.addTable(currentTable);
 
@@ -212,17 +171,8 @@ public class DashboardService {
 
     @Transactional
     public void removeTableFromDashboard(Long dashboardId, Long tableId) {
-        this.checkId(dashboardId);
-        this.checkElementToUpdate(tableId, "table_id");
-
-        Table currentTable = this.tableService.getSpecificTableById(tableId);
-
-        if (currentTable == null) {
-            throw new NoSuchElementException(NOT_FOUND_TABLE_WITH_ID_ERROR + tableId);
-        }
-
-        Optional<Dashboard> result = this.dashboardRepository.findById(dashboardId);
-        Dashboard currentDashboard = this.checkDatabaseResult(dashboardId, result);
+        Table currentTable = obtainTable(tableId);
+        Dashboard currentDashboard = obtainDashboard(dashboardId);
 
         boolean isSuccess = currentDashboard.removeTable(currentTable);
 
@@ -239,17 +189,8 @@ public class DashboardService {
     }
 
     public void updateTablePositionFromDashboard(Long dashboardId, Long tableId, int newPosition) {
-        this.checkId(dashboardId);
-        this.checkElementToUpdate(tableId, "table_id");
-
-        Table currentTable = this.tableService.getSpecificTableById(tableId);
-
-        if (currentTable == null) {
-            throw new NoSuchElementException(NOT_FOUND_TABLE_WITH_ID_ERROR + tableId);
-        }
-
-        Optional<Dashboard> result = this.dashboardRepository.findById(dashboardId);
-        Dashboard currentDashboard = this.checkDatabaseResult(dashboardId, result);
+        Table currentTable = obtainTable(tableId);
+        Dashboard currentDashboard = obtainDashboard(dashboardId);
 
         boolean isSuccess = currentDashboard.updateTablePosition(currentTable, newPosition);
 
@@ -259,4 +200,22 @@ public class DashboardService {
 
         this.dashboardRepository.save(currentDashboard);
     }
+
+    private Dashboard obtainDashboard(Long dashboardId) {
+        checkId(dashboardId);
+        Optional<Dashboard> result = this.dashboardRepository.findById(dashboardId);
+        return this.checkDatabaseResult(dashboardId, result);
+    }
+
+    private Table obtainTable(Long tableId) {
+        checkElementToUpdate(tableId, TABLE_ID_ELEMENT);
+        Table currentTable = this.tableService.getSpecificTableById(tableId);
+
+        if (currentTable == null) {
+            throw new NoSuchElementException(NOT_FOUND_TABLE_WITH_ID_ERROR + tableId);
+        }
+
+        return currentTable;
+    }
+
 }

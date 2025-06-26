@@ -1,9 +1,11 @@
 package dev.kandv.kango.units.models;
 
-import dev.kandv.kango.models.*;
+import dev.kandv.kango.models.Card;
+import dev.kandv.kango.models.Dashboard;
+import dev.kandv.kango.models.Table;
+import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.Color;
 import dev.kandv.kango.models.utils.AttachedFile;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DashboardTest {
+class DashboardTest {
     private Dashboard dashboard;
     private List<Table> tableList;
 
@@ -46,8 +48,9 @@ public class DashboardTest {
         Dashboard exampleDashboard = new Dashboard("Example Dashboard", this.tableList);
         List<Table> result = exampleDashboard.getTableList();
 
-        assertThat(result).hasSize(2);
-        assertThat(result).isEqualTo(this.tableList);
+        assertThat(result)
+                .hasSize(2)
+                .isEqualTo(this.tableList);
     }
 
     @Test
@@ -55,8 +58,9 @@ public class DashboardTest {
         this.dashboard.setTableList(this.tableList);
         List<Table> result = dashboard.getTableList();
 
-        assertThat(result).hasSize(2);
-        assertThat(result).isEqualTo(this.tableList);
+        assertThat(result)
+                .hasSize(2)
+                .isEqualTo(this.tableList);
     }
 
     @Test
@@ -170,26 +174,4 @@ public class DashboardTest {
         tags = this.dashboard.getTagList();
         assertThat(tags).isEmpty();
     }
-
-    //@Test  TODO Decide what to do
-    //void testAddAutomationToAutomationList() {
-    //    Automation newAutomation = new Automation();
-
-    //    this.dashboard.addAutomationToAutomationList(newAutomation);
-    //    List<Automation> automations = this.dashboard.getAutomationList();
-    //    assertThat(automations).hasSize(1);
-    //}
-
-    //@Test
-    //void testRemoveAutomationToAutomationList() {
-    //    Automation newAutomation = new Automation();
-
-    //    this.dashboard.addAutomationToAutomationList(newAutomation);
-    //    List<Automation> automations = this.dashboard.getAutomationList();
-    //    assertThat(automations).hasSize(1);
-
-    //    this.dashboard.removeAutomationFromAutomation(newAutomation);
-    //    automations = this.dashboard.getAutomationList();
-    //    assertThat(automations).isEmpty();
-    //}
 }

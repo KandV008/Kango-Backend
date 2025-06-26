@@ -1,4 +1,4 @@
-package dev.kandv.kango.integrations.controllers;
+package dev.kandv.kango.e2e.controllers;
 
 import dev.kandv.kango.KangoApplication;
 import dev.kandv.kango.dtos.StateDTO;
@@ -19,14 +19,13 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.STATE_NOT_FOUND;
 import static dev.kandv.kango.controllers.StateRestController.*;
-import static dev.kandv.kango.integrations.controllers.StateRestControllerUtils.actionCreateState;
-import static dev.kandv.kango.integrations.controllers.StateRestControllerUtils.actionGetState;
+import static dev.kandv.kango.e2e.controllers.StateRestControllerUtils.actionCreateState;
+import static dev.kandv.kango.e2e.controllers.StateRestControllerUtils.actionGetState;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-
-import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.STATE_NOT_FOUND;
 
 @Testcontainers
 @SpringBootTest(
@@ -34,7 +33,7 @@ import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.STATE_NOT
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ExtendWith(SpringExtension.class)
-public class StateRestControllerTest {
+class StateRestControllerTest {
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer =
             new PostgreSQLContainer<>("postgres:16-alpine")

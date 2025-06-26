@@ -9,10 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,7 +21,6 @@ public class State {
     private FontSize fontSize = FontSize.MEDIUM;
     private Language language = Language.ENGLISH;
     private ColorBlind colorBlind = ColorBlind.NONE;
-    //private List<Automation> automationList = new LinkedList<>(); TODO Decide what to do
 
     public enum FontSize {
         SMALL, MEDIUM, LARGE
@@ -38,14 +33,6 @@ public class State {
     public enum ColorBlind {
         NONE, ANY
     }
-
-    //public void addAutomationToAutomationList(Automation automation) {
-    //    this.automationList.add(automation);
-    //}
-//
-    //public void removeAutomationFromAutomation(Automation automation) {
-    //    this.automationList.remove(automation);
-    //}
 
     @Override
     public boolean equals(Object obj) {

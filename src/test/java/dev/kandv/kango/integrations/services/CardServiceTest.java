@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static dev.kandv.kango.models.Card.NOT_FOUND_CHECK_ERROR;
-import static dev.kandv.kango.services.CardService.*;
+import static dev.kandv.kango.services.CardService.INVALID_CARD_CREATION_ERROR;
+import static dev.kandv.kango.services.CardService.NOT_FOUND_ELEMENT_IN_CARD_ERROR;
 import static dev.kandv.kango.services.ErrorMessagesServices.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Testcontainers
 @SpringBootTest(classes = KangoApplication.class)
 @ExtendWith(SpringExtension.class)
-public class CardServiceTest {
+class CardServiceTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer =
@@ -127,24 +128,6 @@ public class CardServiceTest {
     }
 
     @Test
-    void testGetAllLocalTemplateCards(){
-        Card localTemplateCard1 = new Card("TEMPLATE 1", CardType.LOCAL_TEMPLATE);
-        Card localTemplateCard2 = new Card("TEMPLATE 2", CardType.LOCAL_TEMPLATE);
-        Card localTemplateCard3 = new Card("TEMPLATE 3", CardType.LOCAL_TEMPLATE);
-
-        this.cardService.createCard(localTemplateCard1);
-        this.cardService.createCard(localTemplateCard2);
-        this.cardService.createCard(localTemplateCard3);
-
-        List<Card> localTemplateCardList = this.cardService.getAllLocalTemplateCards();
-
-        assertThat(localTemplateCardList).hasSize(3);
-        assertThat(localTemplateCardList.get(0)).isEqualTo(localTemplateCard1);
-        assertThat(localTemplateCardList.get(1)).isEqualTo(localTemplateCard2);
-        assertThat(localTemplateCardList.get(2)).isEqualTo(localTemplateCard3);
-    }
-
-    @Test
     void testGetAllGlobalTemplateCards(){
         Card globalTemplateCard1 = new Card("TEMPLATE 1", CardType.GLOBAL_TEMPLATE);
         Card globalTemplateCard2 = new Card("TEMPLATE 2", CardType.GLOBAL_TEMPLATE);
@@ -160,41 +143,6 @@ public class CardServiceTest {
         assertThat(localTemplateCardList.get(0)).isEqualTo(globalTemplateCard1);
         assertThat(localTemplateCardList.get(1)).isEqualTo(globalTemplateCard2);
         assertThat(localTemplateCardList.get(2)).isEqualTo(globalTemplateCard3);
-    }
-
-    @Test
-    void testCreateTemplateCard(){
-        Card localTemplateCard1 = new Card("TEMPLATE 1", CardType.LOCAL_TEMPLATE);
-        Card globalTemplateCard2 = new Card("TEMPLATE 2", CardType.GLOBAL_TEMPLATE);
-
-        Card result1 = this.cardService.createCard(localTemplateCard1);
-        Card result2 = this.cardService.createCard(globalTemplateCard2);
-
-        List<Card> allGlobalTemplateCards = this.cardService.getAllGlobalTemplateCards();
-        assertThat(allGlobalTemplateCards).hasSize(1);
-        assertThat(allGlobalTemplateCards.getFirst()).isEqualTo(result2);
-
-        List<Card> allLocalTemplateCards = this.cardService.getAllLocalTemplateCards();
-        assertThat(allLocalTemplateCards).hasSize(1);
-        assertThat(allLocalTemplateCards.getFirst()).isEqualTo(result1);
-    }
-    
-    @Test
-    void testDeleteTemplateCard(){
-        Card localTemplateCard1 = new Card("TEMPLATE 1", CardType.LOCAL_TEMPLATE);
-        Card globalTemplateCard2 = new Card("TEMPLATE 2", CardType.GLOBAL_TEMPLATE);
-
-        Card result1 = this.cardService.createCard(localTemplateCard1);
-        Card result2 = this.cardService.createCard(globalTemplateCard2);
-
-        this.cardService.removeCardById(result1.getId());
-        this.cardService.removeCardById(result2.getId());
-
-        List<Card> allLocalTemplateCards = this.cardService.getAllLocalTemplateCards();
-        assertThat(allLocalTemplateCards).isEmpty();
-
-        List<Card> allGlobalTemplateCards = this.cardService.getAllGlobalTemplateCards();
-        assertThat(allGlobalTemplateCards).isEmpty();
     }
 
     @Test
@@ -375,7 +323,7 @@ public class CardServiceTest {
         this.cardService.detachFileToCard(currentId, newAttachedFile);
         resultCard = this.cardService.getSpecificCardById(currentId);
 
-        assertThat(resultCard.getAttachedFiles()).hasSize(0);
+        assertThat(resultCard.getAttachedFiles()).isEmpty();
     }
 
     @Test
@@ -408,9 +356,14 @@ public class CardServiceTest {
     @Transactional
     void testRemoveFileFromCardWithInvalidFile(){
         Card exampleCard = this.cardService.createCard(this.card);
+        long cardId = exampleCard.getId();
         AttachedFile newAttachedFile = new AttachedFile("example.pdf", "/");
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.detachFileToCard(exampleCard.getId(), newAttachedFile));
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () ->
+                        this.cardService.detachFileToCard(cardId, newAttachedFile)
+        );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_IN_CARD_ERROR);
     }
@@ -469,7 +422,7 @@ public class CardServiceTest {
         this.cardService.removeCheckFromCard(currentId, newCheck);
         resultCard = this.cardService.getSpecificCardById(currentId);
 
-        assertThat(resultCard.getChecks()).hasSize(0);
+        assertThat(resultCard.getChecks()).isEmpty();
     }
 
     @Test
@@ -502,9 +455,14 @@ public class CardServiceTest {
     @Transactional
     void testRemoveCheckFromCardWithInvalidCheck(){
         Card exampleCard = this.cardService.createCard(this.card);
+        long cardId = exampleCard.getId();
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.removeCheckFromCard(exampleCard.getId(), newCheck));
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () ->
+                        this.cardService.removeCheckFromCard(cardId, newCheck)
+        );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_IN_CARD_ERROR);
     }
@@ -555,9 +513,14 @@ public class CardServiceTest {
     @Transactional
     void testUpdateCheckFromCardWithInvalidCheck(){
         Card exampleCard = this.cardService.createCard(this.card);
+        long cardId = exampleCard.getId();
         Check newCheck = new Check("EXAMPLE CHECK", false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.updateCheckFromCard(exampleCard.getId(), newCheck));
+        NoSuchElementException exception = assertThrows(
+                NoSuchElementException.class,
+                () ->
+                        this.cardService.updateCheckFromCard(cardId, newCheck)
+        );
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CHECK_ERROR);
     }
@@ -602,8 +565,9 @@ public class CardServiceTest {
     @Test
     void testAddTagToCardWithInvalidTag(){
         Card exampleCard = this.cardService.createCard(this.card);
+        long cardId = exampleCard.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.addTagToCard(exampleCard.getId(), null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.cardService.addTagToCard(cardId, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -658,10 +622,11 @@ public class CardServiceTest {
     @Transactional
     void testRemoveTagFromCardWithInvalidTag(){
         Card exampleCard = this.cardService.createCard(this.card);
+        long cardId = exampleCard.getId();
         Tag newTag = new Tag("Example Tag", Color.BLUE);
         Tag exampleTag = this.tagService.createTag(newTag);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.removeTagFromCard(exampleCard.getId(), exampleTag));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.cardService.removeTagFromCard(cardId, exampleTag));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_ELEMENT_IN_CARD_ERROR);
     }

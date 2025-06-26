@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Testcontainers
 @SpringBootTest(classes = KangoApplication.class)
 @ExtendWith(SpringExtension.class)
-public class TagServiceTest {
+class TagServiceTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer =
@@ -130,20 +130,34 @@ public class TagServiceTest {
     void testUpdateTag(){
         Tag expectedTag = this.tagService.createTag(this.tag);
 
-        expectedTag.setLabel("New Label");
-        expectedTag.setColor(Color.BLUE);
+        String newLabel = "New Label";
+        expectedTag.setLabel(newLabel);
+        Color newColor = Color.BLUE;
+        expectedTag.setColor(newColor);
 
         this.tagService.updateTag(expectedTag.getId(), expectedTag);
+
+        Tag resultTag = this.tagService.getSpecificTagById(expectedTag.getId());
+
+        assertThat(resultTag.getLabel()).isEqualTo(newLabel);
+        assertThat(resultTag.getColor()).isEqualTo(newColor);
     }
 
     @Test
     void testUpdateTagWithEmptyLabel(){
         Tag expectedTag = this.tagService.createTag(this.tag);
 
-        expectedTag.setLabel("");
-        expectedTag.setColor(Color.BLUE);
+        String newLabel = "";
+        expectedTag.setLabel(newLabel);
+        Color newColor = Color.BLUE;
+        expectedTag.setColor(newColor);
 
         this.tagService.updateTag(expectedTag.getId(), expectedTag);
+
+        Tag resultTag = this.tagService.getSpecificTagById(expectedTag.getId());
+
+        assertThat(resultTag.getLabel()).isEqualTo(newLabel);
+        assertThat(resultTag.getColor()).isEqualTo(newColor);
     }
 
 }

@@ -1,4 +1,4 @@
-package dev.kandv.kango.integrations.controllers;
+package dev.kandv.kango.e2e.controllers;
 
 import dev.kandv.kango.KangoApplication;
 import dev.kandv.kango.dtos.DashboardDTO;
@@ -24,13 +24,13 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.ArrayList;
 
-import static dev.kandv.kango.controllers.DashboardRestController.*;
+import static dev.kandv.kango.controllers.DashboardRestController.INVALID_DASHBOARD_NAME;
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
-import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionCreateCard;
-import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionGetSpecificCardById;
-import static dev.kandv.kango.integrations.controllers.DashboardRestControllerUtils.*;
-import static dev.kandv.kango.integrations.controllers.TableRestControllerUtils.actionCreateTable;
-import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionCreateTag;
+import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionCreateCard;
+import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionGetSpecificCardById;
+import static dev.kandv.kango.e2e.controllers.DashboardRestControllerUtils.*;
+import static dev.kandv.kango.e2e.controllers.TableRestControllerUtils.actionCreateTable;
+import static dev.kandv.kango.e2e.controllers.TagRestControllerUtils.actionCreateTag;
 import static dev.kandv.kango.services.DashboardService.*;
 import static dev.kandv.kango.services.ErrorMessagesServices.*;
 import static io.restassured.RestAssured.given;
@@ -43,7 +43,7 @@ import static org.hamcrest.Matchers.equalTo;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ExtendWith(SpringExtension.class)
-public class DashboardRestControllerTest {
+class DashboardRestControllerTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer =
@@ -488,8 +488,15 @@ public class DashboardRestControllerTest {
         long dashboardId = actionCreateDashboard();
         long tableId = actionCreateTable();
 
-        actionAddTableToDashboard(dashboardId, tableId);
-    }
+        given()
+                .contentType(ContentType.JSON)
+                .body(tableId)
+                .pathParams("id", dashboardId)
+                .when()
+                .post("/api/dashboards/{id}/tables", dashboardId)
+                .then()
+                .statusCode(201)
+                .body("tableList.size()", equalTo(1));    }
 
     @Test
     void testAddTableToDashboardWithInvalidTableId() {
@@ -595,7 +602,15 @@ public class DashboardRestControllerTest {
         long dashboardId = actionCreateDashboard();
         long cardId = actionCreateCard(cardTitle, CardType.LOCAL_TEMPLATE);
 
-        actionAddTemplateCardToDashboard(dashboardId, cardId);
+        given()
+                .contentType(ContentType.JSON)
+                .body(cardId)
+                .pathParams("id", dashboardId)
+                .when()
+                .post("/api/dashboards/{id}/template-cards")
+                .then()
+                .statusCode(201)
+                .body("templateCardList.size()", equalTo(1));
     }
 
     @Test

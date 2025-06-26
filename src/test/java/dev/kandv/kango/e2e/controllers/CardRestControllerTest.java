@@ -1,4 +1,4 @@
-package dev.kandv.kango.integrations.controllers;
+package dev.kandv.kango.e2e.controllers;
 
 import dev.kandv.kango.KangoApplication;
 import dev.kandv.kango.dtos.CardDTO;
@@ -29,9 +29,9 @@ import java.util.TimeZone;
 
 import static dev.kandv.kango.controllers.CardRestController.*;
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.*;
-import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionCreateCard;
-import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionGetSpecificCardById;
-import static dev.kandv.kango.integrations.controllers.TagRestControllerUtils.actionCreateTag;
+import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionCreateCard;
+import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionGetSpecificCardById;
+import static dev.kandv.kango.e2e.controllers.TagRestControllerUtils.actionCreateTag;
 import static dev.kandv.kango.models.Card.NOT_FOUND_CHECK_ERROR;
 import static dev.kandv.kango.services.CardService.NOT_FOUND_ELEMENT_IN_CARD_ERROR;
 import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_CARD_WITH_ID_ERROR;
@@ -44,7 +44,7 @@ import static org.hamcrest.Matchers.*;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ExtendWith(SpringExtension.class)
-public class CardRestControllerTest {
+class CardRestControllerTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer =
@@ -717,14 +717,14 @@ public class CardRestControllerTest {
     @Test
     void testRemoveCheckFromCardWithInvalidId() {
         long cardId = 12345L;
-        AttachedFile attachedFile = new AttachedFile("example.png", "/example.png");
+        Check check = new Check("Example", false);
 
         given()
                 .pathParams("id", cardId)
                 .contentType(ContentType.JSON)
-                .body(attachedFile)
+                .body(check)
                 .when()
-                .delete("/api/cards/{id}/attached-files", cardId)
+                .delete("/api/cards/{id}/checks", cardId)
                 .then()
                 .statusCode(404)
                 .body("message", containsString(NOT_FOUND_CARD_WITH_ID_ERROR));

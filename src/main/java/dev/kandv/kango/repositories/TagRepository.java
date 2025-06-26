@@ -1,6 +1,5 @@
 package dev.kandv.kango.repositories;
 
-import dev.kandv.kango.models.Card;
 import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.Visibility;
 import lombok.NonNull;

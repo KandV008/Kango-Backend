@@ -22,14 +22,15 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static dev.kandv.kango.services.ErrorMessagesServices.*;
-import static dev.kandv.kango.services.TableService.*;
+import static dev.kandv.kango.services.TableService.INVALID_TABLE_CREATION_ERROR;
+import static dev.kandv.kango.services.TableService.NOT_FOUND_CARD_IN_THE_TABLE_ERROR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Testcontainers
 @SpringBootTest(classes = KangoApplication.class)
 @ExtendWith(SpringExtension.class)
-public class TableServiceTest {
+class TableServiceTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer =
@@ -148,9 +149,9 @@ public class TableServiceTest {
     void testUpdateTableNameWithNullId(){
         String tableName = "New Name";
 
-        NoSuchElementException noSuchElementException = assertThrows(NoSuchElementException.class, () ->  this.tableService.updateNameTable(12345L, tableName));
+        IllegalArgumentException noSuchElementException = assertThrows(IllegalArgumentException.class, () ->  this.tableService.updateNameTable(null, tableName));
 
-        assertThat(noSuchElementException.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
+        assertThat(noSuchElementException.getMessage()).contains(INVALID_ID_ERROR);
     }
 
     @Test
@@ -164,12 +165,15 @@ public class TableServiceTest {
     @Transactional
     void testAddCardToTable(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        this.tableService.addCardToTable(expectedTable.getId(), expectedCard.getId());
+
+        this.tableService.addCardToTable(tableId, cardId);
 
         Table result = this.tableService.getSpecificTableById(expectedTable.getId());
-        assertThat(result.getCardList().size()).isEqualTo(1);
+        assertThat(result.getCardList()).hasSize(1);
         assertThat(result.getCardList()).contains(expectedCard);
     }
 
@@ -177,8 +181,9 @@ public class TableServiceTest {
     void testAddCardToTableWithInvalidTableId(){
         Long tableId = 12345L;
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.addCardToTable(tableId, expectedCard.getId()));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.addCardToTable(tableId, cardId));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
@@ -186,8 +191,9 @@ public class TableServiceTest {
     @Test
     void testAddCardToTableWithNullTableId(){
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.addCardToTable(null, expectedCard.getId()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.addCardToTable(null, cardId));
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
     }
@@ -195,9 +201,10 @@ public class TableServiceTest {
     @Test
     void testAddCardToTableWithInvalidCardId(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
         Long cardId = 12345L;
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.addCardToTable(expectedTable.getId(), cardId));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.addCardToTable(tableId, cardId));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
@@ -205,8 +212,9 @@ public class TableServiceTest {
     @Test
     void testAddCardToTableWithNullCardId(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.addCardToTable(expectedTable.getId(), null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.addCardToTable(tableId, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -219,19 +227,20 @@ public class TableServiceTest {
 
         this.tableService.addCardToTable(expectedTable.getId(), expectedCard.getId());
         Table result = this.tableService.getSpecificTableById(expectedTable.getId());
-        assertThat(result.getCardList().size()).isEqualTo(1);
+        assertThat(result.getCardList()).hasSize(1);
 
         this.tableService.removeCardFromTable(expectedTable.getId(), expectedCard.getId());
         result = this.tableService.getSpecificTableById(expectedTable.getId());
-        assertThat(result.getCardList().size()).isEqualTo(0);
+        assertThat(result.getCardList()).isEmpty();
     }
 
     @Test
     void testRemoveCardFromTableWithInvalidTableId(){
         Long tableId = 12345L;
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.removeCardFromTable(tableId, expectedCard.getId()));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.removeCardFromTable(tableId, cardId));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
@@ -239,8 +248,9 @@ public class TableServiceTest {
     @Test
     void testRemoveCardFromTableWithNullTableId(){
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.removeCardFromTable(null, expectedCard.getId()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.removeCardFromTable(null, cardId));
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
     }
@@ -248,9 +258,10 @@ public class TableServiceTest {
     @Test
     void testRemoveCardFromTableWithInvalidCardId(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
         Long cardId = 12345L;
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.removeCardFromTable(expectedTable.getId(), cardId));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.removeCardFromTable(tableId, cardId));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
@@ -258,8 +269,9 @@ public class TableServiceTest {
     @Test
     void testRemoveCardFromTableWithNullCardId(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.removeCardFromTable(expectedTable.getId(), null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.removeCardFromTable(tableId, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -268,9 +280,11 @@ public class TableServiceTest {
     @Transactional
     void testRemoveCardFromTableWithNoCards(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.removeCardFromTable(expectedTable.getId(), expectedCard.getId()));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.removeCardFromTable(tableId, cardId));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_IN_THE_TABLE_ERROR);
     }
@@ -289,7 +303,7 @@ public class TableServiceTest {
 
         Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
 
-        assertThat(resultTable.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable.getCardList()).hasSize(2);
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList.get(0)).isEqualTo(expectedCard1);
         assertThat(cardList.get(1)).isEqualTo(expectedCard2);
@@ -299,7 +313,7 @@ public class TableServiceTest {
 
         resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
 
-        assertThat(resultTable.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable.getCardList()).hasSize(2);
         cardList = resultTable.getCardList();
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
@@ -346,13 +360,13 @@ public class TableServiceTest {
         this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
 
         Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
-        assertThat(resultTable.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable.getCardList()).hasSize(2);
 
         this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard1.getId(), 1);
 
         resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
         List<Card> cardList = resultTable.getCardList();
-        assertThat(cardList.size()).isEqualTo(2);
+        assertThat(cardList).hasSize(2);
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
     }
@@ -361,8 +375,9 @@ public class TableServiceTest {
     void testUpdateCardPositionFromTableWithInvalidTableId(){
         Long tableId = 12345L;
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.updateCardPositionFromTable(tableId, expectedCard.getId(), 0));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.updateCardPositionFromTable(tableId, cardId, 0));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
@@ -370,8 +385,9 @@ public class TableServiceTest {
     @Test
     void testUpdateCardPositionFromTableWithNullTableId(){
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.updateCardPositionFromTable(null, expectedCard.getId(), 0));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.updateCardPositionFromTable(null, cardId, 0));
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
     }
@@ -379,9 +395,10 @@ public class TableServiceTest {
     @Test
     void testUpdateCardPositionFromTableWithInvalidCardId(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
         Long cardId = 12345L;
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.updateCardPositionFromTable(expectedTable.getId(), cardId, 0));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.updateCardPositionFromTable(tableId, cardId, 0));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
@@ -389,8 +406,9 @@ public class TableServiceTest {
     @Test
     void testUpdateCardPositionFromTableWithNullCardId(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.updateCardPositionFromTable(expectedTable.getId(), null, 0));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.updateCardPositionFromTable(tableId, null, 0));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -399,9 +417,11 @@ public class TableServiceTest {
     @Transactional
     void testUpdateCardPositionFromTableWithNoCards(){
         Table expectedTable = this.tableService.createTable(this.table);
+        long tableId = expectedTable.getId();
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard.getId(), 0));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.updateCardPositionFromTable(tableId, cardId, 0));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_IN_THE_TABLE_ERROR);
     }
@@ -419,24 +439,26 @@ public class TableServiceTest {
         this.tableService.addCardToTable(table1.getId(), expectedCard.getId());
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(1);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).hasSize(1);
+        assertThat(resultTable2.getCardList()).isEmpty();
 
         this.tableService.moveCardFromTableToAnotherTable(table1.getId(), expectedCard.getId(), table2.getId(), 0);
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(1);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).hasSize(1);
     }
 
     @Test
     void testMoveCardFromTableToAnotherTableWithInvalidOriginTableId(){
         Long originTableId = 12345L;
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
         Table destinedTable = this.tableService.createTable(this.table);
+        long destinedTableId = destinedTable.getId();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTableId, expectedCard.getId(), destinedTable.getId(), 0));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTableId, cardId, destinedTableId, 0));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
@@ -444,9 +466,11 @@ public class TableServiceTest {
     @Test
     void testMoveCardFromTableToAnotherTableWithNullOriginTableId(){
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
         Table destinedTable = this.tableService.createTable(this.table);
+        long destinedTableId = destinedTable.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.moveCardFromTableToAnotherTable(null, expectedCard.getId(), destinedTable.getId(), 0));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.moveCardFromTableToAnotherTable(null, cardId, destinedTableId, 0));
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
     }
@@ -454,10 +478,12 @@ public class TableServiceTest {
     @Test
     void testMoveCardFromTableToAnotherTableWithInvalidDestinyTableId(){
         Table originTable = this.tableService.createTable(this.table);
+        long originTableId = originTable.getId();
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
         Long destinedTableId = 12345L;
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTable.getId(), expectedCard.getId(), destinedTableId, 0));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTableId, cardId, destinedTableId, 0));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
@@ -465,9 +491,11 @@ public class TableServiceTest {
     @Test
     void testMoveCardFromTableToAnotherTableWithNullDestinyTableId(){
         Table originTable = this.tableService.createTable(this.table);
+        long originTableId = originTable.getId();
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTable.getId(), expectedCard.getId(), null, 0));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTableId, cardId, null, 0));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -475,10 +503,12 @@ public class TableServiceTest {
     @Test
     void testMoveCardFromTableToAnotherTableWithInvalidCardId(){
         Table originTable = this.tableService.createTable(this.table);
+        long originTableId = originTable.getId();
         Long cardId = 12345L;
         Table destinedTable = this.tableService.createTable(this.table);
+        long destinedTableId = destinedTable.getId();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTable.getId(), cardId, destinedTable.getId(),0));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTableId, cardId, destinedTableId,0));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
     }
@@ -486,9 +516,11 @@ public class TableServiceTest {
     @Test
     void testMoveCardFromTableToAnotherTableWithNullCardId(){
         Table originTable = this.tableService.createTable(this.table);
+        long originTableId = originTable.getId();
         Table destinedTable = this.tableService.createTable(this.table);
+        long destinedTableId = destinedTable.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTable.getId(), null, destinedTable.getId(), 0));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTableId, null, destinedTableId, 0));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -498,12 +530,15 @@ public class TableServiceTest {
     void testMoveCardFromTableToAnotherTableWithNoCards(){
         Table newTable1 = new Table("New Table 1");
         Table originTable = this.tableService.createTable(newTable1);
+        long originTableId = originTable.getId();
         Table newTable2 = new Table("New Table 2");
         Table destinyTable = this.tableService.createTable(newTable2);
+        long destinedTableId = destinyTable.getId();
 
         Card expectedCard = this.cardService.createCard(this.card);
+        long cardId = expectedCard.getId();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTable.getId(), expectedCard.getId(), destinyTable.getId(), 0));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardFromTableToAnotherTable(originTableId, cardId, destinedTableId, 0));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_CARD_IN_THE_TABLE_ERROR);
     }
@@ -526,15 +561,15 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(2);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).hasSize(2);
+        assertThat(resultTable2.getCardList()).isEmpty();
 
         this.tableService.moveCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).hasSize(2);
     }
 
     @Test
@@ -555,23 +590,24 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(1);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(1);
+        assertThat(resultTable1.getCardList()).hasSize(1);
+        assertThat(resultTable2.getCardList()).hasSize(1);
 
         this.tableService.moveCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).hasSize(2);
     }
 
     @Test
     void testMoveCardListFromTableToAnotherTableWithInvalidOriginTableId(){
         Long originTableId = 12345L;
         Table destinedTable = this.tableService.createTable(this.table);
+        long destinedTableId = destinedTable.getId();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardListFromTableToAnotherTable(originTableId, destinedTable.getId()));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardListFromTableToAnotherTable(originTableId, destinedTableId));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
@@ -579,8 +615,9 @@ public class TableServiceTest {
     @Test
     void testMoveCardListFromTableToAnotherTableWithNullOriginTableId(){
         Table destinedTable = this.tableService.createTable(this.table);
+        long destinedTableId = destinedTable.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.moveCardListFromTableToAnotherTable(null, destinedTable.getId()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.moveCardListFromTableToAnotherTable(null, destinedTableId));
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
     }
@@ -588,9 +625,10 @@ public class TableServiceTest {
     @Test
     void testMoveCardListFromTableToAnotherTableWithInvalidDestinyTableId(){
         Table originTable = this.tableService.createTable(this.table);
+        long originTableId = originTable.getId();
         Long destinedTableId = 12345L;
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardListFromTableToAnotherTable(originTable.getId(), destinedTableId));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.moveCardListFromTableToAnotherTable(originTableId, destinedTableId));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
@@ -598,8 +636,9 @@ public class TableServiceTest {
     @Test
     void testMoveCardListFromTableToAnotherTableWithNullDestinyTableId(){
         Table originTable = this.tableService.createTable(this.table);
+        long originTableId = originTable.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.moveCardListFromTableToAnotherTable(originTable.getId(), null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.moveCardListFromTableToAnotherTable(originTableId, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -614,15 +653,15 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).isEmpty();
 
         this.tableService.moveCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).isEmpty();
     }
 
     @Test
@@ -643,15 +682,15 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(2);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).hasSize(2);
+        assertThat(resultTable2.getCardList()).isEmpty();
 
         this.tableService.copyCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(2);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable1.getCardList()).hasSize(2);
+        assertThat(resultTable2.getCardList()).hasSize(2);
     }
 
     @Test
@@ -672,23 +711,24 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(1);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(1);
+        assertThat(resultTable1.getCardList()).hasSize(1);
+        assertThat(resultTable2.getCardList()).hasSize(1);
 
         this.tableService.copyCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(1);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(2);
+        assertThat(resultTable1.getCardList()).hasSize(1);
+        assertThat(resultTable2.getCardList()).hasSize(2);
     }
 
     @Test
     void testCopyCardListFromTableToAnotherTableWithInvalidOriginTableId(){
         Long originTableId = 12345L;
         Table destinedTable = this.tableService.createTable(this.table);
+        long destinedTableId = destinedTable.getId();
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.copyCardListFromTableToAnotherTable(originTableId, destinedTable.getId()));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.copyCardListFromTableToAnotherTable(originTableId, destinedTableId));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
@@ -696,8 +736,9 @@ public class TableServiceTest {
     @Test
     void testCopyCardListFromTableToAnotherTableWithNullOriginTableId(){
         Table destinedTable = this.tableService.createTable(this.table);
+        long destinedTableId = destinedTable.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.copyCardListFromTableToAnotherTable(null, destinedTable.getId()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.copyCardListFromTableToAnotherTable(null, destinedTableId));
 
         assertThat(exception.getMessage()).contains(INVALID_ID_ERROR);
     }
@@ -705,9 +746,10 @@ public class TableServiceTest {
     @Test
     void testCopyCardListFromTableToAnotherTableWithInvalidDestinyTableId(){
         Table originTable = this.tableService.createTable(this.table);
+        long originTableId = originTable.getId();
         Long destinedTableId = 12345L;
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.copyCardListFromTableToAnotherTable(originTable.getId(), destinedTableId));
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> this.tableService.copyCardListFromTableToAnotherTable(originTableId, destinedTableId));
 
         assertThat(exception.getMessage()).contains(NOT_FOUND_TABLE_WITH_ID_ERROR);
     }
@@ -715,8 +757,9 @@ public class TableServiceTest {
     @Test
     void testCopyCardListFromTableToAnotherTableWithNullDestinyTableId(){
         Table originTable = this.tableService.createTable(this.table);
+        long originTableId = originTable.getId();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.copyCardListFromTableToAnotherTable(originTable.getId(), null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> this.tableService.copyCardListFromTableToAnotherTable(originTableId, null));
 
         assertThat(exception.getMessage()).contains(INVALID_ELEMENT_ERROR);
     }
@@ -731,14 +774,14 @@ public class TableServiceTest {
 
         Table resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         Table resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).isEmpty();
 
         this.tableService.copyCardListFromTableToAnotherTable(table1.getId(), table2.getId());
 
         resultTable1 = this.tableService.getSpecificTableById(table1.getId());
         resultTable2 = this.tableService.getSpecificTableById(table2.getId());
-        assertThat(resultTable1.getCardList().size()).isEqualTo(0);
-        assertThat(resultTable2.getCardList().size()).isEqualTo(0);
+        assertThat(resultTable1.getCardList()).isEmpty();
+        assertThat(resultTable2.getCardList()).isEmpty();
     }
 }

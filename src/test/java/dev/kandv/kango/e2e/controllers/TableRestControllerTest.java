@@ -1,4 +1,4 @@
-package dev.kandv.kango.integrations.controllers;
+package dev.kandv.kango.e2e.controllers;
 
 import dev.kandv.kango.KangoApplication;
 import dev.kandv.kango.dtos.CardDTO;
@@ -27,11 +27,11 @@ import java.util.List;
 
 import static dev.kandv.kango.controllers.ErrorMessagesRestControllers.TABLE_NOT_FOUND;
 import static dev.kandv.kango.controllers.TableRestController.*;
-import static dev.kandv.kango.integrations.controllers.CardRestControllerUtils.actionCreateCard;
-import static dev.kandv.kango.integrations.controllers.TableRestControllerUtils.*;
+import static dev.kandv.kango.e2e.controllers.CardRestControllerUtils.actionCreateCard;
+import static dev.kandv.kango.e2e.controllers.TableRestControllerUtils.*;
 import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_CARD_WITH_ID_ERROR;
 import static dev.kandv.kango.services.ErrorMessagesServices.NOT_FOUND_TABLE_WITH_ID_ERROR;
-import static dev.kandv.kango.services.TableService.*;
+import static dev.kandv.kango.services.TableService.NOT_FOUND_CARD_IN_THE_TABLE_ERROR;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -42,7 +42,7 @@ import static org.hamcrest.Matchers.equalTo;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ExtendWith(SpringExtension.class)
-public class TableRestControllerTest {
+class TableRestControllerTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer =
@@ -320,7 +320,15 @@ public class TableRestControllerTest {
         long tableId = actionCreateTable();
         long cardId = actionCreateCard();
 
-        actionAddCardToTable(tableId, cardId);
+        given()
+                .contentType(ContentType.JSON)
+                .body(cardId)
+                .pathParams("id", tableId)
+                .when()
+                .post("/api/tables/{id}/cards")
+                .then()
+                .statusCode(201)
+                .body("cardList.size()", equalTo(1));
     }
 
     @Test
