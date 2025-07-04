@@ -56,6 +56,8 @@ public class Dashboard {
     }
 
     public void addTable(Table table) {
+        table.setPosition(tableList.size());
+        table.setDashboard(this);
         this.tableList.add(table);
     }
 
@@ -101,7 +103,7 @@ public class Dashboard {
 
         this.tableList.add(newPosition, currentTable);
 
-        for (int i = newPosition; i < this.tableList.size(); i++) {
+        for (int i = 0; i < this.tableList.size(); i++) {
             this.tableList.get(i).setPosition(i);
         }
 
