@@ -1,4 +1,4 @@
-package dev.kandv.kango.controllers;
+package dev.kandv.kango.config;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
