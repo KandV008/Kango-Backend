@@ -79,7 +79,7 @@ public class TableRestController {
     }
 
     @GetMapping("/tables/{id}")
-    public ResponseEntity<Table> getCard(@PathVariable Long id) {
+    public ResponseEntity<Table> getTable(@PathVariable Long id) {
         Table currentTable = this.tableService.getSpecificTableById(id);
 
         checkTable(id, currentTable);
@@ -210,7 +210,7 @@ public class TableRestController {
         }
     }
 
-    static TableDTO mapToTableDTO(Table currentTable) {
+    static TableDTO mapToTableDTO(Table currentTable)  {
         List<Card> cardList = currentTable.getCardList();
 
         List<CardDTO> list = cardList.stream().map((card -> new CardDTO(card.getTitle(), card.getDescription(), card.getCardType(), card.getColor(), card.getDeadLine()))).toList();
