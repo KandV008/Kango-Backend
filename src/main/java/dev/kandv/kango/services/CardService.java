@@ -7,6 +7,7 @@ import dev.kandv.kango.models.enums.Color;
 import dev.kandv.kango.models.utils.AttachedFile;
 import dev.kandv.kango.models.utils.Check;
 import dev.kandv.kango.repositories.CardRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,18 @@ public class CardService {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(INVALID_CARD_CREATION_ERROR + card);
         }
+    }
+
+    @Transactional
+    public Card createCardUsingATemplate(Long id) {
+        this.checkId(id);
+
+        Optional<Card> result = this.cardRepository.findById(id);
+        Card currentCard = this.checkDatabaseResult(id, result);
+
+        Card copyCard = new Card(currentCard);
+        this.cardRepository.save(copyCard);
+        return copyCard;
     }
 
     public void removeAllCards() {
@@ -210,4 +223,5 @@ public class CardService {
 
         this.cardRepository.save(currentCard);
     }
+
 }

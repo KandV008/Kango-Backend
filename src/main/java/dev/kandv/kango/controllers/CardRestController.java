@@ -90,6 +90,17 @@ public class CardRestController {
         return ResponseEntity.status(201).body(createdCard);
     }
 
+    @PostMapping("/cards/{id}/copy")
+    public ResponseEntity<Card> createCardUsingATemplate(@PathVariable Long id) {
+        try{
+            Card copyCard = this.cardService.createCardUsingATemplate(id);
+
+            return ResponseEntity.status(201).body(copyCard);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + id);
+        }
+    }
+
     @GetMapping("/cards/{id}")
     public ResponseEntity<Card> getCard(@PathVariable Long id) {
         Card currentCard = this.cardService.getSpecificCardById(id);

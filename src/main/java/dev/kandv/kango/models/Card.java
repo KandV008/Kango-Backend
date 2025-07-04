@@ -81,13 +81,25 @@ public class Card {
         this.description = other.description;
         this.cardType = other.cardType;
         this.color = other.color;
-        this.attachedFiles = new LinkedList<>(other.attachedFiles); // TODO See about doing a deep copy
+
+        this.attachedFiles = new LinkedList<>();
+        for (AttachedFile file : other.attachedFiles) {
+            this.attachedFiles.add(new AttachedFile(file));
+        }
+
         this.deadLine = other.deadLine != null ? new Date(other.deadLine.getTime()) : null;
-        this.checks = new LinkedList<>(other.checks); // TODO See about doing a deep copy
+
+        this.checks = new LinkedList<>();
+        for (Check check : other.checks) {
+            this.checks.add(new Check(check));
+        }
+
         this.position = other.position;
-        this.tagList = new LinkedList<>(other.tagList); // TODO See about doing a deep copy
+        this.tagList.addAll(other.tagList);
         this.table = null;
+        this.dashboard = null;
     }
+
 
 
     public void attachFile(AttachedFile attachedFile){

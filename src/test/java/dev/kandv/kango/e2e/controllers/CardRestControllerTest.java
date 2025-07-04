@@ -166,6 +166,31 @@ class CardRestControllerTest {
     }
 
     @Test
+    void testCreateCardUsingATemplate(){
+        long cardId = actionCreateCard("EXAMPLE TEMPLATE CARD", CardType.GLOBAL_TEMPLATE);
+
+        given()
+                .pathParams("id", cardId)
+                .when()
+                .post("/api/cards/{id}/copy", cardId)
+                .then()
+                .statusCode(201);
+    }
+
+    @Test
+    void testCreateCardUsingATemplateWithNotFoundCard(){
+        long cardId = 12345L;
+
+        given()
+                .pathParams("id", cardId)
+                .when()
+                .post("/api/cards/{id}/copy", cardId)
+                .then()
+                .statusCode(404)
+                .body("message", containsString(CARD_NOT_FOUND));
+    }
+
+    @Test
     void testGetSpecificCardById(){
         long cardId = actionCreateCard();
 

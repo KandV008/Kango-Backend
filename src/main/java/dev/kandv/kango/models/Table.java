@@ -45,6 +45,10 @@ public class Table {
 
     public void sortCardList(CardListSort cardListSort){
         this.cardList.sort(cardListSort.getComparator());
+
+        for (int i = 0; i < this.cardList.size(); i++) {
+            this.cardList.get(i).setPosition(i);
+        }
     }
 
     public void cleanCardList() {
