@@ -96,9 +96,8 @@ public class DashboardRestController {
 
         try{
             this.dashboardService.attachFileToDashboard(id, attachedFile);
-            Dashboard updatedDashboard = this.dashboardService.getSpecificDashboardById(id);
 
-            return ResponseEntity.status(201).body(updatedDashboard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, DASHBOARD_NOT_FOUND + id);
         }
@@ -110,9 +109,8 @@ public class DashboardRestController {
 
         try{
             this.dashboardService.detachFileFromDashboard(id, attachedFile);
-            Dashboard updatedDashboard = this.dashboardService.getSpecificDashboardById(id);
 
-            return ResponseEntity.status(200).body(updatedDashboard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
