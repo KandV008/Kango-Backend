@@ -198,7 +198,7 @@ class DashboardRestControllerTest {
     }
 
     @Test
-    void testUpdateTitleCard(){
+    void testUpdateDashboardName(){
         long dashboardId = actionCreateDashboard();
         String newName = "New Name";
         DashboardDTO newDashboardDTO = new DashboardDTO(newName);
@@ -209,6 +209,12 @@ class DashboardRestControllerTest {
                 .body(newDashboardDTO)
                 .when()
                 .put("/api/dashboards/{id}/name", dashboardId)
+                .then()
+                .statusCode(204);
+
+        Response response = actionGetSpecificDashboardById(dashboardId);
+
+        response
                 .then()
                 .statusCode(200)
                 .body("name", equalTo(newName))

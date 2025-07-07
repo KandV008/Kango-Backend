@@ -82,9 +82,8 @@ public class DashboardRestController {
 
         try{
             this.dashboardService.updateName(id, name);
-            Dashboard updatedCard = this.dashboardService.getSpecificDashboardById(id);
 
-            return ResponseEntity.status(200).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, DASHBOARD_NOT_FOUND + id);
         }
