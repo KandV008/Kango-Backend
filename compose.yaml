@@ -1,14 +1,25 @@
 services:
-  postgres:
-    image: 'postgres:16-alpine'
+  db:
+    image: postgres:16-alpine
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: secret
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: secret
 
 volumes:
-  pgdata:
+  db-data:

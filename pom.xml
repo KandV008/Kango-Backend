@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>dev.kandv</groupId>
 	<artifactId>kango</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Kango</name>
 	<description>Auto-hosted personal kanban</description>
 	<url/>
