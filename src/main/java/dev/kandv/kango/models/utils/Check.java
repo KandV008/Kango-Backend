@@ -19,6 +19,13 @@ public class Check {
         this.checked = checked;
     }
 
+    public Check(Check other) {
+        this.label = other.label;
+        this.checked = other.checked;
+        this.position = other.position;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Check )) {

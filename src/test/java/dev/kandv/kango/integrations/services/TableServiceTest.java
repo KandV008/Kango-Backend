@@ -297,26 +297,37 @@ class TableServiceTest {
         Card expectedCard1 = this.cardService.createCard(newCard1);
         Card newCard2 = new Card("Card 2");
         Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
 
         this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
         this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
 
         Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
 
-        assertThat(resultTable.getCardList()).hasSize(2);
+        assertThat(resultTable.getCardList()).hasSize(3);
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList.get(0)).isEqualTo(expectedCard1);
         assertThat(cardList.get(1)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard3);
 
         CardListSort typeSort = CardListSort.BY_ID_REVERSE;
         this.tableService.sortCardListFromTable(resultTable.getId(), typeSort);
 
         resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
 
-        assertThat(resultTable.getCardList()).hasSize(2);
+        assertThat(resultTable.getCardList()).hasSize(3);
         cardList = resultTable.getCardList();
-        assertThat(cardList.get(0)).isEqualTo(expectedCard2);
-        assertThat(cardList.get(1)).isEqualTo(expectedCard1);
+        Card card1 = cardList.get(0);
+        Card card2 = cardList.get(1);
+        Card card3 = cardList.get(2);
+        assertThat(card1).isEqualTo(expectedCard3);
+        assertThat(card1.getPosition()).isEqualTo(0);
+        assertThat(card2).isEqualTo(expectedCard2);
+        assertThat(card2.getPosition()).isEqualTo(1);
+        assertThat(card3).isEqualTo(expectedCard1);
+        assertThat(card3.getPosition()).isEqualTo(2);
     }
 
     @Test

@@ -166,6 +166,31 @@ class CardRestControllerTest {
     }
 
     @Test
+    void testCreateCardUsingATemplate(){
+        long cardId = actionCreateCard("EXAMPLE TEMPLATE CARD", CardType.GLOBAL_TEMPLATE);
+
+        given()
+                .pathParams("id", cardId)
+                .when()
+                .post("/api/cards/{id}/copy", cardId)
+                .then()
+                .statusCode(201);
+    }
+
+    @Test
+    void testCreateCardUsingATemplateWithNotFoundCard(){
+        long cardId = 12345L;
+
+        given()
+                .pathParams("id", cardId)
+                .when()
+                .post("/api/cards/{id}/copy", cardId)
+                .then()
+                .statusCode(404)
+                .body("message", containsString(CARD_NOT_FOUND));
+    }
+
+    @Test
     void testGetSpecificCardById(){
         long cardId = actionCreateCard();
 
@@ -274,7 +299,12 @@ class CardRestControllerTest {
         .when()
                 .put("/api/cards/{id}/title", cardId)
         .then()
-                .statusCode(200)
+                .statusCode(204);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
+                .then().statusCode(200)
                 .body("title", equalTo(newTitle))
                 .body("id", equalTo((int) cardId));
     }
@@ -344,7 +374,12 @@ class CardRestControllerTest {
         .when()
                 .put("/api/cards/{id}/description", cardId)
         .then()
-                .statusCode(200)
+                .statusCode(204);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
+                .then().statusCode(200)
                 .body("description", equalTo(newDescription))
                 .body("id", equalTo((int) cardId));
     }
@@ -418,7 +453,12 @@ class CardRestControllerTest {
         .when()
                 .put("/api/cards/{id}/color", cardId)
         .then()
-                .statusCode(200)
+                .statusCode(204);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
+                .then().statusCode(200)
                 .body("color", equalTo(newColor.toString()))
                 .body("id", equalTo((int) cardId));
     }
@@ -476,6 +516,12 @@ class CardRestControllerTest {
         .when()
                 .put("/api/cards/{id}/deadline", cardId)
         .then()
+                .statusCode(204);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
+                .then()
                 .statusCode(200)
                 .body("deadLine", startsWith(formattedDeadline))
                 .body("id", equalTo((int) cardId));
@@ -522,6 +568,15 @@ class CardRestControllerTest {
         AttachedFile attachedFile = new AttachedFile("example.png", "/example.png");
 
         this.actionAttachFileToCard(cardId, attachedFile);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
+                .then()
+                .statusCode(200)
+                        .body("id", equalTo((int) cardId))
+                .body("attachedFiles.size()", equalTo(1));
+
     }
 
     @Test
@@ -569,6 +624,12 @@ class CardRestControllerTest {
                 .body(attachedFile)
                 .when()
                 .delete("/api/cards/{id}/attached-files", cardId)
+                .then()
+                .statusCode(204);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
                 .then()
                 .statusCode(200)
                 .body("id", equalTo((int) cardId))
@@ -629,6 +690,14 @@ class CardRestControllerTest {
         Check check = new Check("Example Label", false);
 
         this.actionAddCheckToCard(cardId, check);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
+                .then()
+                .statusCode(200)
+                .body("id", equalTo((int) cardId))
+                .body("checks.size()", equalTo(1));
     }
 
     @Test
@@ -677,7 +746,13 @@ class CardRestControllerTest {
                 .when()
                 .delete("/api/cards/{id}/checks", cardId)
                 .then()
-                .statusCode(200)
+                .statusCode(204);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
+                .then()
+                        .statusCode(200)
                 .body("id", equalTo((int) cardId))
                 .body("checks.size()", equalTo(0));
     }
@@ -746,7 +821,13 @@ class CardRestControllerTest {
                 .when()
                 .put("/api/cards/{id}/checks", cardId)
                 .then()
-                .statusCode(200)
+                .statusCode(204);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
+                .then()
+                        .statusCode(200)
                 .body("id", equalTo((int) cardId))
                 .body("checks.size()", equalTo(1));
     }
@@ -806,6 +887,15 @@ class CardRestControllerTest {
         long tagId = actionCreateTag(tag.getLabel(), tag.getColor(), tag.getVisibility());
 
         this.actionAddTagToCard(cardId, tagId);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
+                .then()
+                .statusCode(200)
+                .body("id", equalTo((int) cardId))
+                .body("tagList.size()", equalTo(1));
+
     }
 
     @Test
@@ -856,7 +946,13 @@ class CardRestControllerTest {
                 .when()
                 .delete("/api/cards/{id}/tags", cardId)
                 .then()
-                .statusCode(200)
+                .statusCode(204);
+
+        Response response = actionGetSpecificCardById(cardId);
+
+        response
+                .then()
+                        .statusCode(200)
                 .body("id", equalTo((int) cardId))
                 .body("tagList.size()", equalTo(0));
     }
@@ -919,9 +1015,7 @@ class CardRestControllerTest {
                 .when()
                 .post("/api/cards/{id}/attached-files", cardId)
                 .then()
-                .statusCode(201)
-                .body("id", equalTo((int) cardId))
-                .body("attachedFiles.size()", equalTo(1));
+                .statusCode(204);
     }
 
     private void actionAddCheckToCard(long cardId, Check check) {
@@ -932,9 +1026,7 @@ class CardRestControllerTest {
                 .when()
                 .post("/api/cards/{id}/checks", cardId)
                 .then()
-                .statusCode(201)
-                .body("id", equalTo((int) cardId))
-                .body("checks.size()", equalTo(1));
+                .statusCode(204);
     }
 
     private void actionAddTagToCard(long cardId, long tagId) {
@@ -945,9 +1037,7 @@ class CardRestControllerTest {
                 .when()
                 .post("/api/cards/{id}/tags", cardId)
                 .then()
-                .statusCode(201)
-                .body("id", equalTo((int) cardId))
-                .body("tagList.size()", equalTo(1));
+                .statusCode(204);
     }
 
 }

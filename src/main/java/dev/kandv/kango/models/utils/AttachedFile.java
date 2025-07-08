@@ -14,6 +14,11 @@ public class AttachedFile {
     @NonNull
     private String fileUrl;
 
+    public AttachedFile(AttachedFile other) {
+        this.fileName = other.fileName;
+        this.fileUrl = other.fileUrl;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof AttachedFile )) {

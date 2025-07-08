@@ -451,7 +451,6 @@ class TableRestControllerTest {
                 .body("cardList.size()", equalTo(2))
                 .body("cardList.get(0).id", equalTo((int) cardListId2))
                 .body("cardList.get(1).id", equalTo((int) cardListId1));
-
     }
 
     @Test

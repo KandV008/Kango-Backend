@@ -118,6 +118,39 @@ class CardServiceTest {
     }
 
     @Test
+    @Transactional
+    void testCreateCardUsingATemplate(){
+        Card templateCard = new Card("EXAMPLE TEMPLATE", CardType.GLOBAL_TEMPLATE);
+        Card expectedCard = this.cardService.createCard(templateCard);
+
+        Card resultCard = this.cardService.createCardUsingATemplate(expectedCard.getId());
+
+        assertThat(resultCard).isNotEqualTo(expectedCard);
+        assertThat(resultCard.getTitle()).isEqualTo(expectedCard.getTitle());
+        assertThat(resultCard.getDescription()).isEqualTo(expectedCard.getDescription());
+        assertThat(resultCard.getColor()).isEqualTo(expectedCard.getColor());
+        assertThat(resultCard.getPosition()).isEqualTo(expectedCard.getPosition());
+        assertThat(resultCard.getDeadLine()).isEqualTo(expectedCard.getDeadLine());
+        assertThat(resultCard.getAttachedFiles()).containsAll(expectedCard.getAttachedFiles());
+        assertThat(resultCard.getChecks()).containsAll(expectedCard.getChecks());
+        assertThat(resultCard.getTagList()).containsAll(expectedCard.getTagList());
+    }
+
+    @Test
+    void testCreateCardUsingATemplateWithInvalidCard(){
+        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> this.cardService.createCardUsingATemplate(null));
+
+        assertThat(illegalArgumentException.getMessage()).isEqualTo(INVALID_ID_ERROR + null);
+    }
+
+    @Test
+    void testCreateCardUsingATemplateWithNotFoundCard(){
+        NoSuchElementException noSuchElementException = assertThrows(NoSuchElementException.class, () -> this.cardService.createCardUsingATemplate(12345L));
+
+        assertThat(noSuchElementException.getMessage()).contains(NOT_FOUND_CARD_WITH_ID_ERROR);
+    }
+
+    @Test
     void testDeleteCard(){
         Card expectedCard = this.cardService.createCard(this.card);
 

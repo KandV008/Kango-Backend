@@ -90,6 +90,17 @@ public class CardRestController {
         return ResponseEntity.status(201).body(createdCard);
     }
 
+    @PostMapping("/cards/{id}/copy")
+    public ResponseEntity<Card> createCardUsingATemplate(@PathVariable Long id) {
+        try{
+            Card copyCard = this.cardService.createCardUsingATemplate(id);
+
+            return ResponseEntity.status(201).body(copyCard);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + id);
+        }
+    }
+
     @GetMapping("/cards/{id}")
     public ResponseEntity<Card> getCard(@PathVariable Long id) {
         Card currentCard = this.cardService.getSpecificCardById(id);
@@ -130,9 +141,8 @@ public class CardRestController {
 
         try{
             this.cardService.updateTitleCard(id, title);
-            Card updatedCard = this.cardService.getSpecificCardById(id);
 
-            return ResponseEntity.status(200).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + id);
         }
@@ -145,9 +155,8 @@ public class CardRestController {
 
         try{
             this.cardService.updateDescriptionCard(id, description);
-            Card updatedCard = this.cardService.getSpecificCardById(id);
 
-            return ResponseEntity.status(200).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + id);
         }
@@ -160,9 +169,8 @@ public class CardRestController {
 
         try{
             this.cardService.updateColorCard(id, color);
-            Card updatedCard = this.cardService.getSpecificCardById(id);
 
-            return ResponseEntity.status(200).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + id);
         }
@@ -175,9 +183,8 @@ public class CardRestController {
 
         try{
             this.cardService.updateDeadLineCard(id, deadLine);
-            Card updatedCard = this.cardService.getSpecificCardById(id);
 
-            return ResponseEntity.status(200).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + id);
         }
@@ -189,9 +196,8 @@ public class CardRestController {
 
         try{
             this.cardService.attachFileToCard(id, attachedFile);
-            Card updatedCard = this.cardService.getSpecificCardById(id);
 
-            return ResponseEntity.status(201).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + id);
         }
@@ -203,9 +209,8 @@ public class CardRestController {
 
         try{
             this.cardService.detachFileToCard(id, attachedFile);
-            Card updatedCard = this.cardService.getSpecificCardById(id);
 
-            return ResponseEntity.status(200).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -217,9 +222,8 @@ public class CardRestController {
 
         try{
             this.cardService.addCheckToCard(id, check);
-            Card updatedCard = this.cardService.getSpecificCardById(id);
 
-            return ResponseEntity.status(201).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + id);
         }
@@ -231,9 +235,8 @@ public class CardRestController {
 
         try{
             this.cardService.removeCheckFromCard(id, check);
-            Card updatedCard = this.cardService.getSpecificCardById(id);
 
-            return ResponseEntity.status(200).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -245,9 +248,8 @@ public class CardRestController {
 
         try {
             this.cardService.updateCheckFromCard(id, check);
-            Card updatedCard = this.cardService.getSpecificCardById(id);
 
-            return ResponseEntity.status(200).body(updatedCard);
+            return ResponseEntity.noContent().build();
         }catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -260,9 +262,8 @@ public class CardRestController {
 
         try{
             this.cardService.addTagToCard(cardId, tagById);
-            Card updatedCard = this.cardService.getSpecificCardById(cardId);
 
-            return ResponseEntity.status(201).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, CARD_NOT_FOUND + cardId);
         }
@@ -275,9 +276,8 @@ public class CardRestController {
 
         try{
             this.cardService.removeTagFromCard(cardId, tagById);
-            Card updatedCard = this.cardService.getSpecificCardById(cardId);
 
-            return ResponseEntity.status(200).body(updatedCard);
+            return ResponseEntity.noContent().build();
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

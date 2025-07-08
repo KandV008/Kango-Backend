@@ -198,7 +198,7 @@ class DashboardRestControllerTest {
     }
 
     @Test
-    void testUpdateTitleCard(){
+    void testUpdateDashboardName(){
         long dashboardId = actionCreateDashboard();
         String newName = "New Name";
         DashboardDTO newDashboardDTO = new DashboardDTO(newName);
@@ -209,6 +209,12 @@ class DashboardRestControllerTest {
                 .body(newDashboardDTO)
                 .when()
                 .put("/api/dashboards/{id}/name", dashboardId)
+                .then()
+                .statusCode(204);
+
+        Response response = actionGetSpecificDashboardById(dashboardId);
+
+        response
                 .then()
                 .statusCode(200)
                 .body("name", equalTo(newName))
@@ -270,6 +276,15 @@ class DashboardRestControllerTest {
         AttachedFile attachedFile = new AttachedFile("example.png", "/example.png");
 
         this.actionAttachFileToDashboard(dashboardId, attachedFile);
+
+        Response response = actionGetSpecificDashboardById(dashboardId);
+
+        response
+                .then()
+                        .statusCode(200)
+                .body("id", equalTo((int) dashboardId))
+                .body("attachedFiles.size()", equalTo(1));
+
     }
 
     @Test
@@ -318,9 +333,16 @@ class DashboardRestControllerTest {
                 .when()
                 .delete("/api/dashboards/{id}/attached-files", dashboardId)
                 .then()
+                .statusCode(204);
+
+        Response response = actionGetSpecificDashboardById(dashboardId);
+
+        response
+                .then()
                 .statusCode(200)
                 .body("id", equalTo((int) dashboardId))
                 .body("attachedFiles.size()", equalTo(0));
+
     }
 
     @Test
@@ -827,9 +849,7 @@ class DashboardRestControllerTest {
                 .when()
                 .post("/api/dashboards/{id}/attached-files", dashboardId)
                 .then()
-                .statusCode(201)
-                .body("id", equalTo((int) dashboardId))
-                .body("attachedFiles.size()", equalTo(1));
+                .statusCode(204);
     }
 
     private void actionAddTagToDashboard(long dashboardId, long tagId) {
