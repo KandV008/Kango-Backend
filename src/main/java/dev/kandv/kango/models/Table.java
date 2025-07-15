@@ -76,6 +76,12 @@ public class Table {
     }
 
     public boolean updateCardPosition(Card currentCard, int newPosition) {
+        int oldPosition = currentCard.getPosition();
+
+        if(oldPosition == newPosition){
+            return false;
+        }
+
         boolean success = this.cardList.remove(currentCard);
 
         if (!success) {
@@ -86,7 +92,7 @@ public class Table {
 
         this.cardList.add(newPosition, currentCard);
 
-        for (int i = newPosition; i < this.cardList.size(); i++) {
+        for (int i = 0; i < this.cardList.size(); i++) {
             this.cardList.get(i).setPosition(i);
         }
 

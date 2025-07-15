@@ -77,6 +77,10 @@ public class TableService {
         this.tableRepository.save(currentTable);
     }
 
+    public boolean checkPositions(int newPosition, int oldPosition) {
+        return newPosition != oldPosition;
+    }
+
     @Transactional
     public void addCardToTable(Long tableId, Long cardId) {
         this.checkId(tableId);
@@ -123,6 +127,11 @@ public class TableService {
     public void updateCardPositionFromTable(Long tableId, Long cardId, int newPosition) {
         this.checkId(tableId);
         Card currentCard = obtainCard(cardId, cardService);
+        boolean hasMovement = this.checkPositions(newPosition, currentCard.getPosition());
+
+        if (!hasMovement) {
+            return;
+        }
 
         Optional<Table> result = this.tableRepository.findById(tableId);
         Table currentTable = this.checkTableDatabaseResult(tableId, result);
