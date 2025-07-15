@@ -1,6 +1,7 @@
 package dev.kandv.kango.controllers;
 
 import dev.kandv.kango.dtos.CardDTO;
+import dev.kandv.kango.dtos.TemplateCardDTO;
 import dev.kandv.kango.models.Card;
 import dev.kandv.kango.models.Tag;
 import dev.kandv.kango.models.enums.CardType;
@@ -42,8 +43,8 @@ public class CardRestController {
     }
 
     private void checkCardDescription(String description) {
-        if (description == null || description.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_DESCRIPTION + description);
+        if (description == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_DESCRIPTION + null);
         }
     }
 
@@ -128,10 +129,14 @@ public class CardRestController {
     }
 
     @GetMapping("/global-template-cards")
-    public ResponseEntity<List<Card>> getGlobalTemplatesCards() {
+    public ResponseEntity<List<TemplateCardDTO>> getGlobalTemplatesCards() {
         List<Card> allGlobalTemplateCards = this.cardService.getAllGlobalTemplateCards();
 
-        return ResponseEntity.status(200).body(allGlobalTemplateCards);
+        List<TemplateCardDTO> templateCardDTOs = allGlobalTemplateCards.stream()
+                .map(CardRestController::mapToTemplateCardDTO)
+                .toList();
+
+        return ResponseEntity.status(200).body(templateCardDTOs);
     }
 
     @PutMapping("/cards/{id}/title")
@@ -281,5 +286,22 @@ public class CardRestController {
         } catch (NoSuchElementException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
+    }
+
+    static TemplateCardDTO mapToTemplateCardDTO(Card currentCard)  {
+        Long id = currentCard.getId();
+        String title = currentCard.getTitle();
+        String description = currentCard.getDescription();
+        CardType cardType = currentCard.getCardType();
+        Color color = currentCard.getColor();
+        List<AttachedFile> attachedFiles = currentCard.getAttachedFiles();
+        Date deadLine = currentCard.getDeadLine();
+        List<Check> checks = currentCard.getChecks();
+        int position = currentCard.getPosition();
+        List<Tag> tagList = currentCard.getTagList();
+
+        return new TemplateCardDTO(
+                id, title, description, cardType, color, attachedFiles, deadLine, checks, position, tagList
+        );
     }
 }
