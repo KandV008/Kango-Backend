@@ -11,4 +11,4 @@ FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar /app
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "kango-1.0.0.jar"]
+ENTRYPOINT ["sh", "-c", "java -jar $(ls /app/*.jar)"]
