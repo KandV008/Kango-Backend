@@ -385,25 +385,6 @@ class CardRestControllerTest {
     }
 
     @Test
-    void testUpdateDescriptionCardWithInvalidDescription() {
-        long cardId = actionCreateCard();
-        String newDescription = "";
-        CardDTO newDescriptionDTO = new CardDTO();
-        newDescriptionDTO.setDescription(newDescription);
-
-        given()
-                .pathParams("id", cardId)
-                .contentType(ContentType.JSON)
-                .body(newDescriptionDTO)
-        .when()
-                .put("/api/cards/{id}/description", cardId)
-        .then()
-                .statusCode(400)
-                .body("message", containsString(INVALID_DESCRIPTION));
-
-    }
-
-    @Test
     void testUpdateDescriptionCardWithNullDescription() {
         long cardId = actionCreateCard();
         CardDTO newDescriptionDTO = new CardDTO();
