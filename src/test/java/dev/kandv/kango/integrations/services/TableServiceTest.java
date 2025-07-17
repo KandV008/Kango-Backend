@@ -324,7 +324,7 @@ class TableServiceTest {
         Card card2 = cardList.get(1);
         Card card3 = cardList.get(2);
         assertThat(card1).isEqualTo(expectedCard3);
-        assertThat(card1.getPosition()).isEqualTo(0);
+        assertThat(card1.getPosition()).isZero();
         assertThat(card2).isEqualTo(expectedCard2);
         assertThat(card2.getPosition()).isEqualTo(1);
         assertThat(card3).isEqualTo(expectedCard1);
@@ -382,7 +382,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(2);
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
     }
@@ -410,7 +410,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(2);
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
     }
@@ -438,7 +438,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(2);
         assertThat(cardList.get(0)).isEqualTo(expectedCard1);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard2);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
     }
@@ -469,7 +469,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(3);
         assertThat(cardList.get(0)).isEqualTo(expectedCard1);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard3);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
         assertThat(cardList.get(2)).isEqualTo(expectedCard2);
@@ -502,7 +502,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(3);
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
         assertThat(cardList.get(2)).isEqualTo(expectedCard3);
@@ -535,7 +535,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(3);
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
         assertThat(cardList.get(2)).isEqualTo(expectedCard3);
@@ -568,7 +568,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(3);
         assertThat(cardList.get(0)).isEqualTo(expectedCard1);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard3);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
         assertThat(cardList.get(2)).isEqualTo(expectedCard2);
@@ -604,7 +604,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(4);
         assertThat(cardList.get(0)).isEqualTo(expectedCard1);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard3);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
         assertThat(cardList.get(2)).isEqualTo(expectedCard4);
@@ -642,7 +642,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(4);
         assertThat(cardList.get(0)).isEqualTo(expectedCard3);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
         assertThat(cardList.get(2)).isEqualTo(expectedCard2);
@@ -680,7 +680,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(4);
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
         assertThat(cardList.get(2)).isEqualTo(expectedCard3);
@@ -718,7 +718,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(4);
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard3);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
         assertThat(cardList.get(2)).isEqualTo(expectedCard1);
@@ -756,7 +756,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(4);
         assertThat(cardList.get(0)).isEqualTo(expectedCard1);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard4);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
         assertThat(cardList.get(2)).isEqualTo(expectedCard2);
@@ -794,7 +794,7 @@ class TableServiceTest {
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(4);
         assertThat(cardList.get(0)).isEqualTo(expectedCard1);
-        assertThat(cardList.get(0).getPosition()).isEqualTo(0);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard2);
         assertThat(cardList.get(1).getPosition()).isEqualTo(1);
         assertThat(cardList.get(2)).isEqualTo(expectedCard4);

@@ -4,7 +4,6 @@ import dev.kandv.kango.models.Card;
 import dev.kandv.kango.models.Table;
 import dev.kandv.kango.models.enums.CardListSort;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Description;
 
@@ -17,8 +16,8 @@ class TableTest {
 
     private Table table;
     private List<Card> cardList;
-    private Card card1;
-    private Card card2;
+    private Card exampleCard1;
+    private Card exampleCard2;
 
     @BeforeEach
     void beforeEach() {
@@ -26,13 +25,13 @@ class TableTest {
         this.table = new Table(name);
         this.cardList = new ArrayList<>();
 
-        this.card1 = new Card("Example 1");
-        this.card1.setPosition(0);
-        this.cardList.add(this.card1);
+        this.exampleCard1 = new Card("Example 1");
+        this.exampleCard1.setPosition(0);
+        this.cardList.add(this.exampleCard1);
 
-        this.card2 = new Card("Example 2");
-        this.card2.setPosition(1);
-        this.cardList.add(this.card2);
+        this.exampleCard2 = new Card("Example 2");
+        this.exampleCard2.setPosition(1);
+        this.cardList.add(this.exampleCard2);
     }
 
     @Test
@@ -82,8 +81,8 @@ class TableTest {
         List<Card> result = this.table.getCardList();
 
         assertThat(result).hasSize(2);
-        assertThat(result.get(0)).isEqualTo(this.card1);
-        assertThat(result.get(1)).isEqualTo(this.card2);
+        assertThat(result.get(0)).isEqualTo(this.exampleCard1);
+        assertThat(result.get(1)).isEqualTo(this.exampleCard2);
     }
 
     @Test
@@ -94,8 +93,8 @@ class TableTest {
         List<Card> result = this.table.getCardList();
 
         assertThat(result).hasSize(2);
-        assertThat(result.get(0)).isEqualTo(this.card2);
-        assertThat(result.get(1)).isEqualTo(this.card1);
+        assertThat(result.get(0)).isEqualTo(this.exampleCard2);
+        assertThat(result.get(1)).isEqualTo(this.exampleCard1);
     }
 
     @Test
@@ -125,12 +124,12 @@ class TableTest {
     void testRemoveCardFromCardList(){
         this.table.setCardList(this.cardList);
 
-        this.table.removeCardFromCardList(this.card1);
+        this.table.removeCardFromCardList(this.exampleCard1);
 
         List<Card> result = this.table.getCardList();
         assertThat(result).hasSize(1);
         Card remainingCard = result.getFirst();
-        assertThat(remainingCard).isEqualTo(this.card2);
+        assertThat(remainingCard).isEqualTo(this.exampleCard2);
         assertThat(remainingCard.getPosition()).isZero();
     }
 
@@ -172,7 +171,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(2);
         assertThat(result.get(0).getTitle()).isEqualTo(card2.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card1.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
     }
@@ -193,7 +192,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(2);
         assertThat(result.get(0).getTitle()).isEqualTo(card2.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card1.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
     }
@@ -214,7 +213,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(2);
         assertThat(result.get(0).getTitle()).isEqualTo(card1.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card2.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
     }
@@ -237,7 +236,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(3);
         assertThat(result.get(0).getTitle()).isEqualTo(card1.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card3.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
         assertThat(result.get(2).getTitle()).isEqualTo(card2.getTitle());
@@ -262,7 +261,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(3);
         assertThat(result.get(0).getTitle()).isEqualTo(card2.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card1.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
         assertThat(result.get(2).getTitle()).isEqualTo(card3.getTitle());
@@ -287,7 +286,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(3);
         assertThat(result.get(0).getTitle()).isEqualTo(card2.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card1.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
         assertThat(result.get(2).getTitle()).isEqualTo(card3.getTitle());
@@ -312,7 +311,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(3);
         assertThat(result.get(0).getTitle()).isEqualTo(card1.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card3.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
         assertThat(result.get(2).getTitle()).isEqualTo(card2.getTitle());
@@ -339,7 +338,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(4);
         assertThat(result.get(0).getTitle()).isEqualTo(card1.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card3.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
         assertThat(result.get(2).getTitle()).isEqualTo(card4.getTitle());
@@ -368,7 +367,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(4);
         assertThat(result.get(0).getTitle()).isEqualTo(card3.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card1.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
         assertThat(result.get(2).getTitle()).isEqualTo(card2.getTitle());
@@ -397,7 +396,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(4);
         assertThat(result.get(0).getTitle()).isEqualTo(card2.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card1.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
         assertThat(result.get(2).getTitle()).isEqualTo(card3.getTitle());
@@ -426,7 +425,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(4);
         assertThat(result.get(0).getTitle()).isEqualTo(card2.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card3.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
         assertThat(result.get(2).getTitle()).isEqualTo(card1.getTitle());
@@ -455,7 +454,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(4);
         assertThat(result.get(0).getTitle()).isEqualTo(card1.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card2.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
         assertThat(result.get(2).getTitle()).isEqualTo(card4.getTitle());
@@ -484,7 +483,7 @@ class TableTest {
         List<Card> result = newTable.getCardList();
         assertThat(result).hasSize(4);
         assertThat(result.get(0).getTitle()).isEqualTo(card1.getTitle());
-        assertThat(result.get(0).getPosition()).isEqualTo(0);
+        assertThat(result.get(0).getPosition()).isZero();
         assertThat(result.get(1).getTitle()).isEqualTo(card4.getTitle());
         assertThat(result.get(1).getPosition()).isEqualTo(1);
         assertThat(result.get(2).getTitle()).isEqualTo(card2.getTitle());
