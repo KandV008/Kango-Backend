@@ -77,6 +77,16 @@ public class TableService {
         this.tableRepository.save(currentTable);
     }
 
+    public boolean checkPositions(int newPosition, int oldPosition) {
+        return newPosition != oldPosition;
+    }
+
+    private boolean checkExistenceInTable(Table currentTable, Card currentCard) {
+        List<Card> cardList = currentTable.getCardList();
+
+        return cardList.contains(currentCard);
+    }
+
     @Transactional
     public void addCardToTable(Long tableId, Long cardId) {
         this.checkId(tableId);
@@ -126,6 +136,18 @@ public class TableService {
 
         Optional<Table> result = this.tableRepository.findById(tableId);
         Table currentTable = this.checkTableDatabaseResult(tableId, result);
+
+        boolean existsCardInTable = this.checkExistenceInTable(currentTable, currentCard);
+
+        if (!existsCardInTable) {
+            throw new NoSuchElementException(NOT_FOUND_CARD_IN_THE_TABLE_ERROR + cardId);
+        }
+
+        boolean hasMovement = this.checkPositions(newPosition, currentCard.getPosition());
+
+        if (!hasMovement) {
+            return;
+        }
 
         boolean isSuccess = currentTable.updateCardPosition(currentCard, newPosition);
 

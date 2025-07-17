@@ -11,6 +11,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Description;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -323,7 +324,7 @@ class TableServiceTest {
         Card card2 = cardList.get(1);
         Card card3 = cardList.get(2);
         assertThat(card1).isEqualTo(expectedCard3);
-        assertThat(card1.getPosition()).isEqualTo(0);
+        assertThat(card1.getPosition()).isZero();
         assertThat(card2).isEqualTo(expectedCard2);
         assertThat(card2.getPosition()).isEqualTo(1);
         assertThat(card3).isEqualTo(expectedCard1);
@@ -360,26 +361,446 @@ class TableServiceTest {
 
     @Test
     @Transactional
-    void testUpdateCardPositionFromTable(){
-        Table expectedTable = this.tableService.createTable(this.table);
+    @Description("updateCardPosition with 2 elements -> c1 goes to final")
+    void testUpdateCardPositionFromTableWithTwoCardsCase1(){
         Card newCard1 = new Card("Card 1");
         Card expectedCard1 = this.cardService.createCard(newCard1);
         Card newCard2 = new Card("Card 2");
         Card expectedCard2 = this.cardService.createCard(newCard2);
 
+        Table expectedTable = this.tableService.createTable(this.table);
         this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
         this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
 
         Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
         assertThat(resultTable.getCardList()).hasSize(2);
+        int newPosition = 1;
 
-        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard1.getId(), 1);
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard1.getId(), newPosition);
 
         resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
         List<Card> cardList = resultTable.getCardList();
         assertThat(cardList).hasSize(2);
         assertThat(cardList.get(0)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(0).getPosition()).isZero();
         assertThat(cardList.get(1)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 2 elements -> c2 goes to start")
+    void testUpdateCardPositionFromTableWithTwoCardsCase2(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(2);
+        int newPosition = 0;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard2.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(2);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 2 elements -> No movement")
+    void testUpdateCardPositionFromTableWithTwoCardsCase3(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(2);
+        int newPosition = 0;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard1.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(2);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 3 elements -> c2 goes to final")
+    void testUpdateCardPositionFromTableWithThreeCardsCase1(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(3);
+        int newPosition = 2;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard2.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(3);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard3);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(2).getPosition()).isEqualTo(2);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 3 elements -> c2 goes to start")
+    void testUpdateCardPositionFromTableWithThreeCardsCase2(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(3);
+        int newPosition = 0;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard2.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(3);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard3);
+        assertThat(cardList.get(2).getPosition()).isEqualTo(2);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 3 elements -> c1 goes to middle")
+    void testUpdateCardPositionFromTableWithThreeCardsCase3(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(3);
+        int newPosition = 1;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard1.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(3);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard3);
+        assertThat(cardList.get(2).getPosition()).isEqualTo(2);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 3 elements -> c3 goes to middle")
+    void testUpdateCardPositionFromTableWithThreeCardsCase4(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(3);
+        int newPosition = 1;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard3.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(3);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard3);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(2).getPosition()).isEqualTo(2);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 4 elements -> c2 goes to final")
+    void testUpdateCardPositionFromTableWithFourCardsCase1(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
+        Card newCard4 = new Card("Card 4");
+        Card expectedCard4 = this.cardService.createCard(newCard4);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard4.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(4);
+        int newPosition = 3;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard2.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(4);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard3);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard4);
+        assertThat(cardList.get(2).getPosition()).isEqualTo(2);
+        assertThat(cardList.get(3)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(3).getPosition()).isEqualTo(3);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 4 elements -> c3 goes to start")
+    void testUpdateCardPositionFromTableWithFourCardsCase2(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
+        Card newCard4 = new Card("Card 4");
+        Card expectedCard4 = this.cardService.createCard(newCard4);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard4.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(4);
+        int newPosition = 0;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard3.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(4);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard3);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(2).getPosition()).isEqualTo(2);
+        assertThat(cardList.get(3)).isEqualTo(expectedCard4);
+        assertThat(cardList.get(3).getPosition()).isEqualTo(3);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 4 elements -> c1 goes to lower middle")
+    void testUpdateCardPositionFromTableWithFourCardsCase3(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
+        Card newCard4 = new Card("Card 4");
+        Card expectedCard4 = this.cardService.createCard(newCard4);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard4.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(4);
+        int newPosition = 1;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard1.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(4);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard3);
+        assertThat(cardList.get(2).getPosition()).isEqualTo(2);
+        assertThat(cardList.get(3)).isEqualTo(expectedCard4);
+        assertThat(cardList.get(3).getPosition()).isEqualTo(3);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 4 elements -> c1 goes to upper middle")
+    void testUpdateCardPositionFromTableWithFourCardsCase4(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
+        Card newCard4 = new Card("Card 4");
+        Card expectedCard4 = this.cardService.createCard(newCard4);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard4.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(4);
+        int newPosition = 2;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard1.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(4);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard3);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(2).getPosition()).isEqualTo(2);
+        assertThat(cardList.get(3)).isEqualTo(expectedCard4);
+        assertThat(cardList.get(3).getPosition()).isEqualTo(3);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 4 elements -> c4 goes to lower middle")
+    void testUpdateCardPositionFromTableWithFourCardsCase5(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
+        Card newCard4 = new Card("Card 4");
+        Card expectedCard4 = this.cardService.createCard(newCard4);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard4.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(4);
+        int newPosition = 1;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard4.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(4);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard4);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(2).getPosition()).isEqualTo(2);
+        assertThat(cardList.get(3)).isEqualTo(expectedCard3);
+        assertThat(cardList.get(3).getPosition()).isEqualTo(3);
+    }
+
+    @Test
+    @Transactional
+    @Description("updateCardPosition with 4 elements -> c4 goes to upper middle")
+    void testUpdateCardPositionFromTableWithFourCardsCase6(){
+        Card newCard1 = new Card("Card 1");
+        Card expectedCard1 = this.cardService.createCard(newCard1);
+        Card newCard2 = new Card("Card 2");
+        Card expectedCard2 = this.cardService.createCard(newCard2);
+        Card newCard3 = new Card("Card 3");
+        Card expectedCard3 = this.cardService.createCard(newCard3);
+        Card newCard4 = new Card("Card 4");
+        Card expectedCard4 = this.cardService.createCard(newCard4);
+
+        Table expectedTable = this.tableService.createTable(this.table);
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard1.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard2.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard3.getId());
+        this.tableService.addCardToTable(expectedTable.getId(), expectedCard4.getId());
+
+        Table resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        assertThat(resultTable.getCardList()).hasSize(4);
+        int newPosition = 2;
+
+        this.tableService.updateCardPositionFromTable(expectedTable.getId(), expectedCard4.getId(), newPosition);
+
+        resultTable = this.tableService.getSpecificTableById(expectedTable.getId());
+        List<Card> cardList = resultTable.getCardList();
+        assertThat(cardList).hasSize(4);
+        assertThat(cardList.get(0)).isEqualTo(expectedCard1);
+        assertThat(cardList.get(0).getPosition()).isZero();
+        assertThat(cardList.get(1)).isEqualTo(expectedCard2);
+        assertThat(cardList.get(1).getPosition()).isEqualTo(1);
+        assertThat(cardList.get(2)).isEqualTo(expectedCard4);
+        assertThat(cardList.get(2).getPosition()).isEqualTo(2);
+        assertThat(cardList.get(3)).isEqualTo(expectedCard3);
+        assertThat(cardList.get(3).getPosition()).isEqualTo(3);
     }
 
     @Test
