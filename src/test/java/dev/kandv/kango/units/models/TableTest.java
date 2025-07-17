@@ -16,8 +16,8 @@ class TableTest {
 
     private Table table;
     private List<Card> cardList;
-    private Card card1;
-    private Card card2;
+    private Card exampleCard1;
+    private Card exampleCard2;
 
     @BeforeEach
     void beforeEach() {
@@ -25,13 +25,13 @@ class TableTest {
         this.table = new Table(name);
         this.cardList = new ArrayList<>();
 
-        this.card1 = new Card("Example 1");
-        this.card1.setPosition(0);
-        this.cardList.add(this.card1);
+        this.exampleCard1 = new Card("Example 1");
+        this.exampleCard1.setPosition(0);
+        this.cardList.add(this.exampleCard1);
 
-        this.card2 = new Card("Example 2");
-        this.card2.setPosition(1);
-        this.cardList.add(this.card2);
+        this.exampleCard2 = new Card("Example 2");
+        this.exampleCard2.setPosition(1);
+        this.cardList.add(this.exampleCard2);
     }
 
     @Test
@@ -81,8 +81,8 @@ class TableTest {
         List<Card> result = this.table.getCardList();
 
         assertThat(result).hasSize(2);
-        assertThat(result.get(0)).isEqualTo(this.card1);
-        assertThat(result.get(1)).isEqualTo(this.card2);
+        assertThat(result.get(0)).isEqualTo(this.exampleCard1);
+        assertThat(result.get(1)).isEqualTo(this.exampleCard2);
     }
 
     @Test
@@ -93,8 +93,8 @@ class TableTest {
         List<Card> result = this.table.getCardList();
 
         assertThat(result).hasSize(2);
-        assertThat(result.get(0)).isEqualTo(this.card2);
-        assertThat(result.get(1)).isEqualTo(this.card1);
+        assertThat(result.get(0)).isEqualTo(this.exampleCard2);
+        assertThat(result.get(1)).isEqualTo(this.exampleCard1);
     }
 
     @Test
@@ -124,12 +124,12 @@ class TableTest {
     void testRemoveCardFromCardList(){
         this.table.setCardList(this.cardList);
 
-        this.table.removeCardFromCardList(this.card1);
+        this.table.removeCardFromCardList(this.exampleCard1);
 
         List<Card> result = this.table.getCardList();
         assertThat(result).hasSize(1);
         Card remainingCard = result.getFirst();
-        assertThat(remainingCard).isEqualTo(this.card2);
+        assertThat(remainingCard).isEqualTo(this.exampleCard2);
         assertThat(remainingCard.getPosition()).isZero();
     }
 
