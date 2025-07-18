@@ -49,7 +49,9 @@ public class CardService {
         Card currentCard = this.checkDatabaseResult(id, result);
 
         Card copyCard = new Card(currentCard);
+        copyCard.setCardType(CardType.NORMAL);
         this.cardRepository.save(copyCard);
+        System.out.println(copyCard.getCardType());
         return copyCard;
     }
 
