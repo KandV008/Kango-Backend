@@ -1,0 +1,39 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - develop
+    paths-ignore:
+      - README.md
+      - .gitattributes
+      - .gitignore
+      - compose.yaml
+      - docs/**
+
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-java
+      - uses: ./.github/actions/setup-docker
+
+      - name: Run tests
+        run: mvn verify
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-java
+
+      - name: Run build
+        run: mvn compile
