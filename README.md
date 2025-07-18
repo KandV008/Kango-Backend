@@ -1,175 +1,130 @@
-# Kango, an auto-hosted Kanban
+# Kango, an auto-hosted Kanban - Backend
 
-<p align="center">
-<strong>This project is in development...</strong>
-</p>
+You are on the server side of the Kango software. If you wish to view the client side, [click here](https://github.com/KandV008/Kango-Frontend) to redirect you to the repository.
 
-Kango is a desktop application where you can use a Kanban board in a very simple way. Oriented for personal use, you can manage your hobbies or projects as well as your daily life.  
+This README.md will consist of the manual for installing the application with docker from both repositories. So if you want to use the application, the source repository does not matter.
 
-It stands out for the possibility of configuring the database associated to your needs, although by default it will use PostgreSQL locally.
+---
 
-## :clapper: Preview
+Kango is an application that allows you to manage Kanban boards on your local machine. It is oriented for a more casual use, without having agile development functionalities. If you want to have a Kanban board to manage your daily life or a personal project, this application is ideal for having the essential functionality.
 
-<p align="center">
-<strong>Currently, there is no preview...</strong>
-</p>
+Click in the **image** to see preview of the application:
 
-## :scroll:Table of Contents
+[![Kango - Preview](docs/thumbnail.png)](https://youtu.be/-VS518NoluE)
 
-1. [Requirement Analysis](#black_nib-requirement-analysis)
-    1. [Entities](#black_joker-entities)
-    1. [Type of Users](#busts_in_silhouette-type-of-users)
-    1. [Functional Requirements](#wrench-functional-requirements)
-    1. [Non Functional Requirements](#electric_plug-non-functional-requirements)
-1. [Design](#straight_ruler-design)
-    1. [Prototype](#airplane-navigation)
-    1. [SQL Database](#dvd-sql-database)
+## Table of Content
 
-### :black_nib: Requirement Analysis
+1. [Installation manual](#installation-manual)
+   1. [Steps](#steps)
+   2. [Configuration](#configuration)
+   3. [Back-end](#back-end)
+   4. [Front-end](#front-end)
 
-#### :black_joker: Entities
+## Installation manual
 
-Currently, there are 4 entities.
+This section will explain how to install and use the Kango application on your local machine with Docker. 
 
-| Entities |
-| :-: |
-| [State](#state) |
-| [Dashboard](#dashboard) |
-| [Table](#table) |
-| [Card](#card) |
-| [Automation](#automation) |
-| [Tag](#tag) |
+**Annotation**: This way of installation is the easiest and simplest. You can change the various parameters as you see fit to suit your needs.
 
-##### State
+### Steps
 
-The Status contains the setting of the application. All oriented to accesability.
+1. Check [Configuration](#configuration)
+2. Download the next file: [compose.yaml](https://github.com/KandV008/Kango-Frontend/blob/main/compose.yaml)
+3. Run Docker Desktop
+4. Go to the directory where the file was downloaded
+5. Open a terminal
+6. Run the next command:
+```
+  docker compose up -d
+```
+7. Go to [http://localhost:4173/](http://localhost:4173/)
+8. Enjoy!
 
-The configuration will be:
-- Color blind filter
-- Font size
-- Language
+If you want to stop the application:
 
-##### Dashboard
+1. Go to the directory
+2. Go to the directory where the file was downloaded
+3. Open a terminal
+4. Run the next command:
+```
+  docker compose down
+```
 
-The board contains all tables, a name, a legend with the types of cards and a space to save or quickly access the files.
+If you want to re-start the application:
 
-It also contains the automations, labels, and global and local card templates.
+1. Go to the directory
+2. Go to the directory where the file was downloaded
+3. Open a terminal
+4. Run the next command:
+```
+  docker compose up -d
+```
+5. Go to [http://localhost:4173/](http://localhost:4173/)
 
-##### Table
+### Configuration
 
-The table contains a set of cards next to the table name.
+In order to install the application you need the following:
+- [Docker](https://docs.docker.com/get-started/get-docker/)
 
-##### Card
+If you want to test each side of the application with the tools that were used for development, the following are required:
+- Back-End:
+   - [JDK 21](https://www.oracle.com/es/java/technologies/downloads/#java21)
+   - An IDE, e.g. [IntelliJ IDEA](https://www.jetbrains.com/idea/)
+   - [PostgreSQL](https://www.postgresql.org/download/) (The repository contains a compose.yaml with the docker of the database, if you don't want to install the software)
+- Front-End:
+   - [Node.JS v20 or higher](https://nodejs.org/en/download)
+   - An IDE, e.g. [Visual Studio Code](https://code.visualstudio.com/Download)
 
-The card contains name, description, type (template or card), and other specific information.
+### Back-End
 
-The specific information:
-- Attached links
-- Deadtime
-- Checklist
-- Tags
+For the back-end you need the `kango-backend` image and a `postgreSQL` image.
 
-##### Automation
+- Regarding `kango-backend` image, you can go to the [docker hub section](https://hub.docker.com/repository/docker/kandv/kango-backend/general) and select the version you want. The `latest` is recommended.
+- Regarding `postgreSQL` image, you have to use any image that uses postgreSQL v16. The `16-alpine` is recommended.
 
-The Automation contains a list of instruction to do when it is activated.
+To use the server side with docker it is only necessary to have the following services in the docker compose:
 
-##### Tag
+``` yaml
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
 
-The card contains text and color to be put on a card.
+  backend:
+    image: kango-backend:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: secret
 
+volumes:
+  db-data:
+```
 
-#### :busts_in_silhouette: Type of Users
+### Front-End
 
-As the application is for personal use, and will not be public in the restrictive use of the word.
+For the front-end you need the `kango-frontend` image.
 
-The code will be accessible to everyone, to be downloaded and configured to personal needs.
+- Regarding `kango-frontend` image, you can go to the [docker hub section](https://hub.docker.com/repository/docker/kandv/kango-frontend/general) and select the version you want. The `latest` is recommended.
 
-Therefore, it does not consist of any kind of user to use. It will be the state of the application the “user”.
+To use the client side with docker it is only necessary to have the following service in the docker compose:
 
-#### :wrench: Functional Requirements
+``` yaml
+services:
+  frontend:
+    image: kandv/kango-frontend:latest
+    ports:
+      - "4173:4173"
+```
 
-Here are the diferent actions that can be done in the application:
-
-| User Histories | 
-| :-- |
-| UH-101 Show list of available Dashboard |
-| UH-102 Access to Help Page |
-| UH-103 Show adaptative help |
-| UH-104 Access to Configuration Page |
-| UH-105 Show configuration options |
-| UH-106 Configure Accesibility |
-| UH-107 Create Card Template (Globally) |
-| UH-108 Create Automation (Globally) |
-| UH-109 Create tags (Globally) |
-| UH-110 Create Dashboard |
-| UH-111 Access Dashboard |
-| UH-112 Delete Dashboard |
-| UH-113 Delete Dashboards |
-| UH-114 Exit of the application |
-| UH-201 Show list of available Table | 
-| UH-202 Access to associated files of the table |
-| UH-203 Change Dashboard's name |
-| UH-204 Create Card Template (Locally) |
-| UH-205 Create Automation (Locally) |
-| UH-206 Create tags (Locally) |
-| UH-207 Create Table |
-| UH-208 See Table |
-| UH-209 Change Table's name |
-| UH-210 Move table position in the dashboard |
-| UH-211 Delete Table |
-| UH-212 Copy list of cards |
-| UH-213 Move list of cards |
-| UH-214 Move card to another table |
-| UH-215 Move card position in the table |
-| UH-216 Sort cards from a table |
-| UH-217 Create Card |
-| UH-301 See Card |
-| UH-302 Update Card |
-| UH-303 Delete Card |
-| UH-304 Attach attachedFile to a Card |
-| UH-305 Set deadline to a Card|
-| UH-306 Set checklist to a Card |
-| UH-307 Set Tags to a Card |
-| UH-308 Set description to a Card |
-| UH-309 Set color to a Card |
-
-#### :electric_plug: Non Functional Requirements
-
-| Non Functional Requirements |
-| :-: |
-| Oriented to Desktop |
-| Responsive Design |
-| Front-end must be implemented with React |
-| Back-end must be implemented with Spring |
-| It needs to connect with SQL Database |
-| GUI must be minimalist and user-friendly |
-| Usability & Accesibility |
-| Languages must be English and Spanish  |
-
-### :straight_ruler: Design
-
-#### :bookmark_tabs: Prototype
-
-A disposable prototype of the main screens is shown.
-
-<p align="center">
-  <img src="/docs/prototype/v1/Home_Page.png" alt="Prototype v1 - Home Page">
-  <br>
-  <small>Figure 1. Prototype v1 - Home Page</small>
-</p>
-
-<p align="center">
-  <img src="/docs/prototype/v1/Dashboard_Page.png" alt="Prototype v1 - Dashboard Page">
-  <br>
-  <small>Figure 2. Prototype v1 - Dashboard Page</small>
-</p>
-
-#### :dvd: SQL Database
-
-A relational database is used to contain all entities.
-
-<p align="center">
-  <img src="/docs/diagrams/ER_Model.svg" alt="ER-Diagram">
-  <br>
-  <small>Entity Relation Diagram 1. SQL Database</small>
-</p>

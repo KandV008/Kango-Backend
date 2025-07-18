@@ -10,7 +10,7 @@ on:
       - .gitignore
       - compose.yaml
       - docs/**
-      
+
 jobs:
   test:
     runs-on: ubuntu-latest
