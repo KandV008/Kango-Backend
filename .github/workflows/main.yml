@@ -1,22 +1,16 @@
-name: CI + CD
+name: Continuous Delivery
 
 on: 
   push:
     branches: 
       - main
-      - develop
     paths-ignore:
       - README.md
       - .gitattributes
       - .gitignore
       - compose.yaml
       - docs/**
-
-  pull_request:
-    branches:
-      - main
-      - develop
-
+      
 jobs:
   test:
     runs-on: ubuntu-latest
